@@ -2,22 +2,31 @@ import { gql } from "@apollo/client";
 
 //get customized exeRoutine
 export const GET_ALL_SPECIAL_EXE_ROUTINE = gql`
-  query MyQuery($search: String) {
+  query GetAllSpeRoutine($limit: Int!, $offset: Int!, $search: String!) {
     special_exercise_routine(
+      limit: $limit
+      offset: $offset
       where: { special_exe_routine_name: { _ilike: $search } }
     ) {
       created_at
-      day_2
       day_1
+      day_2
       day_3
       day_4
       day_5
       day_6
       day_7
       fk_users_id
-      special_exe_routine_name
       id
+      special_exe_routine_name
       updated_at
+    }
+    special_exercise_routine_aggregate(
+      where: { special_exe_routine_name: { _ilike: $search } }
+    ) {
+      aggregate {
+        count
+      }
     }
   }
 `;
@@ -32,39 +41,6 @@ export const DELETE_SPECIAL_EXE_ROUTINE = gql`
 `;
 
 //Create customized exeroutine
-// export const CREATE_SPECIAL_EXE_ROUTINE = gql`
-//   mutation MyMutation {
-//     insert_special_exercise_routine_one(
-//       object: {
-//         created_at: "2023-01-18T17:08:33.873483+00:00"
-//         day_1: "leg"
-//         day_2: "leg"
-//         day_3: "leg"
-//         day_4: "leg"
-//         day_5: "leg"
-//         day_6: "leg"
-//         day_7: "leg"
-//         fk_users_id: "8c57e7f5-0c03-450b-8adc-c8fe86af4b14"
-//         id: "e7052eb3-3ab9-4181-ac00-84649eac14c8"
-//         special_exe_routine_name: ""
-//         updated_at: "2023-01-18T17:08:33.873483+00:00"
-//       }
-//     ) {
-//       created_at
-//       day_1
-//       day_2
-//       day_3
-//       day_4
-//       day_5
-//       day_6
-//       day_7
-//       fk_users_id
-//       id
-//       special_exe_routine_name
-//       updated_at
-//     }
-//   }
-// `;
 
 export const CREATE_SPECIAL_EXE_ROUTINE = gql`
   mutation MyMutation(

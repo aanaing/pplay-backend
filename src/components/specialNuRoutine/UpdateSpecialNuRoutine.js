@@ -19,7 +19,11 @@ import {
   TextareaAutosize,
   CardContent,
 } from "@mui/material";
-import { CREATE_NODAYS, UPDATE_NODAYS } from "../../gql/nuRoutine";
+import {
+  CREATE_NODAYS,
+  UPDATE_NODAYS,
+  USER_ID,
+} from "../../gql/specialNuRoutine";
 import { GET_IMAGE_UPLOAD_URL, DELETE_IMAGE } from "../../gql/misc";
 import { useMutation, useQuery } from "@apollo/client";
 import { LoadingButton } from "@mui/lab";
@@ -64,6 +68,8 @@ const UpdateNuRoutine = (props) => {
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [isImageChange, setIsImageChange] = useState(false);
   const [textValue, setTextValue] = useState(RichTextEditor.createEmptyValue());
+  const result = useQuery(USER_ID);
+  console.log(result);
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -235,7 +241,10 @@ const UpdateNuRoutine = (props) => {
     setErrors({});
     props.handleClose();
   };
-
+  if (!result) {
+    return;
+  }
+  let user = result.data.users;
   return (
     <>
       <Box
@@ -360,6 +369,26 @@ const UpdateNuRoutine = (props) => {
                 </Select>
                 {errors.package_type && (
                   <FormHelperText error>{errors.package_type}</FormHelperText>
+                )}
+              </FormControl>
+              <FormControl variant="outlined">
+                <InputLabel id="User ID">User Name</InputLabel>
+                <Select
+                  labelId="User Name"
+                  label="User Name"
+                  onChange={handleChange("user_name")}
+                  error={errors.user_name ? true : false}
+                >
+                  {Array.isArray(user)
+                    ? user.map((u) => (
+                        <MenuItem key={u.id} value={u.id}>
+                          {u.username}
+                        </MenuItem>
+                      ))
+                    : null}
+                </Select>
+                {errors.day_3 && (
+                  <FormHelperText error>{errors.day_3}</FormHelperText>
                 )}
               </FormControl>
               <TextField

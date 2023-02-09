@@ -25,6 +25,11 @@ const Video = lazy(() => import("./Video/index"));
 const ExeRoutine = lazy(() => import("./exerciseRoutine/index"));
 const NuRoutine = lazy(() => import("./nutritionRoutine/index"));
 const SpecialExeRoutine = lazy(() => import("./specialExeRoutine/index"));
+const NuRoutineId = lazy(() => import("./nutritionRoutine/nutrition"));
+const SpecialNuRoutine = lazy(() => import("./specialNuRoutine/index"));
+const SpecialNuRoutineId = lazy(() =>
+  import("./specialNuRoutine/specialNuRoutineID")
+);
 
 const drawerWidth = 340;
 
@@ -115,7 +120,13 @@ const Admin = () => {
               <Route path="/video/update/:id" element={<UpdateVideo />} />
               <Route path="/exeroutine" element={<ExeRoutine />} />
               <Route path="/nuroutine" element={<NuRoutine />} />
+              <Route path="/nuroutine/:id" element={<NuRoutineId />} />
               <Route path="/spe_exe_routine" element={<SpecialExeRoutine />} />
+              <Route path="/spe_nu_routine" element={<SpecialNuRoutine />} />
+              <Route
+                path="/spe_nu_routine/:id"
+                element={<SpecialNuRoutineId />}
+              />
             </Routes>
           </AuthContext.Provider>
         </Suspense>

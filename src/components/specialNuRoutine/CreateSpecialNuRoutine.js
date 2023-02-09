@@ -1,5 +1,5 @@
 import RichTextEditor from "react-rte";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import imageService from "../../services/image";
 
 import {
@@ -19,12 +19,17 @@ import {
   TextareaAutosize,
   CardContent,
 } from "@mui/material";
-import { CREATE_NODAYS, UPDATE_NODAYS } from "../../gql/nuRoutine";
-import { GET_IMAGE_UPLOAD_URL, DELETE_IMAGE } from "../../gql/misc";
-import { useMutation, useQuery } from "@apollo/client";
+import {
+  CREATE_EACH_DAY,
+  CREATE_NUROUTINE,
+  CREATE_NODAYS,
+  USER_ID,
+} from "../../gql/specialNuRoutine";
+import { GET_IMAGE_UPLOAD_URL } from "../../gql/misc";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { LoadingButton } from "@mui/lab";
 
-const UpdateNuRoutine = (props) => {
+const CreateSpecialNuRoutine = ({ handleClose }) => {
   const fileTypes = [
     "image/apng",
     "image/bmp",
@@ -38,46 +43,45 @@ const UpdateNuRoutine = (props) => {
     "image/x-icon",
   ];
 
+  const [values, setValues] = useState({});
+  const [errors, setErrors] = useState({});
+
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState({ message: "", isError: false });
-  const [values, setValues] = useState({
-    description: "",
-    target: "",
-    pdf_file_url: "",
-    vegetarian: "",
-    package_type: "",
-    thumbnail_image_url: "",
-    duration_of_routine_in_days: "",
-  });
-  const [errors, setErrors] = useState({
-    description: "",
-    target: "",
-    pdf_file_url: "",
-    vegetarian: "",
-    package_type: "",
-    thumbnail_image_url: "",
-    duration_of_routine_in_days: "",
-  });
+
   const [imagePreview, setImagePreview] = useState(null);
-  const [oldImageName, setOldImageName] = useState(null);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
-  const [isImageChange, setIsImageChange] = useState(false);
   const [textValue, setTextValue] = useState(RichTextEditor.createEmptyValue());
+
+  const [users, setUsers] = useState({});
+  //const [loadUser, resultUser] = useLazyQuery(USER_ID);
+  const result = useQuery(USER_ID);
+  console.log(result);
+
+  /*---------------------------*/
+
+  //get user datas
+  // useEffect(() => {
+  //   loadUser();
+  // }, [loadUser]);
+
+  // useEffect(() => {
+  //   if (resultUser) {
+  //     setUsers(resultUser.data.users);
+  //   }
+  // }, [resultUser]);
+  // console.log(users);
+
+  /*----------------*/
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
 
-  const [deleteImage] = useMutation(DELETE_IMAGE, {
-    onError: (error) => {
-      console.log("error : ", error);
-      setLoading(false);
-    },
-  });
-
   const [getImageUrl] = useMutation(GET_IMAGE_UPLOAD_URL, {
-    onError: () => {
+    onError: (error) => {
+      console.log("imge errors", error);
       setShowAlert({ message: "Error on server", isError: true });
       setTimeout(() => {
         setShowAlert({ message: "", isError: false });
@@ -85,7 +89,6 @@ const UpdateNuRoutine = (props) => {
     },
     onCompleted: (result) => {
       setImageFileUrl(result.getImageUploadUrl.imageUploadUrl);
-      setIsImageChange(true);
       setValues({
         ...values,
         thumbnail_image_url: `https://axra.sgp1.digitaloceanspaces.com/VJun/${result.getImageUploadUrl.imageName}`,
@@ -93,7 +96,7 @@ const UpdateNuRoutine = (props) => {
     },
   });
 
-  const [updateRoutine] = useMutation(UPDATE_NODAYS, {
+  const [createNuRoutine] = useMutation(CREATE_NODAYS, {
     onError: (error) => {
       console.log("error : ", error);
       setShowAlert({ message: "Error on server", isError: true });
@@ -103,56 +106,27 @@ const UpdateNuRoutine = (props) => {
       setLoading(false);
     },
     onCompleted: () => {
-      setValues({
-        description: "",
-        target: "",
-        pdf_file_url: "",
-        vegetarian: "",
-        package_type: "",
-        thumbnail_image_url: "",
-        duration_of_routine_in_days: "",
-      });
-      setErrors({
-        description: "",
-        target: "",
-        pdf_file_url: "",
-        vegetarian: "",
-        package_type: "",
-        thumbnail_image_url: "",
-        duration_of_routine_in_days: "",
-      });
+      setValues({});
+      setErrors({});
+
+      setTextValue(RichTextEditor.createEmptyValue());
+
       setImageFile("");
       setImagePreview("");
       setLoading(false);
-      props.routineAlert("Routine have been updated.", false);
-      props.handleClose();
+      setShowAlert({
+        message: "Nurtrition Routine have been created.",
+        isError: false,
+      });
+      setTimeout(() => {
+        setShowAlert({ message: "", isError: false });
+      }, 1000);
     },
   });
 
-  useEffect(() => {
-    console.log(props);
-    let val = props.value;
-    console.log(props.value);
-    setValues({
-      description: val.description,
-      target: val.target,
-      pdf_file_url: val.pdf_file_url,
-      vegetarian: val.vegetarian,
-      package_type: val.package_type,
-      thumbnail_image_url: val.thumbnail_image_url,
-      duration_of_routine_in_days: val.duration_of_routine_in_days,
-    });
-    setTextValue(RichTextEditor.createValueFromString(val.description, "html"));
-    setImagePreview(props.value.thumbnail_image_url);
-    let image_url = props.value.thumbnail_image_url;
-    console.log(image_url);
-    // setOldImageName(
-    //   image_url.substring(image_url.lastIndexOf("/") + 1, image_url.lenght)
-    // );
-  }, [props.value]);
-
   const imageChange = async (e) => {
     if (e.target.files && e.target.files[0]) {
+      console.log(e.target.files);
       let img = e.target.files[0];
       if (!fileTypes.includes(img.type)) {
         setErrors({
@@ -175,30 +149,72 @@ const UpdateNuRoutine = (props) => {
     }
   };
 
-  const handleUpdate = async () => {
+  const handleCreate = async () => {
     setLoading(true);
-    setErrors({
-      name: "",
-      price: "",
-      description: "",
-      value_image_url: "",
-      category: "",
-      brand: "",
-      discount: "",
-      review: "",
-      barcode: "",
-    });
+    setErrors({});
+    let isErrorExit = false;
+    let errorObject = {};
+    if (!values.nutrition_routine_name) {
+      errorObject.nutrition_routine_name = "Routine name is required";
+      isErrorExit = true;
+    }
+    if (!values.thumbnail_image_url || !imageFile) {
+      errorObject.thumbnail_image_url = "Image field is required.";
+      isErrorExit = true;
+    }
+
+    if (!values.package_type) {
+      errorObject.package_type = "package_type is required";
+      isErrorExit = true;
+    }
+    if (!values.duration_of_routine_in_days) {
+      errorObject.duration_of_routine_in_days =
+        "duration_of_routine_in_days is required";
+      isErrorExit = true;
+    }
+    if (!values.description) {
+      errorObject.description = "description is required";
+      isErrorExit = true;
+    }
+    if (!values.pdf_file_url) {
+      errorObject.pdf_file_url = "pdf_file_url is required";
+      isErrorExit = true;
+    }
+    if (!values.vegetarian) {
+      errorObject.vegetarian = "vegetarian is required";
+      isErrorExit = true;
+    }
+    if (!values.vegetarian) {
+      errorObject.vegetarian = "vegetarian is required";
+      isErrorExit = true;
+    }
+
+    if (isErrorExit) {
+      setErrors({ ...errorObject });
+      console.log(errorObject);
+      setLoading(false);
+      return;
+    }
 
     try {
-      if (isImageChange) {
-        await imageService.uploadImage(imageFileUrl, imageFile);
-        deleteImage({ variables: { image_name: oldImageName } });
-      }
-
-      updateRoutine({ variables: { ...values, id: props.value.id } });
+      await imageService.uploadImage(imageFileUrl, imageFile);
+      //await routine.uploadImage(pdfFileUrl, pdfFile);
+      createNuRoutine({ variables: { ...values } });
+      // console.log(values);
     } catch (error) {
-      console.log("error : ", error);
+      console.log("error bbbbbbbbbbbbbbb : ", error);
     }
+  };
+
+  const onChange = (value) => {
+    setTextValue(value);
+    setValues({ ...values, description: value.toString("html") });
+  };
+
+  const handleClosClearData = () => {
+    setValues({});
+    setErrors({});
+    handleClose();
   };
 
   const toolbarConfig = {
@@ -226,15 +242,10 @@ const UpdateNuRoutine = (props) => {
       { label: "OL", style: "ordered-list-item" },
     ],
   };
-  const onChange = (value) => {
-    setTextValue(value);
-    setValues({ ...values, description: value.toString("html") });
-  };
-  const handleClosClearData = () => {
-    setValues({});
-    setErrors({});
-    props.handleClose();
-  };
+  let user = result.data.users;
+  if (!user) {
+    return;
+  }
 
   return (
     <>
@@ -252,7 +263,7 @@ const UpdateNuRoutine = (props) => {
         }}
       >
         <Typography variant="h5" component="h2" color="black" sx={{ mx: 4 }}>
-          Update Nutrition Routine
+          Create Nutrition Routine
         </Typography>
         <Button
           onClick={handleClosClearData}
@@ -336,6 +347,26 @@ const UpdateNuRoutine = (props) => {
                   <FormHelperText error>{errors.vegetarian}</FormHelperText>
                 )}
               </FormControl>
+              <FormControl variant="outlined">
+                <InputLabel id="User ID">User Name</InputLabel>
+                <Select
+                  labelId="User Name"
+                  label="User Name"
+                  onChange={handleChange("user_name")}
+                  error={errors.user_name ? true : false}
+                >
+                  {Array.isArray(user)
+                    ? user.map((u) => (
+                        <MenuItem key={u.id} value={u.id}>
+                          {u.username}
+                        </MenuItem>
+                      ))
+                    : null}
+                </Select>
+                {errors.day_3 && (
+                  <FormHelperText error>{errors.day_3}</FormHelperText>
+                )}
+              </FormControl>
               <TextField
                 id="target"
                 label="target"
@@ -399,9 +430,9 @@ const UpdateNuRoutine = (props) => {
             size="large"
             sx={{ height: 50, width: 100 }}
             loading={loading}
-            onClick={handleUpdate}
+            onClick={handleCreate}
           >
-            Update
+            Create
           </LoadingButton>
         </Box>
       </Card>
@@ -425,4 +456,4 @@ const UpdateNuRoutine = (props) => {
     </>
   );
 };
-export default UpdateNuRoutine;
+export default CreateSpecialNuRoutine;

@@ -115,6 +115,17 @@ const SideBar = ({ open }) => {
             Special Exercise Routine
           </ListItem>
         </Link>
+        <Link to="/spe_nu_routine" className="nav-link">
+          <ListItem button className="nav-btn">
+            <ListItemIcon>
+              <FoodBankIcon
+                sx={{ fontSize: "27px" }}
+                className="nav-link-icon"
+              />
+            </ListItemIcon>
+            Special Nutrition Routine
+          </ListItem>
+        </Link>
       </List>
     </Drawer>
   );

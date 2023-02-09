@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import Divider from "@mui/material/Divider";
@@ -12,6 +12,7 @@ import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 
 import {
   Box,
+  Alert,
   Breadcrumbs,
   ListItemButton,
   ListItemText,
@@ -88,7 +89,6 @@ const Index = () => {
 
   // alert message
   const [showAlert, setShowAlert] = useState({ message: "", isError: false });
-  //const navigate = useNavigate();
 
   // get data from db
   const [loadVideo, result] = useLazyQuery(ALL_VIDEOS);
@@ -297,6 +297,7 @@ const Index = () => {
       border: 0,
     },
   }));
+  //  console.log(video);
 
   if (!video) {
     return (
@@ -305,7 +306,7 @@ const Index = () => {
       </div>
     );
   }
-  //console.log(video.user_subscription_level);
+  console.log(video.user_subscription_level);
   return (
     <div>
       <div className="align">
@@ -556,7 +557,7 @@ const Index = () => {
                     </StyledTableCell>
                     <StyledTableCell>{row.main_type}</StyledTableCell>
                     <StyledTableCell>
-                      { row.video_sub_type
+                      {row.video_sub_type
                         ? row.video_sub_type.sub_type_name
                         : "-"}
                     </StyledTableCell>
@@ -634,47 +635,62 @@ const Index = () => {
         </Box>
       </Modal>
       {/* Add Video */}
-      {
-        createOpen && <div>
-            <Modal
-                keepMounted
-                open={createOpen}
-                onClose={handleCreateClose}
-                aria-labelledby="keep-mounted-modal-title"
-                aria-descripedby="keep-mounted-modal-description"
-            >
-              <Box style={style}>
-                <CreateVideo
-                    videoAlert={videoAlert}
-                    handleClose={handleCreateClose}
-                />
-              </Box>
-            </Modal>
-          </div>
-      }
+      {createOpen && (
+        <div>
+          <Modal
+            keepMounted
+            open={createOpen}
+            onClose={handleCreateClose}
+            aria-labelledby="keep-mounted-modal-title"
+            aria-descripedby="keep-mounted-modal-description"
+          >
+            <Box style={style}>
+              <CreateVideo
+                videoAlert={videoAlert}
+                handleClose={handleCreateClose}
+              />
+            </Box>
+          </Modal>
+        </div>
+      )}
 
       {/* Update Video */}
 
-      {
-        updateOpen && <div>
-            <Modal
-                keepMounted
-                open={updateOpen}
-                onClose={handleUpdateClose}
-                aria-labelledby="keep-mounted-modal-title"
-                aria-descripedby="keep-mounted-modal-description"
+      {updateOpen && (
+        <div>
+          <Modal
+            keepMounted
+            open={updateOpen}
+            onClose={handleUpdateClose}
+            aria-labelledby="keep-mounted-modal-title"
+            aria-descripedby="keep-mounted-modal-description"
+          >
+            <Box sx={style}>
+              <UpdateVideo
+                videoAlert={videoAlert}
+                handleClose={handleUpdateClose}
+                video={updateVideo}
+              />
+            </Box>
+          </Modal>
+          {showAlert.message && !showAlert.isError && (
+            <Alert
+              sx={{ position: "fixed", bottom: "1em", right: "1em" }}
+              severity="success"
             >
-              <Box sx={style}>
-                <UpdateVideo
-                    videoAlert={videoAlert}
-                    handleClose={handleUpdateClose}
-                    video={updateVideo}
-                />
-              </Box>
-            </Modal>
-          </div>
-      }
-
+              {showAlert.message}
+            </Alert>
+          )}
+          {showAlert.message && showAlert.isError && (
+            <Alert
+              sx={{ position: "fixed", bottom: "1em", right: "1em" }}
+              severity="warning"
+            >
+              {showAlert.message}
+            </Alert>
+          )}
+        </div>
+      )}
     </div>
   );
 };

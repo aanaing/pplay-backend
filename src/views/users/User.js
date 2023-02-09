@@ -100,7 +100,7 @@ const User = () => {
           <Link to="/" className="dashboard">
             Dashboard
           </Link>
-          <Link to="/users" className="user">
+          <Link to="/" className="user">
             Users
           </Link>
           <span>{id}</span>

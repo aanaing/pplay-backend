@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   CREATE_NUROUTINE,
   DELETE_NUROUTINE,
@@ -28,27 +28,44 @@ import {
   InputBase,
   Paper,
   autocompleteClasses,
+  Avatar,
+  Alert,
 } from "@mui/material";
 import { useLazyQuery, useMutation } from "@apollo/client";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "60%",
-  transform: "translate(-50%, -50%)",
-  width: "100vw",
-  //bgcolor: "white",
-  // border: "2px solid #000",
-  // boxShadow: 24,
-  p: 8,
-};
-const styleR = {
+// const style = {
+//   position: "absolute",
+//   top: "50%",
+//   left: "50%",
+//   transform: "translate(-50%, -50%)",
+//   width: "100vw",
+//   overflow: "scroll",
+//   height: "100vh",
+//   //bgcolor: "white",
+//   // border: "2px solid #000",
+//   // boxShadow: 24,
+//   // p: 8,
+// };
+const styleP = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%,-50%)",
   width: 300,
   backgroundColor: "#cecece",
+};
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "100vw",
+  height: "100vh",
+  overflow: "scroll",
+  bgcolor: "background.paper",
+  // border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
 };
 
 const Routine = () => {
@@ -65,6 +82,7 @@ const Routine = () => {
 
   //for alert message
   const [showAlert, setShowAlert] = useState("");
+  const navigate = useNavigate();
 
   // for pagination
   const [count, setCount] = useState(0);
@@ -74,28 +92,31 @@ const Routine = () => {
   const [loadRoutine, resutRoutine] = useLazyQuery(GET_ALL_NUROUTINES);
   const [routine, setRoutine] = useState({});
 
+  //console.log(resutRoutine);
+
   // ---------------------****------------------------
-
-  // get data from db
-  useEffect(() => {
-    loadRoutine();
-  }, [loadRoutine]);
-
-  useEffect(() => {
-    console.log(resutRoutine);
-    if (resutRoutine.data) {
-      setRoutine(resutRoutine.data.nutrition_routine_plan);
-    }
-  }, [resutRoutine]);
-  // console.log(routine);
 
   //for search button
   const handleSearch = (e) => {
     setSearch(document.getElementById("search-by-title").value);
   };
+
+  // get data from db
+
   useEffect(() => {
-    loadRoutine({ variables: { search: `%${search}%` } });
-  }, [loadRoutine, search]);
+    loadRoutine({
+      variables: { limit: rowsPerPage, offset: offset, search: `%${search}%` },
+    });
+  }, [loadRoutine, rowsPerPage, offset, search]);
+
+  useEffect(() => {
+    if (resutRoutine.data) {
+      setRoutine(resutRoutine.data.nutrition_routine);
+      setCount(
+        Number(resutRoutine.data?.nutrition_routine_aggregate.aggregate.count)
+      );
+    }
+  }, [resutRoutine]);
 
   //------------- REMOVE ROUTINE -------------
   const [deleteRoutine] = useMutation(DELETE_NUROUTINE, {
@@ -201,7 +222,7 @@ const Routine = () => {
   if (!routine) {
     return <em>Loading .....</em>;
   }
-
+  console.log(routine);
   return (
     <>
       <div className="align">
@@ -287,105 +308,14 @@ const Routine = () => {
               <TableHead>
                 <TableRow>
                   <StyledTableCell>ID</StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 180 }}>
-                    Routine name
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_1
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_2
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_3
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_4
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_5
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_6
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_7
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_8
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_9
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_10
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_11
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_12
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_13
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_14
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_15
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_16
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_17
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_18
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_19
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_20
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_21
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_22
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_23
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_24
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_25
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_26
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_27
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_28
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_29
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_30
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_31
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    Actions
-                  </StyledTableCell>
+                  <StyledTableCell>Routine name</StyledTableCell>
+                  <StyledTableCell>Image</StyledTableCell>
+                  <StyledTableCell>Package Type</StyledTableCell>
+                  <StyledTableCell>Target</StyledTableCell>
+                  <StyledTableCell>Duration of routine In days</StyledTableCell>
+                  <StyledTableCell>PDF download link</StyledTableCell>
+                  <StyledTableCell>Vegetarian</StyledTableCell>
+                  <StyledTableCell>Action</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -403,38 +333,49 @@ const Routine = () => {
                         <StyledTableCell>
                           {row.nutrition_routine_name}
                         </StyledTableCell>
-                        <StyledTableCell>{row.day_1}</StyledTableCell>
-                        <StyledTableCell>{row.day_2}</StyledTableCell>
-                        <StyledTableCell>{row.day_3}</StyledTableCell>
-                        <StyledTableCell>{row.day_4}</StyledTableCell>
-                        <StyledTableCell>{row.day_5}</StyledTableCell>
-                        <StyledTableCell>{row.day_6}</StyledTableCell>
-                        <StyledTableCell>{row.day_7}</StyledTableCell>
-                        <StyledTableCell>{row.day_8}</StyledTableCell>
-                        <StyledTableCell>{row.day_9}</StyledTableCell>
-                        <StyledTableCell>{row.day_10}</StyledTableCell>
-                        <StyledTableCell>{row.day_11}</StyledTableCell>
-                        <StyledTableCell>{row.day_12}</StyledTableCell>
-                        <StyledTableCell>{row.day_13}</StyledTableCell>
-                        <StyledTableCell>{row.day_14}</StyledTableCell>
-                        <StyledTableCell>{row.day_15}</StyledTableCell>
-                        <StyledTableCell>{row.day_16}</StyledTableCell>
-                        <StyledTableCell>{row.day_17}</StyledTableCell>
-                        <StyledTableCell>{row.day_18}</StyledTableCell>
-                        <StyledTableCell>{row.day_19}</StyledTableCell>
-                        <StyledTableCell>{row.day_20}</StyledTableCell>
-                        <StyledTableCell>{row.day_21}</StyledTableCell>
-                        <StyledTableCell>{row.day_22}</StyledTableCell>
-                        <StyledTableCell>{row.day_23}</StyledTableCell>
-                        <StyledTableCell>{row.day_24}</StyledTableCell>
-                        <StyledTableCell>{row.day_25}</StyledTableCell>
-                        <StyledTableCell>{row.day_26}</StyledTableCell>
-                        <StyledTableCell>{row.day_27}</StyledTableCell>
-                        <StyledTableCell>{row.day_28}</StyledTableCell>
-                        <StyledTableCell>{row.day_29}</StyledTableCell>
-                        <StyledTableCell>{row.day_30}</StyledTableCell>
-                        <StyledTableCell>{row.day_31}</StyledTableCell>
                         <StyledTableCell>
+                          <Avatar
+                            alt="notification image"
+                            src={row.thumbnail_image_url}
+                            width="56px"
+                            height="56px"
+                          />
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          {row.user_subscription_level
+                            ? row.user_subscription_level.subscription_type
+                            : " - "}
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          {row.target ? row.target : "-"}
+                        </StyledTableCell>
+                        <StyledTableCell style={{ textAlign: "center" }}>
+                          {row.duration_of_routine_in_days
+                            ? row.duration_of_routine_in_days
+                            : "-"}
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          {row.pdf_file_url
+                            ? row.pdf_file_url.substring(0, 20)
+                            : "-"}
+                        </StyledTableCell>
+                        <StyledTableCell style={{ textAlign: "center" }}>
+                          {row.vegetrian == "true" ? "Yes" : "No"}
+                        </StyledTableCell>
+
+                        <StyledTableCell>
+                          <Button
+                            size="small"
+                            //sx={{ color: "red" }}
+                            color="warning"
+                            //variant="contained"
+                            fontWeight="bold"
+                            onClick={() => navigate(`/nuroutine/${row.id}`)}
+                          >
+                            Detail
+                          </Button>
+                        </StyledTableCell>
+                        {/* <StyledTableCell>
                           <Button
                             onClick={() => handleRemoveOpen(row)}
                             size="small"
@@ -449,7 +390,7 @@ const Routine = () => {
                           >
                             Edit
                           </Button>
-                        </StyledTableCell>
+                        </StyledTableCell> */}
                       </StyledTableRow>
                     ))
                   : "-"}
@@ -477,7 +418,7 @@ const Routine = () => {
           aria-labelledby="keep-mounted-modal-title"
           aria-describedby="keep-mounted-modal-description"
         >
-          <Box style={styleR} sx={{ px: 4, py: 4, borderColor: "black" }}>
+          <Box style={styleP} sx={{ px: 4, py: 4, borderColor: "black" }}>
             <RemoveNuRoutine />
             <Box sx={{ textAlign: "right", mt: 2 }}>
               <Button color="primary" onClick={handleRemoveClose}>
@@ -490,21 +431,17 @@ const Routine = () => {
           </Box>
         </Modal>
       </div>
-      {/* Create exe routine */}
+      {/* Create Nutrition routine */}
       <div>
         <Modal
-          keepMounted
           open={createOpen}
-          scroll={scroll}
           onClose={handleCreateClose}
-          aria-labelledby="keep-mounted-modal-title"
-          aria-describedby="keep-mounted-modal-description"
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          sx={{ width: "100vw" }}
         >
-          <Box style={style}>
-            <CreateNuRoutine
-              routineAlert={routineAlert}
-              handleClose={handleCreateClose}
-            />
+          <Box sx={style}>
+            <CreateNuRoutine handleClose={handleCreateClose} />
           </Box>
         </Modal>
       </div>
@@ -526,6 +463,22 @@ const Routine = () => {
             />
           </Box>
         </Modal>
+        {showAlert.message && !showAlert.isError && (
+          <Alert
+            sx={{ position: "fixed", bottom: "1em", right: "1em" }}
+            severity="success"
+          >
+            {showAlert.message}
+          </Alert>
+        )}
+        {showAlert.message && showAlert.isError && (
+          <Alert
+            sx={{ position: "fixed", bottom: "1em", right: "1em" }}
+            severity="error"
+          >
+            {showAlert.message}
+          </Alert>
+        )}
       </div>
     </>
   );

@@ -1,329 +1,356 @@
-import { useLazyQuery } from "@apollo/client";
-import { useMutation } from "@apollo/client";
-import { LoadingButton } from "@mui/lab";
+import RichTextEditor from "react-rte";
+import { useState } from "react";
+import imageService from "../../services/image";
+
 import {
   Button,
-  Card,
-  CardContent,
-  FormControl,
-  InputLabel,
-  TextField,
   Typography,
-  Select,
-  MenuItem,
+  Box,
+  Card,
+  CardActionArea,
+  CardMedia,
+  TextField,
   FormHelperText,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Select,
+  Alert,
+  TextareaAutosize,
+  CardContent,
 } from "@mui/material";
-import { Box } from "@mui/system";
-import { validateSDL } from "graphql/validation/validate";
-import { useState, useEffect } from "react";
-import { UPDATE_NUROUTINE, SUB_TYPE_NAME } from "../../gql/nuRoutine";
+import {
+  CREATE_EACH_DAY,
+  CREATE_NUROUTINE,
+  CREATE_NODAYS,
+} from "../../gql/nuRoutine";
+import { GET_IMAGE_UPLOAD_URL } from "../../gql/misc";
+import { useMutation, useQuery } from "@apollo/client";
+import { LoadingButton } from "@mui/lab";
 
-const CreateNuRoutine = ({ handleClose, routineAlert }) => {
-  const [values, setValues] = useState({
-    nutrition_routine_name: "",
-    sub_name: "",
-    day_1: "",
-    day_2: "",
-    day_3: "",
-    day_4: "",
-    day_5: "",
-    day_6: "",
-    day_7: "",
-    day_8: "",
-    day_9: "",
-    day_10: "",
-    day_11: "",
-    day_12: "",
-    day_13: "",
-    day_14: "",
-    day_15: "",
-    day_16: "",
-    day_17: "",
-    day_18: "",
-    day_19: "",
-    day_20: "",
-    day_21: "",
-    day_22: "",
-    day_23: "",
-    day_24: "",
-    day_25: "",
-    day_26: "",
-    day_27: "",
-    day_28: "",
-    day_29: "",
-    day_30: "",
-    day_31: "",
-  });
-  const [errors, setErrors] = useState({
-    nutrition_routine_name: "",
-    sub_name: "",
-    day_1: "",
-    day_2: "",
-    day_3: "",
-    day_4: "",
-    day_5: "",
-    day_6: "",
-    day_7: "",
-    day_8: "",
-    day_9: "",
-    day_10: "",
-    day_11: "",
-    day_12: "",
-    day_13: "",
-    day_14: "",
-    day_15: "",
-    day_16: "",
-    day_17: "",
-    day_18: "",
-    day_19: "",
-    day_20: "",
-    day_21: "",
-    day_22: "",
-    day_23: "",
-    day_24: "",
-    day_25: "",
-    day_26: "",
-    day_27: "",
-    day_28: "",
-    day_29: "",
-    day_30: "",
-    day_31: "",
-  });
+const CreateNuRoutine = ({ handleClose }) => {
+  const fileTypes = [
+    "image/apng",
+    "image/bmp",
+    "image/gif",
+    "image/jpeg",
+    "image/pjpeg",
+    "image/png",
+    "image/svg+xml",
+    "image/tiff",
+    "image/webp",
+    "image/x-icon",
+  ];
+
+  const [values, setValues] = useState({});
+  const [errors, setErrors] = useState({});
 
   const [loading, setLoading] = useState(false);
+  const [showAlert, setShowAlert] = useState({ message: "", isError: false });
 
-  const [sub, setSub] = useState({});
-  const [loadSub, resultSub] = useLazyQuery(SUB_TYPE_NAME);
-  const [changeSubType, setChangeSubType] = useState(false);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
+  const [imageFileUrl, setImageFileUrl] = useState(null);
 
-  useEffect(() => {
-    loadSub();
-  }, [loadSub]);
+  const [textValue1, setTextValue1] = useState(
+    RichTextEditor.createEmptyValue()
+  );
+  const [textValue2, setTextValue2] = useState(
+    RichTextEditor.createEmptyValue()
+  );
+  const [textValue3, setTextValue3] = useState(
+    RichTextEditor.createEmptyValue()
+  );
+  const [textValue4, setTextValue4] = useState(
+    RichTextEditor.createEmptyValue()
+  );
+  const [textValue5, setTextValue5] = useState(
+    RichTextEditor.createEmptyValue()
+  );
+  const [textValue6, setTextValue6] = useState(
+    RichTextEditor.createEmptyValue()
+  );
+  const [textValue7, setTextValue7] = useState(
+    RichTextEditor.createEmptyValue()
+  );
+  const [textValue8, setTextValue8] = useState(
+    RichTextEditor.createEmptyValue()
+  );
+  const [textValue9, setTextValue9] = useState(
+    RichTextEditor.createEmptyValue()
+  );
+  const [textValue10, setTextValue10] = useState(
+    RichTextEditor.createEmptyValue()
+  );
+  const [textValue11, setTextValue11] = useState(
+    RichTextEditor.createEmptyValue()
+  );
+  const [textValue12, setTextValue12] = useState(
+    RichTextEditor.createEmptyValue()
+  );
+  const [textValue13, setTextValue13] = useState(
+    RichTextEditor.createEmptyValue()
+  );
+  const [textValue14, setTextValue14] = useState(
+    RichTextEditor.createEmptyValue()
+  );
+  const [textValue15, setTextValue15] = useState(
+    RichTextEditor.createEmptyValue()
+  );
+  const [textValue16, setTextValue16] = useState(
+    RichTextEditor.createEmptyValue()
+  );
+  const [textValue17, setTextValue17] = useState(
+    RichTextEditor.createEmptyValue()
+  );
+  const [textValue18, setTextValue18] = useState(
+    RichTextEditor.createEmptyValue()
+  );
+  const [textValue19, setTextValue19] = useState(
+    RichTextEditor.createEmptyValue()
+  );
+  const [textValue20, setTextValue20] = useState(
+    RichTextEditor.createEmptyValue()
+  );
+  const [textValue21, setTextValue21] = useState(
+    RichTextEditor.createEmptyValue()
+  );
+  const [textValue22, setTextValue22] = useState(
+    RichTextEditor.createEmptyValue()
+  );
+  const [textValue23, setTextValue23] = useState(
+    RichTextEditor.createEmptyValue()
+  );
+  const [textValue24, setTextValue24] = useState(
+    RichTextEditor.createEmptyValue()
+  );
+  const [textValue25, setTextValue25] = useState(
+    RichTextEditor.createEmptyValue()
+  );
+  const [textValue26, setTextValue26] = useState(
+    RichTextEditor.createEmptyValue()
+  );
+  const [textValue27, setTextValue27] = useState(
+    RichTextEditor.createEmptyValue()
+  );
+  const [textValue28, setTextValue28] = useState(
+    RichTextEditor.createEmptyValue()
+  );
+  const [textValue29, setTextValue29] = useState(
+    RichTextEditor.createEmptyValue()
+  );
+  const [textValue30, setTextValue30] = useState(
+    RichTextEditor.createEmptyValue()
+  );
+  const [textValue, setTextValue] = useState(RichTextEditor.createEmptyValue());
 
-  useEffect(() => {
-    if (resultSub.data) {
-      setSub(resultSub.data.video_sub_type);
-    }
-  }, [resultSub]);
+  // const [textValue, setTextValue] = useState(null);
+
+  /*---------------------------*/
+
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
 
-  const handleChange_1 = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
-
-  const handleChange_2 = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
-
-  const handleChange_3 = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
-
-  const handleChange_4 = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
-
-  const handleChange_5 = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
-
-  const handleChange_6 = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
-
-  const handleChange_7 = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
-  const [createRoutine] = useMutation(UPDATE_NUROUTINE, {
+  const [getImageUrl] = useMutation(GET_IMAGE_UPLOAD_URL, {
     onError: (error) => {
-      console.log("error : ", error);
-      setLoading(false);
-      console.log("wrong");
+      console.log("imge errors", error);
+      setShowAlert({ message: "Error on server", isError: true });
+      setTimeout(() => {
+        setShowAlert({ message: "", isError: false });
+      }, 1000);
     },
-    onCompleted: () => {
-      console.log("right");
+    onCompleted: (result) => {
+      setImageFileUrl(result.getImageUploadUrl.imageUploadUrl);
       setValues({
-        nutrition_routine_name: "",
-        sub_name: "",
-        day_1: "",
-        day_2: "",
-        day_3: "",
-        day_4: "",
-        day_5: "",
-        day_6: "",
-        day_7: "",
-        day_8: "",
-        day_9: "",
-        day_10: "",
-        day_11: "",
-        day_12: "",
-        day_13: "",
-        day_14: "",
-        day_15: "",
-        day_16: "",
-        day_17: "",
-        day_18: "",
-        day_19: "",
-        day_20: "",
-        day_21: "",
-        day_22: "",
-        day_23: "",
-        day_24: "",
-        day_25: "",
-        day_26: "",
-        day_27: "",
-        day_28: "",
-        day_29: "",
-        day_30: "",
-        day_31: "",
+        ...values,
+        thumbnail_image_url: `https://axra.sgp1.digitaloceanspaces.com/VJun/${result.getImageUploadUrl.imageName}`,
       });
-      setErrors({
-        nutrition_routine_name: "",
-        sub_name: "",
-        day_1: "",
-        day_2: "",
-        day_3: "",
-        day_4: "",
-        day_5: "",
-        day_6: "",
-        day_7: "",
-        day_8: "",
-        day_9: "",
-        day_10: "",
-        day_11: "",
-        day_12: "",
-        day_13: "",
-        day_14: "",
-        day_15: "",
-        day_16: "",
-        day_17: "",
-        day_18: "",
-        day_19: "",
-        day_20: "",
-        day_21: "",
-        day_22: "",
-        day_23: "",
-        day_24: "",
-        day_25: "",
-        day_26: "",
-        day_27: "",
-        day_28: "",
-        day_29: "",
-        day_30: "",
-        day_31: "",
-      });
-      setLoading(false);
-      routineAlert("New Routine has been added");
-      handleClose();
     },
   });
 
-  const handleCreate = () => {
+  // const [getPdfUrl] = useMutation(GET_IMAGE_UPLOAD_URL, {
+  //   onError: (error) => {
+  //     console.log(error);
+  //     setShowAlert({ message: "Error on server", isError: true });
+  //     setTimeout(() => {
+  //       setShowAlert({ message: "", isError: false });
+  //     }, 1000);
+  //   },
+  //   onCompleted: (result) => {
+  //     setImageFileUrl(result.getImageUploadUrl.imageUploadUrl);
+  //     setValues({
+  //       ...values,
+  //       pdf_file_url: `https://axra.sgp1.digitaloceanspaces.com/VJun/${result.getImageUploadUrl.imageName}`,
+  //     });
+  //   },
+  // });
+
+  const [createNuRoutine] = useMutation(CREATE_NODAYS, {
+    onError: (error) => {
+      console.log("error : ", error);
+      setShowAlert({ message: "Error on server", isError: true });
+      setTimeout(() => {
+        setShowAlert({ message: "", isError: false });
+      }, 1000);
+      setLoading(false);
+    },
+    onCompleted: () => {
+      setValues({});
+      setErrors({});
+
+      setTextValue(RichTextEditor.createEmptyValue());
+
+      setImageFile("");
+      setImagePreview("");
+      setLoading(false);
+      setShowAlert({
+        message: "Nurtrition Routine have been created.",
+        isError: false,
+      });
+      setTimeout(() => {
+        setShowAlert({ message: "", isError: false });
+      }, 1000);
+    },
+  });
+
+  const imageChange = async (e) => {
+    if (e.target.files && e.target.files[0]) {
+      console.log(e.target.files);
+      let img = e.target.files[0];
+      if (!fileTypes.includes(img.type)) {
+        setErrors({
+          ...errors,
+          thumbnail_image_url:
+            "Please select image. (PNG, JPG, JPEG, GIF, ...)",
+        });
+        return;
+      }
+      if (img.size > 10485760) {
+        setErrors({
+          ...errors,
+          thumbnail_image_url: "Image file size must be smaller than 10MB.",
+        });
+        return;
+      }
+      setImageFile(img);
+      setImagePreview(URL.createObjectURL(img));
+      getImageUrl();
+    }
+  };
+
+  const handleCreate = async () => {
     setLoading(true);
-    setErrors({
-      nutrition_routine_name: "",
-      sub_name: "",
-      day_1: "",
-      day_2: "",
-      day_3: "",
-      day_4: "",
-      day_5: "",
-      day_6: "",
-      day_7: "",
-      day_8: "",
-      day_9: "",
-      day_10: "",
-      day_11: "",
-      day_12: "",
-      day_13: "",
-      day_14: "",
-      day_15: "",
-      day_16: "",
-      day_17: "",
-      day_18: "",
-      day_19: "",
-      day_20: "",
-      day_21: "",
-      day_22: "",
-      day_23: "",
-      day_24: "",
-      day_25: "",
-      day_26: "",
-      day_27: "",
-      day_28: "",
-      day_29: "",
-      day_30: "",
-      day_31: "",
-    });
+    setErrors({});
     let isErrorExit = false;
     let errorObject = {};
+    if (!values.nutrition_routine_name) {
+      errorObject.nutrition_routine_name = "Routine name is required";
+      isErrorExit = true;
+    }
+    if (!values.thumbnail_image_url || !imageFile) {
+      errorObject.thumbnail_image_url = "Image field is required.";
+      isErrorExit = true;
+    }
 
-    if (!values.exercise_routine_name) {
-      errorObject.exercise_routine_name = "Routine name is required";
+    if (!values.package_type) {
+      errorObject.package_type = "package_type is required";
       isErrorExit = true;
     }
-    if (!values.day_1) {
-      errorObject.day_1 = "day 1 is required";
+    if (!values.duration_of_routine_in_days) {
+      errorObject.duration_of_routine_in_days =
+        "duration_of_routine_in_days is required";
       isErrorExit = true;
     }
-    if (!values.day_2) {
-      errorObject.day_2 = "day 2 is required";
+    if (!values.description) {
+      errorObject.description = "description is required";
       isErrorExit = true;
     }
-    if (!values.day_3) {
-      errorObject.day_3 = "day 3 is required";
+    if (!values.pdf_file_url) {
+      errorObject.pdf_file_url = "pdf_file_url is required";
       isErrorExit = true;
     }
-    if (!values.day_4) {
-      errorObject.day_4 = "day 4 is required";
-      isErrorExit = true;
-    }
-    if (!values.day_5) {
-      errorObject.day_5 = "day 5 is required";
-      isErrorExit = true;
-    }
-    if (!values.day_6) {
-      errorObject.day_6 = "day 6 is required";
-      isErrorExit = true;
-    }
-    if (!values.day_7) {
-      errorObject.day_7 = "day 7 is required";
+    if (!values.vegetarian) {
+      errorObject.vegetarian = "vegetarian is required";
       isErrorExit = true;
     }
 
     if (isErrorExit) {
-      setErrors(errorObject);
+      setErrors({ ...errorObject });
+      console.log(errorObject);
       setLoading(false);
       return;
     }
+
     try {
-      createRoutine({ variables: { ...values } });
+      await imageService.uploadImage(imageFileUrl, imageFile);
+      //await routine.uploadImage(pdfFileUrl, pdfFile);
+      createNuRoutine({ variables: { ...values } });
+      // console.log(values);
     } catch (error) {
-      console.log("error", error);
+      console.log("error bbbbbbbbbbbbbbb : ", error);
     }
   };
 
+  const onChange = (value) => {
+    setTextValue(value);
+    setValues({ ...values, description: value.toString("html") });
+  };
+
+  const handleClosClearData = () => {
+    setValues({});
+    setErrors({});
+    handleClose();
+  };
+
+  const toolbarConfig = {
+    // Optionally specify the groups to display (displayed in the order listed).
+    display: [
+      "INLINE_STYLE_BUTTONS",
+      "BLOCK_TYPE_BUTTONS",
+      "LINK_BUTTONS",
+      "BLOCK_TYPE_DROPDOWN",
+      "HISTORY_BUTTONS",
+    ],
+    INLINE_STYLE_BUTTONS: [
+      { label: "Bold", style: "BOLD", className: "custom-css-class" },
+      { label: "Italic", style: "ITALIC" },
+      { label: "Underline", style: "UNDERLINE" },
+    ],
+    BLOCK_TYPE_DROPDOWN: [
+      { label: "Normal", style: "unstyled" },
+      { label: "Heading Large", style: "header-one" },
+      { label: "Heading Medium", style: "header-two" },
+      { label: "Heading Small", style: "header-three" },
+    ],
+    BLOCK_TYPE_BUTTONS: [
+      { label: "UL", style: "unordered-list-item" },
+      { label: "OL", style: "ordered-list-item" },
+    ],
+  };
+
+  console.log(values);
+
   return (
-    <div>
+    <>
       <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
           color: "black",
-          maxWidth: "lg",
+          // width: "94.5vw",
           bgcolor: "#cecece",
           borderTopRightRadius: 10,
           borderTopLeftRadius: 10,
           py: 2,
+          gridColumn: 1 / -1,
         }}
       >
         <Typography variant="h5" component="h2" color="black" sx={{ mx: 4 }}>
-          Create Routine
+          Create Nutrition Routine
         </Typography>
         <Button
-          onClick={handleClose}
+          onClick={handleClosClearData}
           variant="contained"
           color="error"
           sx={{ mx: 4 }}
@@ -332,724 +359,165 @@ const CreateNuRoutine = ({ handleClose, routineAlert }) => {
         </Button>
       </Box>
 
-      <Card
-        sx={{
-          display: "flex",
-          justifyContent: "flex-start",
-          color: "white",
-          bgcolor: "white",
-          maxWidth: "lg",
-          borderRadius: 0,
-          height: 600,
-          borderBottomLeftRadius: 10,
-          borderBottomRightRadius: 10,
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            my: 2,
-            mx: 2,
-            ml: 8,
-            minWidth: 330,
-          }}
-        >
-          <TextField
-            id="nutrition_routine_name"
-            label="nutrition_routine_name"
-            sx={{ my: 2 }}
-            value={values.nutrition_routine_name}
-            onChange={handleChange("exercise_routine_name")}
-            error={errors.nutrition_routine_name ? true : false}
-            helperText={errors.nutrition_routine_name}
-          />
-          <FormControl variant="outlined" sx={{ my: 2 }}>
-            <InputLabel id="sub_type">day_1</InputLabel>
-            <Select
-              labelId="day_1"
-              value={values.sub_name}
-              label="day_1"
-              onChange={handleChange_1("sub_name")}
-              error={errors.sub_name ? true : false}
-            >
-              {Array.isArray(sub)
-                ? sub.map((sub) => (
-                    <MenuItem key={sub.id} value={sub.id}>
-                      {sub.sub_type_name}
-                    </MenuItem>
-                  ))
-                : null}
-            </Select>
-            {errors.d_1 && <FormHelperText error>{errors.d_1}</FormHelperText>}
-          </FormControl>
-          <FormControl variant="outlined" sx={{ my: 2 }}>
-            <InputLabel id="sub_type">day_2</InputLabel>
-            <Select
-              labelId="day_2"
-              value={values.sub_name}
-              label="day_2"
-              onChange={handleChange_2("sub_name")}
-              error={errors.sub_name ? true : false}
-            >
-              {Array.isArray(sub)
-                ? sub.map((sub) => (
-                    <MenuItem key={sub.id} value={sub.id}>
-                      {sub.sub_type_name}
-                    </MenuItem>
-                  ))
-                : null}
-            </Select>
-            {errors.sub_name && (
-              <FormHelperText error>{errors.sub_name}</FormHelperText>
-            )}
-          </FormControl>
-          <FormControl variant="outlined" sx={{ my: 2 }}>
-            <InputLabel id="sub_type">day_3</InputLabel>
-            <Select
-              labelId="day_3"
-              value={values.sub_name}
-              label="day_3"
-              onChange={handleChange_3("sub_name")}
-              error={errors.sub_name ? true : false}
-            >
-              {Array.isArray(sub)
-                ? sub.map((sub) => (
-                    <MenuItem key={sub.id} value={sub.id}>
-                      {sub.sub_type_name}
-                    </MenuItem>
-                  ))
-                : null}
-            </Select>
-            {errors.sub_name && (
-              <FormHelperText error>{errors.sub_name}</FormHelperText>
-            )}
-          </FormControl>
-          <FormControl variant="outlined" sx={{ my: 2 }}>
-            <InputLabel id="sub_type">day_4</InputLabel>
-            <Select
-              labelId="day_4"
-              value={values.sub_name}
-              label="day_4"
-              onChange={handleChange_3("sub_name")}
-              error={errors.sub_name ? true : false}
-            >
-              {Array.isArray(sub)
-                ? sub.map((sub) => (
-                    <MenuItem key={sub.id} value={sub.id}>
-                      {sub.sub_type_name}
-                    </MenuItem>
-                  ))
-                : null}
-            </Select>
-            {errors.sub_name && (
-              <FormHelperText error>{errors.sub_name}</FormHelperText>
-            )}
-          </FormControl>
-          <FormControl variant="outlined" sx={{ my: 2 }}>
-            <InputLabel id="sub_type">day_5</InputLabel>
-            <Select
-              labelId="day_5"
-              value={values.sub_name}
-              label="day_5"
-              onChange={handleChange_3("sub_name")}
-              error={errors.sub_name ? true : false}
-            >
-              {Array.isArray(sub)
-                ? sub.map((sub) => (
-                    <MenuItem key={sub.id} value={sub.id}>
-                      {sub.sub_type_name}
-                    </MenuItem>
-                  ))
-                : null}
-            </Select>
-            {errors.sub_name && (
-              <FormHelperText error>{errors.sub_name}</FormHelperText>
-            )}
-          </FormControl>
-          <FormControl variant="outlined" sx={{ my: 2 }}>
-            <InputLabel id="sub_type">day_6</InputLabel>
-            <Select
-              labelId="day_6"
-              value={values.sub_name}
-              label="day_6"
-              onChange={handleChange_3("sub_name")}
-              error={errors.sub_name ? true : false}
-            >
-              {Array.isArray(sub)
-                ? sub.map((sub) => (
-                    <MenuItem key={sub.id} value={sub.id}>
-                      {sub.sub_type_name}
-                    </MenuItem>
-                  ))
-                : null}
-            </Select>
-            {errors.sub_name && (
-              <FormHelperText error>{errors.sub_name}</FormHelperText>
-            )}
-          </FormControl>
-          <FormControl variant="outlined" sx={{ my: 2 }}>
-            <InputLabel id="sub_type">day_7</InputLabel>
-            <Select
-              labelId="day_7"
-              value={values.sub_name}
-              label="day_7"
-              onChange={handleChange_3("sub_name")}
-              error={errors.sub_name ? true : false}
-            >
-              {Array.isArray(sub)
-                ? sub.map((sub) => (
-                    <MenuItem key={sub.id} value={sub.id}>
-                      {sub.sub_type_name}
-                    </MenuItem>
-                  ))
-                : null}
-            </Select>
-            {errors.sub_name && (
-              <FormHelperText error>{errors.sub_name}</FormHelperText>
-            )}
-          </FormControl>
-          <FormControl variant="outlined" sx={{ my: 2 }}>
-            <InputLabel id="sub_type">day_8</InputLabel>
-            <Select
-              labelId="day_8"
-              value={values.sub_name}
-              label="day_8"
-              onChange={handleChange_3("sub_name")}
-              error={errors.sub_name ? true : false}
-            >
-              {Array.isArray(sub)
-                ? sub.map((sub) => (
-                    <MenuItem key={sub.id} value={sub.id}>
-                      {sub.sub_type_name}
-                    </MenuItem>
-                  ))
-                : null}
-            </Select>
-            {errors.sub_name && (
-              <FormHelperText error>{errors.sub_name}</FormHelperText>
-            )}
-          </FormControl>
-          <FormControl variant="outlined" sx={{ my: 2 }}>
-            <InputLabel id="sub_type">day_9</InputLabel>
-            <Select
-              labelId="day_9"
-              value={values.sub_name}
-              label="day_9"
-              onChange={handleChange_3("sub_name")}
-              error={errors.sub_name ? true : false}
-            >
-              {Array.isArray(sub)
-                ? sub.map((sub) => (
-                    <MenuItem key={sub.id} value={sub.id}>
-                      {sub.sub_type_name}
-                    </MenuItem>
-                  ))
-                : null}
-            </Select>
-            {errors.sub_name && (
-              <FormHelperText error>{errors.sub_name}</FormHelperText>
-            )}
-          </FormControl>
-        </Box>
+      <Card>
+        <CardContent>
+          <div className="grid--2--cols-update">
+            {/* image */}
+            <Box>
+              <CardMedia
+                sx={{
+                  flex: 1,
+                  bgcolor: "#cecece",
+                  maxHeight: 300,
+                  objectFit: "contain",
+                  width: 300,
+                  mt: 4,
+                  boxShadow: 5,
+                  borderRadius: 2,
+                }}
+                component="img"
+                height="300"
+                image={imagePreview}
+                alt="notification image"
+                className="grid_img"
+              />
+            </Box>
 
-        <div>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              mx: 2,
-              my: 2,
-              minWidth: 330,
-            }}
+            {/* list items */}
+            <div className="grid-item-update">
+              <TextField
+                id="thumbnail_image_url"
+                label="image_url"
+                type="file"
+                accept="image/png, image/jpeg, image/jpg, image/gif, image/svg+xml"
+                InputLabelProps={{ shrink: "shrink" }}
+                //value={values.thumbnail_image_url}
+                onChange={imageChange}
+                error={errors.thumbnail_image_url ? true : false}
+                helperText={errors.thumbnail_image_url}
+              />
+
+              <TextField
+                id="nutrition_routine_name"
+                label="nutrition routine name"
+                //value={values.nutrition_routine_name}
+                onChange={handleChange("nutrition_routine_name")}
+                error={errors.nutrition_routine_name ? true : false}
+                helperText={errors.nutrition_routine_name}
+              />
+
+              <TextField
+                id="duration_of_routine_in_days"
+                label="duration_of_routine_in_days"
+                //value={values.duration_of_routine_in_days}
+                onChange={handleChange("duration_of_routine_in_days")}
+                error={errors.duration_of_routine_in_days ? true : false}
+                helperText={errors.duration_of_routine_in_days}
+              />
+
+              <FormControl variant="outlined">
+                <InputLabel id="vegetarian">Vegetarian</InputLabel>
+                <Select
+                  labelId="vegetarian"
+                  // value={values.package_type}
+                  label="vegetarian"
+                  onChange={handleChange("vegetarian")}
+                  error={errors.vegetarian ? true : false}
+                >
+                  <MenuItem value="0">False</MenuItem>
+                  <MenuItem value="1">True</MenuItem>
+                </Select>
+                {errors.vegetarian && (
+                  <FormHelperText error>{errors.vegetarian}</FormHelperText>
+                )}
+              </FormControl>
+              <TextField
+                id="target"
+                label="target"
+                //value={values.target}
+                onChange={handleChange("target")}
+                error={errors.target ? true : false}
+                helperText={errors.target}
+              />
+              <FormControl variant="outlined">
+                <InputLabel id="main_type">Package Type</InputLabel>
+                <Select
+                  labelId="main_type"
+                  // value={values.package_type}
+                  label="Package Type"
+                  onChange={handleChange("package_type")}
+                  error={errors.package_type ? true : false}
+                >
+                  <MenuItem value="0">Free</MenuItem>
+                  <MenuItem value="1">Basic</MenuItem>
+                  <MenuItem value="2">Medium</MenuItem>
+                  <MenuItem value="3">Premium</MenuItem>
+                </Select>
+                {errors.package_type && (
+                  <FormHelperText error>{errors.package_type}</FormHelperText>
+                )}
+              </FormControl>
+              <TextField
+                id="pdf_file_url"
+                label="pdf_file_url"
+                type="file"
+                InputLabelProps={{ shrink: "shrink" }}
+                //value={values.pdf_file_url}
+                onChange={handleChange("pdf_file_url")}
+                error={errors.pdf_file_url ? true : false}
+                helperText={errors.pdf_file_url}
+              />
+            </div>
+          </div>
+        </CardContent>
+
+        {/* description */}
+        <Box ml="1rem">
+          <InputLabel style={{ marginBottom: 10, fontWeight: "bold" }}>
+            Description
+          </InputLabel>
+          <RichTextEditor
+            className="richtext"
+            //onChange={handleChange("description")}
+            onChange={onChange}
+            value={textValue}
+            toolbarConfig={toolbarConfig}
+          />
+          {errors.description && (
+            <FormHelperText error> {errors.description}</FormHelperText>
+          )}
+        </Box>
+        <Box className="add">
+          <LoadingButton
+            variant="contained"
+            //color="warning"
+            size="large"
+            sx={{ height: 50, width: 100 }}
+            loading={loading}
+            onClick={handleCreate}
           >
-            <FormControl variant="outlined" sx={{ my: 2 }}>
-              <InputLabel id="sub_type">day_10</InputLabel>
-              <Select
-                labelId="day_10"
-                value={values.sub_name}
-                label="day_10"
-                onChange={handleChange_3("sub_name")}
-                error={errors.sub_name ? true : false}
-              >
-                {Array.isArray(sub)
-                  ? sub.map((sub) => (
-                      <MenuItem key={sub.id} value={sub.id}>
-                        {sub.sub_type_name}
-                      </MenuItem>
-                    ))
-                  : null}
-              </Select>
-              {errors.sub_name && (
-                <FormHelperText error>{errors.sub_name}</FormHelperText>
-              )}
-            </FormControl>
-            <FormControl variant="outlined" sx={{ my: 2 }}>
-              <InputLabel id="sub_type">day_11</InputLabel>
-              <Select
-                labelId="day_11"
-                value={values.sub_name}
-                label="day_11"
-                onChange={handleChange_3("sub_name")}
-                error={errors.sub_name ? true : false}
-              >
-                {Array.isArray(sub)
-                  ? sub.map((sub) => (
-                      <MenuItem key={sub.id} value={sub.id}>
-                        {sub.sub_type_name}
-                      </MenuItem>
-                    ))
-                  : null}
-              </Select>
-              {errors.sub_name && (
-                <FormHelperText error>{errors.sub_name}</FormHelperText>
-              )}
-            </FormControl>
-            <FormControl variant="outlined" sx={{ my: 2 }}>
-              <InputLabel id="sub_type">day_12</InputLabel>
-              <Select
-                labelId="day_12"
-                value={values.sub_name}
-                label="day_12"
-                onChange={handleChange_3("sub_name")}
-                error={errors.sub_name ? true : false}
-              >
-                {Array.isArray(sub)
-                  ? sub.map((sub) => (
-                      <MenuItem key={sub.id} value={sub.id}>
-                        {sub.sub_type_name}
-                      </MenuItem>
-                    ))
-                  : null}
-              </Select>
-              {errors.sub_name && (
-                <FormHelperText error>{errors.sub_name}</FormHelperText>
-              )}
-            </FormControl>
-            <FormControl variant="outlined" sx={{ my: 2 }}>
-              <InputLabel id="sub_type">day_13</InputLabel>
-              <Select
-                labelId="day_13"
-                value={values.sub_name}
-                label="day_13"
-                onChange={handleChange_3("sub_name")}
-                error={errors.sub_name ? true : false}
-              >
-                {Array.isArray(sub)
-                  ? sub.map((sub) => (
-                      <MenuItem key={sub.id} value={sub.id}>
-                        {sub.sub_type_name}
-                      </MenuItem>
-                    ))
-                  : null}
-              </Select>
-              {errors.sub_name && (
-                <FormHelperText error>{errors.sub_name}</FormHelperText>
-              )}
-            </FormControl>
-            <FormControl variant="outlined" sx={{ my: 2 }}>
-              <InputLabel id="sub_type">day_14</InputLabel>
-              <Select
-                labelId="day_14"
-                value={values.sub_name}
-                label="day_14"
-                onChange={handleChange_3("sub_name")}
-                error={errors.sub_name ? true : false}
-              >
-                {Array.isArray(sub)
-                  ? sub.map((sub) => (
-                      <MenuItem key={sub.id} value={sub.id}>
-                        {sub.sub_type_name}
-                      </MenuItem>
-                    ))
-                  : null}
-              </Select>
-              {errors.sub_name && (
-                <FormHelperText error>{errors.sub_name}</FormHelperText>
-              )}
-            </FormControl>
-            <FormControl variant="outlined" sx={{ my: 2 }}>
-              <InputLabel id="sub_type">day_15</InputLabel>
-              <Select
-                labelId="day_15"
-                value={values.sub_name}
-                label="day_15"
-                onChange={handleChange_3("sub_name")}
-                error={errors.sub_name ? true : false}
-              >
-                {Array.isArray(sub)
-                  ? sub.map((sub) => (
-                      <MenuItem key={sub.id} value={sub.id}>
-                        {sub.sub_type_name}
-                      </MenuItem>
-                    ))
-                  : null}
-              </Select>
-              {errors.sub_name && (
-                <FormHelperText error>{errors.sub_name}</FormHelperText>
-              )}
-            </FormControl>
-            <FormControl variant="outlined" sx={{ my: 2 }}>
-              <InputLabel id="sub_type">day_16</InputLabel>
-              <Select
-                labelId="day_16"
-                value={values.sub_name}
-                label="day_16"
-                onChange={handleChange_3("sub_name")}
-                error={errors.sub_name ? true : false}
-              >
-                {Array.isArray(sub)
-                  ? sub.map((sub) => (
-                      <MenuItem key={sub.id} value={sub.id}>
-                        {sub.sub_type_name}
-                      </MenuItem>
-                    ))
-                  : null}
-              </Select>
-              {errors.sub_name && (
-                <FormHelperText error>{errors.sub_name}</FormHelperText>
-              )}
-            </FormControl>
-            <FormControl variant="outlined" sx={{ my: 2 }}>
-              <InputLabel id="sub_type">day_17</InputLabel>
-              <Select
-                labelId="day_17"
-                value={values.sub_name}
-                label="day_17"
-                onChange={handleChange_4("sub_name")}
-                error={errors.sub_name ? true : false}
-              >
-                {Array.isArray(sub)
-                  ? sub.map((sub) => (
-                      <MenuItem key={sub.id} value={sub.id}>
-                        {sub.sub_type_name}
-                      </MenuItem>
-                    ))
-                  : null}
-              </Select>
-              {errors.sub_name && (
-                <FormHelperText error>{errors.sub_name}</FormHelperText>
-              )}
-            </FormControl>
-            <FormControl variant="outlined" sx={{ my: 2 }}>
-              <InputLabel id="sub_type">day_18</InputLabel>
-              <Select
-                labelId="day_18"
-                value={values.sub_name}
-                label="day_18"
-                onChange={handleChange_5("sub_name")}
-                error={errors.sub_name ? true : false}
-              >
-                {Array.isArray(sub)
-                  ? sub.map((sub) => (
-                      <MenuItem key={sub.id} value={sub.id}>
-                        {sub.sub_type_name}
-                      </MenuItem>
-                    ))
-                  : null}
-              </Select>
-              {errors.sub_name && (
-                <FormHelperText error>{errors.sub_name}</FormHelperText>
-              )}
-            </FormControl>
-            <FormControl variant="outlined" sx={{ my: 2 }}>
-              <InputLabel id="sub_type">day_19</InputLabel>
-              <Select
-                labelId="day_19"
-                value={values.sub_name}
-                label="day_19"
-                onChange={handleChange_6("sub_name")}
-                error={errors.sub_name ? true : false}
-              >
-                {Array.isArray(sub)
-                  ? sub.map((sub) => (
-                      <MenuItem key={sub.id} value={sub.id}>
-                        {sub.sub_type_name}
-                      </MenuItem>
-                    ))
-                  : null}
-              </Select>
-              {errors.sub_name && (
-                <FormHelperText error>{errors.sub_name}</FormHelperText>
-              )}
-            </FormControl>
-          </Box>
-        </div>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            my: 2,
-            mx: 2,
-            minWidth: 330,
-          }}
-        >
-          <FormControl variant="outlined" sx={{ my: 2 }}>
-            <InputLabel id="sub_type">day_20</InputLabel>
-            <Select
-              labelId="day_20"
-              value={values.sub_name}
-              label="day_20"
-              onChange={handleChange_7("sub_name")}
-              error={errors.sub_name ? true : false}
-            >
-              {Array.isArray(sub)
-                ? sub.map((sub) => (
-                    <MenuItem key={sub.id} value={sub.id}>
-                      {sub.sub_type_name}
-                    </MenuItem>
-                  ))
-                : null}
-            </Select>
-            {errors.sub_name && (
-              <FormHelperText error>{errors.sub_name}</FormHelperText>
-            )}
-          </FormControl>
-          <FormControl variant="outlined" sx={{ my: 2 }}>
-            <InputLabel id="sub_type">day_21</InputLabel>
-            <Select
-              labelId="day_21"
-              value={values.sub_name}
-              label="day_21"
-              onChange={handleChange_3("sub_name")}
-              error={errors.sub_name ? true : false}
-            >
-              {Array.isArray(sub)
-                ? sub.map((sub) => (
-                    <MenuItem key={sub.id} value={sub.id}>
-                      {sub.sub_type_name}
-                    </MenuItem>
-                  ))
-                : null}
-            </Select>
-            {errors.sub_name && (
-              <FormHelperText error>{errors.sub_name}</FormHelperText>
-            )}
-          </FormControl>
-          <FormControl variant="outlined" sx={{ my: 2 }}>
-            <InputLabel id="sub_type">day_22</InputLabel>
-            <Select
-              labelId="day_22"
-              value={values.sub_name}
-              label="day_22"
-              onChange={handleChange_3("sub_name")}
-              error={errors.sub_name ? true : false}
-            >
-              {Array.isArray(sub)
-                ? sub.map((sub) => (
-                    <MenuItem key={sub.id} value={sub.id}>
-                      {sub.sub_type_name}
-                    </MenuItem>
-                  ))
-                : null}
-            </Select>
-            {errors.sub_name && (
-              <FormHelperText error>{errors.sub_name}</FormHelperText>
-            )}
-          </FormControl>
-          <FormControl variant="outlined" sx={{ my: 2 }}>
-            <InputLabel id="sub_type">day_23</InputLabel>
-            <Select
-              labelId="day_23"
-              value={values.sub_name}
-              label="day_23"
-              onChange={handleChange_3("sub_name")}
-              error={errors.sub_name ? true : false}
-            >
-              {Array.isArray(sub)
-                ? sub.map((sub) => (
-                    <MenuItem key={sub.id} value={sub.id}>
-                      {sub.sub_type_name}
-                    </MenuItem>
-                  ))
-                : null}
-            </Select>
-            {errors.sub_name && (
-              <FormHelperText error>{errors.sub_name}</FormHelperText>
-            )}
-          </FormControl>
-          <FormControl variant="outlined" sx={{ my: 2 }}>
-            <InputLabel id="sub_type">day_24</InputLabel>
-            <Select
-              labelId="day_24"
-              value={values.sub_name}
-              label="day_24"
-              onChange={handleChange_3("sub_name")}
-              error={errors.sub_name ? true : false}
-            >
-              {Array.isArray(sub)
-                ? sub.map((sub) => (
-                    <MenuItem key={sub.id} value={sub.id}>
-                      {sub.sub_type_name}
-                    </MenuItem>
-                  ))
-                : null}
-            </Select>
-            {errors.sub_name && (
-              <FormHelperText error>{errors.sub_name}</FormHelperText>
-            )}
-          </FormControl>
-          <FormControl variant="outlined" sx={{ my: 2 }}>
-            <InputLabel id="sub_type">day_25</InputLabel>
-            <Select
-              labelId="day_25"
-              value={values.sub_name}
-              label="day_25"
-              onChange={handleChange_3("sub_name")}
-              error={errors.sub_name ? true : false}
-            >
-              {Array.isArray(sub)
-                ? sub.map((sub) => (
-                    <MenuItem key={sub.id} value={sub.id}>
-                      {sub.sub_type_name}
-                    </MenuItem>
-                  ))
-                : null}
-            </Select>
-            {errors.sub_name && (
-              <FormHelperText error>{errors.sub_name}</FormHelperText>
-            )}
-          </FormControl>
-          <FormControl variant="outlined" sx={{ my: 2 }}>
-            <InputLabel id="sub_type">day_26</InputLabel>
-            <Select
-              labelId="day_26"
-              value={values.sub_name}
-              label="day_26"
-              onChange={handleChange_3("sub_name")}
-              error={errors.sub_name ? true : false}
-            >
-              {Array.isArray(sub)
-                ? sub.map((sub) => (
-                    <MenuItem key={sub.id} value={sub.id}>
-                      {sub.sub_type_name}
-                    </MenuItem>
-                  ))
-                : null}
-            </Select>
-            {errors.sub_name && (
-              <FormHelperText error>{errors.sub_name}</FormHelperText>
-            )}
-          </FormControl>
-          <FormControl variant="outlined" sx={{ my: 2 }}>
-            <InputLabel id="sub_type">day_27</InputLabel>
-            <Select
-              labelId="day_27"
-              value={values.sub_name}
-              label="day_27"
-              onChange={handleChange_3("sub_name")}
-              error={errors.sub_name ? true : false}
-            >
-              {Array.isArray(sub)
-                ? sub.map((sub) => (
-                    <MenuItem key={sub.id} value={sub.id}>
-                      {sub.sub_type_name}
-                    </MenuItem>
-                  ))
-                : null}
-            </Select>
-            {errors.sub_name && (
-              <FormHelperText error>{errors.sub_name}</FormHelperText>
-            )}
-          </FormControl>
-          <FormControl variant="outlined" sx={{ my: 2 }}>
-            <InputLabel id="sub_type">day_28</InputLabel>
-            <Select
-              labelId="day_28"
-              value={values.sub_name}
-              label="day_28"
-              onChange={handleChange_3("sub_name")}
-              error={errors.sub_name ? true : false}
-            >
-              {Array.isArray(sub)
-                ? sub.map((sub) => (
-                    <MenuItem key={sub.id} value={sub.id}>
-                      {sub.sub_type_name}
-                    </MenuItem>
-                  ))
-                : null}
-            </Select>
-            {errors.sub_name && (
-              <FormHelperText error>{errors.sub_name}</FormHelperText>
-            )}
-          </FormControl>
-          <FormControl variant="outlined" sx={{ my: 2 }}>
-            <InputLabel id="sub_type">day_29</InputLabel>
-            <Select
-              labelId="day_29"
-              value={values.sub_name}
-              label="day_29"
-              onChange={handleChange_3("sub_name")}
-              error={errors.sub_name ? true : false}
-            >
-              {Array.isArray(sub)
-                ? sub.map((sub) => (
-                    <MenuItem key={sub.id} value={sub.id}>
-                      {sub.sub_type_name}
-                    </MenuItem>
-                  ))
-                : null}
-            </Select>
-            {errors.sub_name && (
-              <FormHelperText error>{errors.sub_name}</FormHelperText>
-            )}
-          </FormControl>
-          <FormControl variant="outlined" sx={{ my: 2 }}>
-            <InputLabel id="sub_type">day_30</InputLabel>
-            <Select
-              labelId="day_30"
-              value={values.sub_name}
-              label="day_30"
-              onChange={handleChange_3("sub_name")}
-              error={errors.sub_name ? true : false}
-            >
-              {Array.isArray(sub)
-                ? sub.map((sub) => (
-                    <MenuItem key={sub.id} value={sub.id}>
-                      {sub.sub_type_name}
-                    </MenuItem>
-                  ))
-                : null}
-            </Select>
-            {errors.sub_name && (
-              <FormHelperText error>{errors.sub_name}</FormHelperText>
-            )}
-          </FormControl>
-          <FormControl variant="outlined" sx={{ my: 2 }}>
-            <InputLabel id="sub_type">day_31</InputLabel>
-            <Select
-              labelId="day_31"
-              value={values.sub_name}
-              label="day_3"
-              onChange={handleChange_3("sub_name")}
-              error={errors.sub_name ? true : false}
-            >
-              {Array.isArray(sub)
-                ? sub.map((sub) => (
-                    <MenuItem key={sub.id} value={sub.id}>
-                      {sub.sub_type_name}
-                    </MenuItem>
-                  ))
-                : null}
-            </Select>
-            {errors.sub_name && (
-              <FormHelperText error>{errors.sub_name}</FormHelperText>
-            )}
-          </FormControl>
+            Create
+          </LoadingButton>
         </Box>
       </Card>
-      <LoadingButton
-        variant="contained"
-        //color="warning"
-        size="large"
-        sx={{ maxWidth: 100, mt: "1rem", left: "90%", height: 60 }}
-        loading={loading}
-        onClick={handleCreate}
-      >
-        Update
-      </LoadingButton>
-    </div>
+
+      {showAlert.message && !showAlert.isError && (
+        <Alert
+          sx={{ position: "fixed", bottom: "1em", right: "1em" }}
+          severity="success"
+        >
+          {showAlert.message}
+        </Alert>
+      )}
+      {showAlert.message && showAlert.isError && (
+        <Alert
+          sx={{ position: "fixed", bottom: "1em", right: "1em" }}
+          severity="error"
+        >
+          {showAlert.message}
+        </Alert>
+      )}
+    </>
   );
 };
-
 export default CreateNuRoutine;

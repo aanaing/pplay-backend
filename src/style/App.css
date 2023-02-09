@@ -1,3 +1,6 @@
+* {
+  font-family: sans-serif;
+}
 .nav-link-icon {
   /* color: #303031; */
   color: #59595a;
@@ -62,7 +65,7 @@ thead .MuiTableCell-root:last-child {
 .dashboard,
 .nav-link,
 .user {
-  color: #59595a;
+  color: #7f7f80;
   text-decoration: none;
 }
 
@@ -71,7 +74,11 @@ thead .MuiTableCell-root:last-child {
   color: orangered;
   /* color: #000; */
 }
-
+.dashboard-link,
+.user-link {
+  text-decoration: none;
+  color: #7f7f80;
+}
 .dob {
   color: #fff;
   border-color: #000;
@@ -95,4 +102,89 @@ thead .MuiTableCell-root:last-child {
   justify-content: space-around;
   margin-top: 2rem;
   background: #f7f7f7;
+}
+.btn-align {
+  display: flex;
+  justify-content: flex-end;
+  margin: 3rem;
+}
+.richtext {
+  height: 500px;
+  overflow-y: scroll;
+  width: 700px;
+}
+
+.grid-item,
+.grid--2--cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 1rem;
+  padding: 1rem;
+  gap: 1rem;
+}
+.grid--2--cols {
+  grid-template-columns: 300px 300px;
+  gap: 1rem;
+  margin-top: 0;
+}
+.grid-item {
+  gap: 2rem;
+}
+.grid--2--cols-update {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 2rem;
+  padding: 2rem;
+}
+.grid-item-update {
+  display: grid;
+  grid-template-columns: 400px 400px;
+  gap: 2rem;
+}
+.create-btn {
+  grid-column: 1/-1;
+  display: flex;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+.add {
+  display: flex;
+  grid-row: 1/-1;
+  justify-content: flex-end;
+  margin-bottom: 2rem;
+  margin-right: 2rem;
+}
+.container {
+  background-color: white;
+}
+.update-day {
+  display: flex;
+  justify-content: space-between;
+  color: black;
+  background-color: #cecece;
+
+  padding: 0 2;
+  width: 50vw;
+  height: 70px;
+  margin: 0 auto;
+  align-items: center;
+  margin-top: 1rem;
+}
+.text-container {
+  width: 50vw;
+  height: 82vh;
+  margin: 0 auto;
+}
+.text-item {
+  display: flex;
+  justify-content: center;
+}
+.text-box {
+  flex-direction: column;
+  display: block;
+}
+.text-day {
+  width: 45vw;
+  height: 400px;
+  overflow: scroll;
 }

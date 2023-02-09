@@ -14,7 +14,6 @@ import {
   FormHelperText,
 } from "@mui/material";
 import { Box } from "@mui/system";
-
 import { useState, useEffect } from "react";
 import {
   CREATE_SPECIAL_EXE_ROUTINE,
@@ -83,6 +82,7 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
   const handleCreate = () => {
     setLoading(true);
     setErrors({});
+
     let isErrorExit = false;
     let errorObject = {};
 
@@ -129,7 +129,7 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
       console.log("error", error);
     }
   };
-  console.log(errors);
+  //console.log(errors);
   return (
     <div>
       <Box
@@ -248,11 +248,11 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
                 <FormHelperText error>{errors.day_3}</FormHelperText>
               )}
             </FormControl>
-            <FormControl variant="outlined" sx={{ my: 2 }}>
-              <InputLabel id="User ID">User ID</InputLabel>
+            <FormControl variant="outlined">
+              <InputLabel id="User ID">User Name</InputLabel>
               <Select
-                labelId="User ID"
-                label="User ID"
+                labelId="User Name"
+                label="User Name"
                 onChange={handleChange("user_name")}
                 error={errors.user_name ? true : false}
               >

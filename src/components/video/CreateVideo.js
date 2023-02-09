@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import imageService from "../../services/image";
 import { GET_IMAGE_UPLOAD_URL } from "../../gql/misc";
 import { Box } from "@mui/system";
@@ -17,7 +17,6 @@ import {
   CardContent,
   TextField,
   FormControl,
-  Menu,
   MenuItem,
   InputLabel,
   Select,
@@ -274,7 +273,7 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
       console.log(errorObject);
       return;
     }
-    console.log("create button 2", values);
+    //    console.log("create button 2", values);
 
     try {
       await imageService.uploadImage(imageFileUrl, imageFile);
@@ -293,7 +292,7 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
     }
   };
 
-  console.log(values);
+  // console.log(values);
   return (
     <div>
       <Box
@@ -450,7 +449,7 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
               <InputLabel id="main_type">Package Type</InputLabel>
               <Select
                 labelId="main_type"
-                // value={values.package_type}
+                value={values.package_type}
                 label="Package Type"
                 onChange={handleChange("package_type")}
                 error={errors.package_type ? true : false}

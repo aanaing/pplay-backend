@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
-  DELETE_SPECIAL_EXE_ROUTINE,
-  GET_ALL_SPECIAL_EXE_ROUTINE,
-  SUB_TYPE_NAME,
-} from "../../gql/specialExeRoutine";
-import RemoveExeRoutine from "../../components/specialExeRoutine/RemoveSpeExeRoutine";
-import CreateExeRoutine from "../../components/specialExeRoutine/CreateSpeExeRoutine";
-import UpdateExeRoutine from "../../components/specialExeRoutine/UpdateSpeExeRoutine";
+  // CREATE_NUROUTINE,
+  DELETE_SPE_NUROUTINE,
+  GET_ALL_SPE_NUROUTINES,
+} from "../../gql/specialNuRoutine";
+import RemoveNuRoutine from "../../components/nutrition routine/RemoveNuRoutine";
+import CreateSpecialNuRoutine from "../../components/specialNuRoutine/CreateSpecialNuRoutine";
+import UpdateNuRoutine from "../../components/nutrition routine/UpdateNuRoutine";
 import DirectionsIcon from "@mui/icons-material/Directions";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
@@ -27,29 +27,45 @@ import {
   Modal,
   InputBase,
   Paper,
-  Alert,
   autocompleteClasses,
+  Avatar,
+  Alert,
 } from "@mui/material";
 import { useLazyQuery, useMutation } from "@apollo/client";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "80%",
-  transform: "translate(-50%, -50%)",
-  width: "100vw",
-  //bgcolor: "white",
-  // border: "2px solid #000",
-  // boxShadow: 24,
-  p: 8,
-};
-const styleR = {
+// const style = {
+//   position: "absolute",
+//   top: "50%",
+//   left: "50%",
+//   transform: "translate(-50%, -50%)",
+//   width: "100vw",
+//   overflow: "scroll",
+//   height: "100vh",
+//   //bgcolor: "white",
+//   // border: "2px solid #000",
+//   // boxShadow: 24,
+//   // p: 8,
+// };
+const styleP = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%,-50%)",
   width: 300,
   backgroundColor: "#cecece",
+};
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "100vw",
+  height: "100vh",
+  overflow: "scroll",
+  bgcolor: "background.paper",
+  // border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
 };
 
 const Routine = () => {
@@ -62,41 +78,31 @@ const Routine = () => {
   const [removeOpen, setRemoveOpen] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
   const [updateOpen, setUpdateOpen] = useState(false);
+  const [scroll, setScroll] = useState("paper");
 
   //for alert message
   const [showAlert, setShowAlert] = useState("");
+  const navigate = useNavigate();
 
   // for pagination
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [offset, setOffset] = useState(0);
-  const [subType, setSubType] = useState([]);
-  const [loadRoutine, resutRoutine] = useLazyQuery(GET_ALL_SPECIAL_EXE_ROUTINE);
-  const [loadSubType, resultSubType] = useLazyQuery(SUB_TYPE_NAME);
+  const [loadRoutine, resutRoutine] = useLazyQuery(GET_ALL_SPE_NUROUTINES);
   const [routine, setRoutine] = useState({});
-  console.log(resutRoutine);
+
+  //console.log(resutRoutine);
 
   // ---------------------****------------------------
-
-  // get data from db
-  useEffect(() => {
-    loadSubType();
-    loadRoutine();
-  }, [loadSubType, loadRoutine]);
-
-  useEffect(() => {
-    if (resultSubType.data) {
-      setSubType(resultSubType.data.video_sub_type);
-    }
-  }, [resultSubType]);
 
   //for search button
   const handleSearch = (e) => {
     setSearch(document.getElementById("search-by-title").value);
   };
 
-  //get data from db and search button
+  // get data from db
+
   useEffect(() => {
     loadRoutine({
       variables: { limit: rowsPerPage, offset: offset, search: `%${search}%` },
@@ -105,17 +111,18 @@ const Routine = () => {
 
   useEffect(() => {
     if (resutRoutine.data) {
-      setRoutine(resutRoutine.data.special_exercise_routine);
+      setRoutine(resutRoutine.data.special_nutrition_routine);
       setCount(
         Number(
-          resutRoutine.data?.special_exercise_routine_aggregate.aggregate.count
+          resutRoutine.data?.special_nutrition_routine_aggregate.aggregate.count
         )
       );
     }
   }, [resutRoutine]);
+  console.log(resutRoutine);
 
   //------------- REMOVE ROUTINE -------------
-  const [deleteRoutine] = useMutation(DELETE_SPECIAL_EXE_ROUTINE, {
+  const [deleteSpeRoutine] = useMutation(DELETE_SPE_NUROUTINE, {
     onError: (error) => {
       console.log("error : ", error);
     },
@@ -134,7 +141,7 @@ const Routine = () => {
     if (!removeRoutine) {
       return;
     }
-    deleteRoutine({ variables: { id: removeRoutine.id } });
+    deleteSpeRoutine({ variables: { id: removeRoutine.id } });
     resutRoutine.refetch();
     setRemoveOpen(false);
   };
@@ -157,8 +164,9 @@ const Routine = () => {
     }, 3000);
   };
 
-  const handleCreateOpen = () => {
+  const handleCreateOpen = (scrollType) => {
     setCreateOpen(true);
+    setScroll(scrollType);
   };
 
   const handleCreateClose = () => {
@@ -218,8 +226,6 @@ const Routine = () => {
     return <em>Loading .....</em>;
   }
 
-  console.log(routine);
-
   return (
     <>
       <div className="align">
@@ -233,7 +239,7 @@ const Routine = () => {
             <Link to="/" className="dashboard">
               Dashboard
             </Link>
-            <span>Exercise routine</span>
+            <span>Special Nutrition routine</span>
           </Breadcrumbs>
         </div>
         {/* search */}
@@ -281,7 +287,7 @@ const Routine = () => {
               fontWeight: "bold",
             }}
             color="secondary"
-            onClick={handleCreateOpen}
+            onClick={() => handleCreateOpen("paper")}
           >
             Add
           </Button>
@@ -300,38 +306,19 @@ const Routine = () => {
             mt: "1rem",
           }}
         >
-          <TableContainer sx={{ maxHeight: "60vh", Width: "10px" }}>
+          <TableContainer sx={{ maxHeight: "60vh", width: "100px" }}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
                   <StyledTableCell>ID</StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    Routine name
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_1
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_2
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_3
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_4
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_5
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_6
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    day_7
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100 }}>
-                    Actions
-                  </StyledTableCell>
+                  <StyledTableCell>Routine name</StyledTableCell>
+                  <StyledTableCell>Image</StyledTableCell>
+                  <StyledTableCell>Package Type</StyledTableCell>
+                  <StyledTableCell>Target</StyledTableCell>
+                  <StyledTableCell>Duration of routine In days</StyledTableCell>
+                  <StyledTableCell>PDF download link</StyledTableCell>
+                  <StyledTableCell>Vegetarian</StyledTableCell>
+                  <StyledTableCell>Action</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -347,58 +334,57 @@ const Routine = () => {
                           {row.id.substring(0, 8)}
                         </StyledTableCell>
                         <StyledTableCell>
-                          {row.special_exe_routine_name}
+                          {row.nutrition_routine_name}
                         </StyledTableCell>
                         <StyledTableCell>
-                          {subType.map((s) => {
-                            if (s.id === row.day_1) {
-                              return s.sub_type_name;
+                          <Avatar
+                            alt="notification image"
+                            src={
+                              row.thumbnail_image_url
+                                ? row.thumbnail_image_url
+                                : "-"
                             }
-                          })}
+                            width="56px"
+                            height="56px"
+                          />
                         </StyledTableCell>
                         <StyledTableCell>
-                          {subType.map((s) => {
-                            if (s.id === row.day_2) {
-                              return s.sub_type_name;
+                          {row.user_subscription_level
+                            ? row.user_subscription_level.subscription_type
+                            : " - "}
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          {row.target ? row.target : "-"}
+                        </StyledTableCell>
+                        <StyledTableCell style={{ textAlign: "center" }}>
+                          {row.duration_of_routine_in_days
+                            ? row.duration_of_routine_in_days
+                            : "-"}
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          {row.pdf_file_url
+                            ? row.pdf_file_url.substring(0, 20)
+                            : "-"}
+                        </StyledTableCell>
+                        <StyledTableCell style={{ textAlign: "center" }}>
+                          {row.vegetrian == "true" ? "Yes" : "No"}
+                        </StyledTableCell>
+
+                        <StyledTableCell>
+                          <Button
+                            size="small"
+                            //sx={{ color: "red" }}
+                            color="warning"
+                            //variant="contained"
+                            fontWeight="bold"
+                            onClick={() =>
+                              navigate(`/spe_nu_routine/${row.id}`)
                             }
-                          })}
+                          >
+                            Detail
+                          </Button>
                         </StyledTableCell>
-                        <StyledTableCell>
-                          {subType.map((s) => {
-                            if (s.id === row.day_3) {
-                              return s.sub_type_name;
-                            }
-                          })}
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          {subType.map((s) => {
-                            if (s.id === row.day_4) {
-                              return s.sub_type_name;
-                            }
-                          })}
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          {subType.map((s) => {
-                            if (s.id === row.day_5) {
-                              return s.sub_type_name;
-                            }
-                          })}
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          {subType.map((s) => {
-                            if (s.id === row.day_6) {
-                              return s.sub_type_name;
-                            }
-                          })}
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          {subType.map((s) => {
-                            if (s.id === row.day_7) {
-                              return s.sub_type_name;
-                            }
-                          })}
-                        </StyledTableCell>
-                        <StyledTableCell>
+                        {/* <StyledTableCell>
                           <Button
                             onClick={() => handleRemoveOpen(row)}
                             size="small"
@@ -413,7 +399,7 @@ const Routine = () => {
                           >
                             Edit
                           </Button>
-                        </StyledTableCell>
+                        </StyledTableCell> */}
                       </StyledTableRow>
                     ))
                   : "-"}
@@ -432,7 +418,8 @@ const Routine = () => {
           />
         </Box>
       </div>
-      <div>
+      {/* delete routine */}
+      {/* <div>
         <Modal
           keepMounted
           open={removeOpen}
@@ -440,8 +427,8 @@ const Routine = () => {
           aria-labelledby="keep-mounted-modal-title"
           aria-describedby="keep-mounted-modal-description"
         >
-          <Box style={styleR} sx={{ px: 4, py: 4, borderColor: "black" }}>
-            <RemoveExeRoutine />
+          <Box style={styleP} sx={{ px: 4, py: 4, borderColor: "black" }}>
+            <RemoveNuRoutine />
             <Box sx={{ textAlign: "right", mt: 2 }}>
               <Button color="primary" onClick={handleRemoveClose}>
                 Cancel
@@ -452,24 +439,24 @@ const Routine = () => {
             </Box>
           </Box>
         </Modal>
-      </div>
+      </div> */}
+      {/* Create Nutrition routine */}
       <div>
         <Modal
-          keepMounted
           open={createOpen}
           onClose={handleCreateClose}
-          aria-labelledby="keep-mounted-modal-title"
-          aria-describedby="keep-mounted-modal-description"
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          sx={{ width: "100vw" }}
         >
-          <Box style={style}>
-            <CreateExeRoutine
-              routineAlert={routineAlert}
-              handleClose={handleCreateClose}
-            />
+          <Box sx={style}>
+            <CreateSpecialNuRoutine handleClose={handleCreateClose} />
           </Box>
         </Modal>
       </div>
-      <div>
+
+      {/* update exe routine */}
+      {/* <div>
         <Modal
           keepMounted
           open={updateOpen}
@@ -478,7 +465,7 @@ const Routine = () => {
           aria-describedby="keep-mounted-modal-description"
         >
           <Box style={style}>
-            <UpdateExeRoutine
+            <UpdateNuRoutine
               routineAlert={routineAlert}
               handleClose={handleUpdateClose}
               value={updateRoutine}
@@ -501,7 +488,7 @@ const Routine = () => {
             {showAlert.message}
           </Alert>
         )}
-      </div>
+      </div> */}
     </>
   );
 };

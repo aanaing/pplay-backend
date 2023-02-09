@@ -214,16 +214,6 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
       setImagePreview(video.thumbnail_image_url);
     }
 
-    if(video.main_type === "ZUMBA"){
-      setShowSubInput(true);
-    }else{
-      setShowSubInput(false);
-    }
-    //console.log(video);
-    //console.log(video[0].thumbnail_image_url);
-    // setImagePreview(video.thumbnail_image_url);
-    //let image_url = video.thumbnail_image_url;
-    // console.log(image_url);
     setOldImageName();
     // image_url.substring(image_url.lastIndexOf("/") + 1, image_url.lenght);
   }, [
