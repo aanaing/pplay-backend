@@ -20,6 +20,12 @@ export const GET_ALL_SPECIAL_EXE_ROUTINE = gql`
       id
       special_exe_routine_name
       updated_at
+      thumbnail_image_url
+      routine_category
+      description
+      user {
+        username
+      }
     }
     special_exercise_routine_aggregate(
       where: { special_exe_routine_name: { _ilike: $search } }
@@ -53,6 +59,9 @@ export const CREATE_SPECIAL_EXE_ROUTINE = gql`
     $day_6: uuid!
     $day_7: uuid!
     $user_name: uuid!
+    $thumbnail_image_url: String!
+    $routine_category: String!
+    $description: String!
   ) {
     insert_special_exercise_routine_one(
       object: {
@@ -65,6 +74,9 @@ export const CREATE_SPECIAL_EXE_ROUTINE = gql`
         day_7: $day_7
         fk_users_id: $user_name
         special_exe_routine_name: $special_exe_routine_name
+        thumbnail_image_url: $thumbnail_image_url
+        routine_category: $routine_category
+        description: $description
       }
     ) {
       created_at
@@ -79,6 +91,12 @@ export const CREATE_SPECIAL_EXE_ROUTINE = gql`
       id
       special_exe_routine_name
       updated_at
+      thumbnail_image_url
+      routine_category
+      description
+      user {
+        username
+      }
     }
   }
 `;
@@ -96,6 +114,9 @@ export const UPDATE_SPECIAL_EXE_ROUTINE = gql`
     $day_6: uuid!
     $day_7: uuid!
     $user_name: uuid!
+    $thumbnail_image_url: String!
+    $routine_category: String!
+    $description: String!
   ) {
     update_special_exercise_routine_by_pk(
       pk_columns: { id: $id }
@@ -109,6 +130,9 @@ export const UPDATE_SPECIAL_EXE_ROUTINE = gql`
         day_7: $day_7
         fk_users_id: $user_name
         special_exe_routine_name: $special_exe_routine_name
+        thumbnail_image_url: $thumbnail_image_url
+        routine_category: $routine_category
+        description: $description
       }
     ) {
       created_at
@@ -123,6 +147,12 @@ export const UPDATE_SPECIAL_EXE_ROUTINE = gql`
       id
       special_exe_routine_name
       updated_at
+      thumbnail_image_url
+      routine_category
+      description
+      user {
+        username
+      }
     }
   }
 `;

@@ -68,17 +68,17 @@ thead .MuiTableCell-root:last-child {
   color: #7f7f80;
   text-decoration: none;
 }
+.dash:link {
+  color: red;
+  text-decoration: none;
+}
 
 .dashboard:hover,
 .user:hover {
   color: orangered;
   /* color: #000; */
 }
-.dashboard-link,
-.user-link {
-  text-decoration: none;
-  color: #7f7f80;
-}
+
 .dob {
   color: #fff;
   border-color: #000;
@@ -108,38 +108,43 @@ thead .MuiTableCell-root:last-child {
   justify-content: flex-end;
   margin: 3rem;
 }
-.richtext {
-  height: 500px;
-  overflow-y: scroll;
-  width: 700px;
+
+.btn-center {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
 }
 
-.grid-item,
 .grid--2--cols {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  margin-top: 1rem;
+  grid-template-columns: 300px 1fr;
+  margin-top: 0;
   padding: 1rem;
   gap: 1rem;
 }
-.grid--2--cols {
-  grid-template-columns: 300px 300px;
-  gap: 1rem;
-  margin-top: 0;
-}
+
 .grid-item {
+  grid-template-columns: 1fr 1fr;
+  margin-top: 1rem;
   gap: 2rem;
 }
-.grid--2--cols-update {
-  display: grid;
-  grid-template-columns: 300px 1fr;
-  gap: 2rem;
-  padding: 2rem;
-}
-.grid-item-update {
-  display: grid;
+.grid-routine {
   grid-template-columns: 400px 400px;
-  gap: 2rem;
+  margin: 0 auto;
+  margin-left: 50%;
+  transform: translate(-50%, 0);
+}
+.grid-img {
+  width: 300px;
+  height: 300px;
+  margin: 0 auto;
+}
+.description {
+  grid-column: 1/-1;
+}
+.description-text {
+  height: 400px;
+  overflow-y: scroll;
 }
 .create-btn {
   grid-column: 1/-1;
@@ -147,7 +152,7 @@ thead .MuiTableCell-root:last-child {
   justify-content: center;
   margin-top: 0.5rem;
 }
-.add {
+.btn_end {
   display: flex;
   grid-row: 1/-1;
   justify-content: flex-end;
@@ -162,7 +167,6 @@ thead .MuiTableCell-root:last-child {
   justify-content: space-between;
   color: black;
   background-color: #cecece;
-
   padding: 0 2;
   width: 50vw;
   height: 70px;

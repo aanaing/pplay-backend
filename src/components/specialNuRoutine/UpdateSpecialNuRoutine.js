@@ -25,7 +25,7 @@ import {
   USER_ID,
 } from "../../gql/specialNuRoutine";
 import { GET_IMAGE_UPLOAD_URL, DELETE_IMAGE } from "../../gql/misc";
-import { useMutation, useQuery } from "@apollo/client";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { LoadingButton } from "@mui/lab";
 
 const UpdateNuRoutine = (props) => {
@@ -44,32 +44,28 @@ const UpdateNuRoutine = (props) => {
 
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState({ message: "", isError: false });
-  const [values, setValues] = useState({
-    description: "",
-    target: "",
-    pdf_file_url: "",
-    vegetarian: "",
-    package_type: "",
-    thumbnail_image_url: "",
-    duration_of_routine_in_days: "",
-  });
-  const [errors, setErrors] = useState({
-    description: "",
-    target: "",
-    pdf_file_url: "",
-    vegetarian: "",
-    package_type: "",
-    thumbnail_image_url: "",
-    duration_of_routine_in_days: "",
-  });
+  const [values, setValues] = useState({});
+  const [errors, setErrors] = useState({});
   const [imagePreview, setImagePreview] = useState(null);
   const [oldImageName, setOldImageName] = useState(null);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [isImageChange, setIsImageChange] = useState(false);
   const [textValue, setTextValue] = useState(RichTextEditor.createEmptyValue());
-  const result = useQuery(USER_ID);
-  console.log(result);
+  const [loadUser, resultUser] = useLazyQuery(USER_ID);
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    loadUser();
+  }, [loadUser]);
+
+  useEffect(() => {
+    if (resultUser) {
+      setUser(resultUser);
+    }
+  }, [resultUser]);
+
+  console.log(resultUser);
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -109,24 +105,8 @@ const UpdateNuRoutine = (props) => {
       setLoading(false);
     },
     onCompleted: () => {
-      setValues({
-        description: "",
-        target: "",
-        pdf_file_url: "",
-        vegetarian: "",
-        package_type: "",
-        thumbnail_image_url: "",
-        duration_of_routine_in_days: "",
-      });
-      setErrors({
-        description: "",
-        target: "",
-        pdf_file_url: "",
-        vegetarian: "",
-        package_type: "",
-        thumbnail_image_url: "",
-        duration_of_routine_in_days: "",
-      });
+      setValues({});
+      setErrors({});
       setImageFile("");
       setImagePreview("");
       setLoading(false);
@@ -136,25 +116,20 @@ const UpdateNuRoutine = (props) => {
   });
 
   useEffect(() => {
-    console.log(props);
-    let val = props.value;
-    console.log(props.value);
-    setValues({
-      description: val.description,
-      target: val.target,
-      pdf_file_url: val.pdf_file_url,
-      vegetarian: val.vegetarian,
-      package_type: val.package_type,
-      thumbnail_image_url: val.thumbnail_image_url,
-      duration_of_routine_in_days: val.duration_of_routine_in_days,
-    });
-    setTextValue(RichTextEditor.createValueFromString(val.description, "html"));
-    setImagePreview(props.value.thumbnail_image_url);
-    let image_url = props.value.thumbnail_image_url;
-    console.log(image_url);
-    // setOldImageName(
-    //   image_url.substring(image_url.lastIndexOf("/") + 1, image_url.lenght)
-    // );
+    if (props.value) {
+      let val = props.value;
+      setValues(props.value);
+      setTextValue(
+        RichTextEditor.createValueFromString(val.description, "html")
+      );
+      console.log(val.thumbnail_image_url);
+      setImagePreview(val.thumbnail_image_url);
+      let image_url = val.thumbnail_image_url;
+      // setOldImageName(
+      //   image_url.substring(image_url.lastIndexOf("/") + 1, image_url.lenght)
+      // );
+      console.log(image_url);
+    }
   }, [props.value]);
 
   const imageChange = async (e) => {
@@ -241,10 +216,13 @@ const UpdateNuRoutine = (props) => {
     setErrors({});
     props.handleClose();
   };
-  if (!result) {
+  if (!resultUser) {
     return;
   }
-  let user = result.data.users;
+  // let user = result.data.users;
+  console.log(props.value);
+  console.log(values);
+  console.log(values.nutrition_routine_name);
   return (
     <>
       <Box
@@ -275,7 +253,7 @@ const UpdateNuRoutine = (props) => {
 
       <Card>
         <CardContent>
-          <div className="grid--2--cols-update">
+          <div className="grid--2--cols">
             {/* image */}
             <Box>
               <CardMedia
@@ -298,7 +276,7 @@ const UpdateNuRoutine = (props) => {
             </Box>
 
             {/* list items */}
-            <div className="grid-item-update">
+            <div className="grid-item grid--2--cols">
               <TextField
                 id="thumbnail_image_url"
                 label="image_url"
@@ -314,7 +292,11 @@ const UpdateNuRoutine = (props) => {
               <TextField
                 id="nutrition_routine_name"
                 label="nutrition routine name"
-                //value={values.nutrition_routine_name}
+                value={
+                  values.nutrition_routine_name
+                    ? values.nutrition_routine_name
+                    : "-"
+                }
                 onChange={handleChange("nutrition_routine_name")}
                 error={errors.nutrition_routine_name ? true : false}
                 helperText={errors.nutrition_routine_name}
@@ -323,7 +305,11 @@ const UpdateNuRoutine = (props) => {
               <TextField
                 id="duration_of_routine_in_days"
                 label="duration_of_routine_in_days"
-                //value={values.duration_of_routine_in_days}
+                value={
+                  values.duration_of_routine_in_days
+                    ? values.duration_of_routine_in_days
+                    : "-"
+                }
                 onChange={handleChange("duration_of_routine_in_days")}
                 error={errors.duration_of_routine_in_days ? true : false}
                 helperText={errors.duration_of_routine_in_days}
@@ -333,7 +319,7 @@ const UpdateNuRoutine = (props) => {
                 <InputLabel id="vegetarian">Vegetarian</InputLabel>
                 <Select
                   labelId="vegetarian"
-                  // value={values.package_type}
+                  value={values.vegetarian ? "Yes" : "No"}
                   label="vegetarian"
                   onChange={handleChange("vegetarian")}
                   error={errors.vegetarian ? true : false}
@@ -348,7 +334,7 @@ const UpdateNuRoutine = (props) => {
               <TextField
                 id="target"
                 label="target"
-                //value={values.target}
+                value={values.target ? values.target : "-"}
                 onChange={handleChange("target")}
                 error={errors.target ? true : false}
                 helperText={errors.target}

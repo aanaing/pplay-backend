@@ -15,6 +15,9 @@ export const EXE_ROUTINE = gql`
       exercise_routine_name
       id
       updated_at
+      thumbnail_image_url
+      routine_category
+      description
     }
   }
 `;
@@ -39,6 +42,9 @@ export const CREATE_EXE_ROUTINE = gql`
     $day_5: uuid!
     $day_6: uuid!
     $day_7: uuid!
+    $thumbnail_image_url: String!
+    $routine_category: String!
+    $description: String!
   ) {
     insert_exercise_routine_one(
       object: {
@@ -50,6 +56,9 @@ export const CREATE_EXE_ROUTINE = gql`
         day_6: $day_6
         day_7: $day_7
         exercise_routine_name: $exercise_routine_name
+        thumbnail_image_url: $thumbnail_image_url
+        routine_category: $routine_category
+        description: $description
       }
     ) {
       created_at
@@ -63,6 +72,9 @@ export const CREATE_EXE_ROUTINE = gql`
       exercise_routine_name
       id
       updated_at
+      thumbnail_image_url
+      routine_category
+      description
     }
   }
 `;
@@ -78,6 +90,9 @@ export const UPDATE_EXE_ROUTINE = gql`
     $day_6: uuid!
     $day_7: uuid!
     $exercise_routine_name: String!
+    $thumbnail_image_url: String!
+    $routine_category: String!
+    $description: String!
   ) {
     update_exercise_routine_by_pk(
       pk_columns: { id: $id }
@@ -90,6 +105,9 @@ export const UPDATE_EXE_ROUTINE = gql`
         day_6: $day_6
         day_7: $day_7
         exercise_routine_name: $exercise_routine_name
+        thumbnail_image_url: $thumbnail_image_url
+        routine_category: $routine_category
+        description: $description
       }
     ) {
       exercise_routine_name
@@ -100,6 +118,9 @@ export const UPDATE_EXE_ROUTINE = gql`
       day_3
       day_2
       day_1
+      thumbnail_image_url
+      routine_category
+      description
     }
   }
 `;

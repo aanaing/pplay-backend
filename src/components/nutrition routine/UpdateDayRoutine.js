@@ -13,47 +13,25 @@ import RichTextEditor from "react-rte";
 import { UPDATE_EACH_DAY } from "../../gql/nuRoutine";
 
 const UpdateDayRoutine = (props) => {
-  console.log(props);
+  console.log("props values are :", props);
   const [values, setValues] = useState({});
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-  const [textValue1, setTextValue1] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-  const [textValue2, setTextValue2] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-  const [textValue3, setTextValue3] = useState(
-    RichTextEditor.createEmptyValue()
-  );
+  const [textValue, setTextValue] = useState(RichTextEditor.createEmptyValue());
 
   useEffect(() => {
     if (props.value) {
-      //props.value = Object.assign({}, props.value);
-      // delete props.value.created_at;
-      // delete props.value.updated_at;
-      // delete props.value.__typename;
-      // console.log("original", props.value);
-      setValues(props.value);
+      setValues(props.values);
+      setTextValue(
+        RichTextEditor.createValueFromString(props.value[props.k] ?? "", "html")
+      );
     }
   }, [props.value]);
   const handleClosClearData = () => {
     setValues({});
     setErrors({});
     props.handleClose();
-  };
-  const onChange1 = (value) => {
-    setTextValue1(value);
-    setValues({ ...values, day_1: value.toString("html") });
-  };
-  const onChange2 = (value) => {
-    setTextValue2(value);
-    setValues({ ...values, day_2: value.toString("html") });
-  };
-  const onChange3 = (value) => {
-    setTextValue3(value);
-    setValues({ ...values, day_3: value.toString("html") });
   };
 
   const [updateDays] = useMutation(UPDATE_EACH_DAY, {
@@ -68,7 +46,6 @@ const UpdateDayRoutine = (props) => {
     onCompleted: () => {
       setValues({});
       setErrors({});
-      setLoading(false);
       props.routineAlert("Routine have been updated.", false);
       props.handleClose();
     },
@@ -77,9 +54,20 @@ const UpdateDayRoutine = (props) => {
   const handleUpdate = async () => {
     setLoading(true);
     setErrors({});
-
+    let isErrorExit = false;
+    let errorObject = {};
+    // if (!values.props.value[props.k]) {
+    //   errorObject.props.value[props.k] = "Description is required";
+    //   isErrorExit = true;
+    // }
+    if (isErrorExit) {
+      setErrors(errorObject);
+      setLoading(false);
+      return;
+    }
     try {
-      updateDays({ variables: { ...values, id: props.value.id } });
+      updateDays({ variables: { ...values, id: props.values.id } });
+      setLoading(false);
     } catch (error) {
       console.log("error : ", error);
     }
@@ -110,12 +98,12 @@ const UpdateDayRoutine = (props) => {
     ],
   };
 
-  if (!props.value) {
-    return;
-  }
-  if (!values) {
-    return;
-  }
+  const onChange = (value) => {
+    setTextValue(value);
+    setValues({ ...values, day_1: value.toString("html") });
+    // setValues(props.values);
+    // setTextValue(value);
+  };
 
   return (
     <>
@@ -135,7 +123,7 @@ const UpdateDayRoutine = (props) => {
           Close
         </Button>
       </Box>
-      {/* day_1 */}
+      {/* day */}
       <Card
         className="text-container"
         sx={{ borderTopRightRadius: 0, borderTopLeftRadius: 0 }}
@@ -143,85 +131,16 @@ const UpdateDayRoutine = (props) => {
         <div className="text-item">
           <Box sx={{ padding: "1rem" }} className="text-box">
             <InputLabel style={{ marginBottom: 10, fontWeight: "bold" }}>
-              Day_1
+              Day
             </InputLabel>
             <RichTextEditor
               className="text-day"
-              //onChange={handleChange("description")}
-              onChange={onChange1}
-              value={textValue1}
+              onChange={onChange}
+              value={textValue}
               toolbarConfig={toolbarConfig}
             />
-            {errors.description && (
-              <FormHelperText error> {errors.description}</FormHelperText>
-            )}
-          </Box>
-        </div>
-        <Box className="add">
-          <LoadingButton
-            variant="contained"
-            //color="warning"
-            size="large"
-            loading={loading}
-            onClick={handleUpdate}
-          >
-            Update
-          </LoadingButton>
-        </Box>
-      </Card>
-      ;{/* day_2 */}
-      <Card
-        className="text-container"
-        sx={{ borderTopRightRadius: 0, borderTopLeftRadius: 0 }}
-      >
-        <div className="text-item">
-          <Box sx={{ padding: "1rem" }} className="text-box">
-            <InputLabel style={{ marginBottom: 10, fontWeight: "bold" }}>
-              Day_2
-            </InputLabel>
-            <RichTextEditor
-              className="text-day"
-              //onChange={handleChange("description")}
-              onChange={onChange2}
-              value={textValue2}
-              toolbarConfig={toolbarConfig}
-            />
-            {errors.day_2 && (
-              <FormHelperText error> {errors.day_2}</FormHelperText>
-            )}
-          </Box>
-        </div>
-        <Box className="add">
-          <LoadingButton
-            variant="contained"
-            //color="warning"
-            size="large"
-            loading={loading}
-            onClick={handleUpdate}
-          >
-            Update
-          </LoadingButton>
-        </Box>
-      </Card>
-      {/* day_3 */}
-      <Card
-        className="text-container"
-        sx={{ borderTopRightRadius: 0, borderTopLeftRadius: 0 }}
-      >
-        <div className="text-item">
-          <Box sx={{ padding: "1rem" }} className="text-box">
-            <InputLabel style={{ marginBottom: 10, fontWeight: "bold" }}>
-              Day_3
-            </InputLabel>
-            <RichTextEditor
-              className="text-day"
-              //onChange={handleChange("description")}
-              onChange={onChange3}
-              value={textValue3}
-              toolbarConfig={toolbarConfig}
-            />
-            {errors.day_3 && (
-              <FormHelperText error> {errors.day_3}</FormHelperText>
+            {errors.day_1 && (
+              <FormHelperText error> {errors.day_1}</FormHelperText>
             )}
           </Box>
         </div>

@@ -119,7 +119,6 @@ const Routine = () => {
       );
     }
   }, [resutRoutine]);
-  console.log(resutRoutine);
 
   //------------- REMOVE ROUTINE -------------
   const [deleteSpeRoutine] = useMutation(DELETE_SPE_NUROUTINE, {

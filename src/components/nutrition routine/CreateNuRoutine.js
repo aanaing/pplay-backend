@@ -52,96 +52,6 @@ const CreateNuRoutine = ({ handleClose }) => {
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
 
-  const [textValue1, setTextValue1] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-  const [textValue2, setTextValue2] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-  const [textValue3, setTextValue3] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-  const [textValue4, setTextValue4] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-  const [textValue5, setTextValue5] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-  const [textValue6, setTextValue6] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-  const [textValue7, setTextValue7] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-  const [textValue8, setTextValue8] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-  const [textValue9, setTextValue9] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-  const [textValue10, setTextValue10] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-  const [textValue11, setTextValue11] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-  const [textValue12, setTextValue12] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-  const [textValue13, setTextValue13] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-  const [textValue14, setTextValue14] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-  const [textValue15, setTextValue15] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-  const [textValue16, setTextValue16] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-  const [textValue17, setTextValue17] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-  const [textValue18, setTextValue18] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-  const [textValue19, setTextValue19] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-  const [textValue20, setTextValue20] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-  const [textValue21, setTextValue21] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-  const [textValue22, setTextValue22] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-  const [textValue23, setTextValue23] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-  const [textValue24, setTextValue24] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-  const [textValue25, setTextValue25] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-  const [textValue26, setTextValue26] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-  const [textValue27, setTextValue27] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-  const [textValue28, setTextValue28] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-  const [textValue29, setTextValue29] = useState(
-    RichTextEditor.createEmptyValue()
-  );
-  const [textValue30, setTextValue30] = useState(
-    RichTextEditor.createEmptyValue()
-  );
   const [textValue, setTextValue] = useState(RichTextEditor.createEmptyValue());
 
   // const [textValue, setTextValue] = useState(null);
@@ -168,23 +78,6 @@ const CreateNuRoutine = ({ handleClose }) => {
       });
     },
   });
-
-  // const [getPdfUrl] = useMutation(GET_IMAGE_UPLOAD_URL, {
-  //   onError: (error) => {
-  //     console.log(error);
-  //     setShowAlert({ message: "Error on server", isError: true });
-  //     setTimeout(() => {
-  //       setShowAlert({ message: "", isError: false });
-  //     }, 1000);
-  //   },
-  //   onCompleted: (result) => {
-  //     setImageFileUrl(result.getImageUploadUrl.imageUploadUrl);
-  //     setValues({
-  //       ...values,
-  //       pdf_file_url: `https://axra.sgp1.digitaloceanspaces.com/VJun/${result.getImageUploadUrl.imageName}`,
-  //     });
-  //   },
-  // });
 
   const [createNuRoutine] = useMutation(CREATE_NODAYS, {
     onError: (error) => {
@@ -284,9 +177,8 @@ const CreateNuRoutine = ({ handleClose }) => {
 
     try {
       await imageService.uploadImage(imageFileUrl, imageFile);
-      //await routine.uploadImage(pdfFileUrl, pdfFile);
+
       createNuRoutine({ variables: { ...values } });
-      // console.log(values);
     } catch (error) {
       console.log("error bbbbbbbbbbbbbbb : ", error);
     }
@@ -343,7 +235,6 @@ const CreateNuRoutine = ({ handleClose }) => {
           borderTopRightRadius: 10,
           borderTopLeftRadius: 10,
           py: 2,
-          gridColumn: 1 / -1,
         }}
       >
         <Typography variant="h5" component="h2" color="black" sx={{ mx: 4 }}>
@@ -359,9 +250,9 @@ const CreateNuRoutine = ({ handleClose }) => {
         </Button>
       </Box>
 
-      <Card>
+      <Card sx={{ borderTopLeftRadius: 0, borderTopRightRadius: 0 }}>
         <CardContent>
-          <div className="grid--2--cols-update">
+          <div className="grid--2--cols">
             {/* image */}
             <Box>
               <CardMedia
@@ -384,7 +275,7 @@ const CreateNuRoutine = ({ handleClose }) => {
             </Box>
 
             {/* list items */}
-            <div className="grid-item-update">
+            <div className="grid--2--cols grid-item">
               <TextField
                 id="thumbnail_image_url"
                 label="image_url"
@@ -467,27 +358,27 @@ const CreateNuRoutine = ({ handleClose }) => {
                 error={errors.pdf_file_url ? true : false}
                 helperText={errors.pdf_file_url}
               />
+              {/* description */}
+              <Box className="description">
+                <InputLabel style={{ marginBottom: 10, fontWeight: "bold" }}>
+                  Description
+                </InputLabel>
+                <RichTextEditor
+                  className="description-text"
+                  //onChange={handleChange("description")}
+                  onChange={onChange}
+                  value={textValue}
+                  toolbarConfig={toolbarConfig}
+                />
+                {errors.description && (
+                  <FormHelperText error> {errors.description}</FormHelperText>
+                )}
+              </Box>
             </div>
           </div>
         </CardContent>
 
-        {/* description */}
-        <Box ml="1rem">
-          <InputLabel style={{ marginBottom: 10, fontWeight: "bold" }}>
-            Description
-          </InputLabel>
-          <RichTextEditor
-            className="richtext"
-            //onChange={handleChange("description")}
-            onChange={onChange}
-            value={textValue}
-            toolbarConfig={toolbarConfig}
-          />
-          {errors.description && (
-            <FormHelperText error> {errors.description}</FormHelperText>
-          )}
-        </Box>
-        <Box className="add">
+        <Box className="btn_end">
           <LoadingButton
             variant="contained"
             //color="warning"

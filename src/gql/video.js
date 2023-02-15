@@ -271,7 +271,7 @@ export const VIDEO_CATEGORY = gql`
       thumbnail_image_url
       target_period
       promotion
-      package_type
+      fk_user_subscription_level_id
       main_type
       id
       duration
@@ -289,7 +289,7 @@ export const ALL_VIDEO_CATEGORY = gql`
       fk_video_sub_type_id
       id
       main_type
-      package_type
+      fk_user_subscription_level_id
       promotion
       target_period
       thumbnail_image_url

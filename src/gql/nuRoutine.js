@@ -271,7 +271,7 @@ export const UPDATE_NODAYS = gql`
 
 //Update Each Day
 export const UPDATE_EACH_DAY = gql`
-  mutation UpdateEahDay(
+  mutation UpdateEachDay(
     $id: uuid!
     $day_1: String!
     $day_2: String!

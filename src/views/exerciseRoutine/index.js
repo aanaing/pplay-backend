@@ -28,6 +28,7 @@ import {
   Modal,
   InputBase,
   Paper,
+  Avatar,
   autocompleteClasses,
 } from "@mui/material";
 import { useLazyQuery, useMutation } from "@apollo/client";
@@ -35,13 +36,14 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 const style = {
   position: "absolute",
   top: "50%",
-  left: "80%",
+  left: "50%",
   transform: "translate(-50%, -50%)",
   width: "100vw",
-  //bgcolor: "white",
+  height: "100vh",
+  overflow: "scroll",
+  bgcolor: "background.paper",
   // border: "2px solid #000",
-  // boxShadow: 24,
-  p: 8,
+  boxShadow: 24,
 };
 const styleR = {
   position: "absolute",
@@ -164,8 +166,8 @@ const Routine = () => {
     setUpdateOpen(true);
   };
   const handleUpdateClose = () => {
-    resutRoutine.refetch();
     setUpdateOpen(false);
+    resutRoutine.refetch();
   };
 
   // for pagination
@@ -207,8 +209,6 @@ const Routine = () => {
   if (!routine) {
     return <em>Loading .....</em>;
   }
-
-  console.log(subType);
 
   return (
     <>
@@ -299,6 +299,12 @@ const Routine = () => {
                     Routine name
                   </StyledTableCell>
                   <StyledTableCell style={{ minWidth: 100 }}>
+                    Image
+                  </StyledTableCell>
+                  <StyledTableCell style={{ minWidth: 100 }}>
+                    Routine Category
+                  </StyledTableCell>
+                  <StyledTableCell style={{ minWidth: 100 }}>
                     day_1
                   </StyledTableCell>
                   <StyledTableCell style={{ minWidth: 100 }}>
@@ -327,17 +333,24 @@ const Routine = () => {
               <TableBody>
                 {Array.isArray(routine)
                   ? routine.map((row, index) => (
-                      <StyledTableRow
-                        hover
-                        role="checkbox"
-                        tabIndex={-1}
-                        key={index}
-                      >
+                      <StyledTableRow hover key={index}>
                         <StyledTableCell>
                           {row.id.substring(0, 8)}
                         </StyledTableCell>
                         <StyledTableCell>
                           {row.exercise_routine_name}
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <Avatar
+                            alt="routine image"
+                            src={row.thumbnail_image_url}
+                            width="56px"
+                            height="56px"
+                          />
+                        </StyledTableCell>
+
+                        <StyledTableCell>
+                          {row.routine_category ? row.routine_category : "-"}
                         </StyledTableCell>
                         <StyledTableCell>
                           {subType.map((s) => {

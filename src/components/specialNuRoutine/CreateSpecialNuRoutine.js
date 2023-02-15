@@ -54,24 +54,21 @@ const CreateSpecialNuRoutine = ({ handleClose }) => {
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [textValue, setTextValue] = useState(RichTextEditor.createEmptyValue());
 
-  const [users, setUsers] = useState({});
-  //const [loadUser, resultUser] = useLazyQuery(USER_ID);
-  const result = useQuery(USER_ID);
-  console.log(result);
+  const [user, setUser] = useState({});
+  const [loadUser, resultUser] = useLazyQuery(USER_ID);
 
   /*---------------------------*/
 
   //get user datas
-  // useEffect(() => {
-  //   loadUser();
-  // }, [loadUser]);
+  useEffect(() => {
+    loadUser();
+  }, [loadUser]);
 
-  // useEffect(() => {
-  //   if (resultUser) {
-  //     setUsers(resultUser.data.users);
-  //   }
-  // }, [resultUser]);
-  // console.log(users);
+  useEffect(() => {
+    if (resultUser) {
+      setUser(resultUser.data.users);
+    }
+  }, [resultUser]);
 
   /*----------------*/
 
@@ -242,10 +239,7 @@ const CreateSpecialNuRoutine = ({ handleClose }) => {
       { label: "OL", style: "ordered-list-item" },
     ],
   };
-  let user = result.data.users;
-  if (!user) {
-    return;
-  }
+  //let user = result.data.user;
 
   return (
     <>
@@ -277,7 +271,7 @@ const CreateSpecialNuRoutine = ({ handleClose }) => {
 
       <Card>
         <CardContent>
-          <div className="grid--2--cols-update">
+          <div className="grid--2--cols">
             {/* image */}
             <Box>
               <CardMedia
@@ -300,7 +294,7 @@ const CreateSpecialNuRoutine = ({ handleClose }) => {
             </Box>
 
             {/* list items */}
-            <div className="grid-item-update">
+            <div className="grid-item grid--2--cols">
               <TextField
                 id="thumbnail_image_url"
                 label="image_url"

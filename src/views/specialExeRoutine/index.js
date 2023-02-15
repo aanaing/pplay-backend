@@ -29,19 +29,21 @@ import {
   Paper,
   Alert,
   autocompleteClasses,
+  Avatar,
 } from "@mui/material";
 import { useLazyQuery, useMutation } from "@apollo/client";
 
 const style = {
   position: "absolute",
   top: "50%",
-  left: "80%",
+  left: "50%",
   transform: "translate(-50%, -50%)",
   width: "100vw",
-  //bgcolor: "white",
+  height: "100vh",
+  overflow: "scroll",
+  bgcolor: "background.paper",
   // border: "2px solid #000",
-  // boxShadow: 24,
-  p: 8,
+  boxShadow: 24,
 };
 const styleR = {
   position: "absolute",
@@ -218,8 +220,6 @@ const Routine = () => {
     return <em>Loading .....</em>;
   }
 
-  console.log(routine);
-
   return (
     <>
       <div className="align">
@@ -308,6 +308,8 @@ const Routine = () => {
                   <StyledTableCell style={{ minWidth: 100 }}>
                     Routine name
                   </StyledTableCell>
+                  <StyledTableCell>Image</StyledTableCell>
+                  <StyledTableCell>Routine Category</StyledTableCell>
                   <StyledTableCell style={{ minWidth: 100 }}>
                     day_1
                   </StyledTableCell>
@@ -348,6 +350,17 @@ const Routine = () => {
                         </StyledTableCell>
                         <StyledTableCell>
                           {row.special_exe_routine_name}
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <Avatar
+                            alt="routine image"
+                            src={row.thumbnail_image_url}
+                            width="56px"
+                            height="56px"
+                          ></Avatar>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          {row.routine_category ? row.routine_category : "-"}
                         </StyledTableCell>
                         <StyledTableCell>
                           {subType.map((s) => {
