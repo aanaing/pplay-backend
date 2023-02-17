@@ -78,6 +78,11 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
 
   useEffect(() => {
     if (resutSub.data) {
+      if(video.main_type === "ZUMBA"){
+        setShowSubInput(true);
+      }else{
+        setShowSubInput(false);
+      }
       setSub(resutSub.data.video_sub_type);
     }
   }, [resutSub]);
@@ -371,13 +376,13 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
         deleteImage({ variables: { image_name: oldImageName } });
       }
       if (values.main_type === "ZUMBA") {
-        delete values.sub_name;
+        values.sub_name = null;
         setValues(values);
-        console.log("update video 1", values);
-        updateVideosZumba({ variables: { ...values, id: video.id } });
-      } else {
-        updateVideos({ variables: { ...values, id: video.id } });
+        // console.log("update video 1", values);
       }
+
+        updateVideos({ variables: { ...values, id: video.id } });
+
     } catch (error) {
       console.log("error : ", error);
     }

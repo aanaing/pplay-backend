@@ -148,7 +148,7 @@ export const UPDATE_VIDEOS = gql`
     $video_url_b: String!
     $thumbnail_image_url: String!
     $promotion: Boolean!
-    $sub_name: uuid!
+    $sub_name: uuid
     $package_type: Int!
   ) {
     update_video_list_by_pk(
