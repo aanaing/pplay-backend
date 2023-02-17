@@ -7,7 +7,6 @@ import {
   Typography,
   Box,
   Card,
-  CardActionArea,
   CardMedia,
   TextField,
   FormHelperText,
@@ -16,7 +15,6 @@ import {
   FormControl,
   Select,
   Alert,
-  TextareaAutosize,
   CardContent,
 } from "@mui/material";
 import { CREATE_NODAYS, UPDATE_NODAYS } from "../../gql/nuRoutine";
@@ -42,7 +40,7 @@ const UpdateNuRoutine = (props) => {
   const [showAlert, setShowAlert] = useState({ message: "", isError: false });
   const [values, setValues] = useState({
     description: "",
-    target: "",
+    routine_category: "",
     pdf_file_url: "",
     vegetarian: "",
     package_type: "",
@@ -51,7 +49,7 @@ const UpdateNuRoutine = (props) => {
   });
   const [errors, setErrors] = useState({
     description: "",
-    target: "",
+    routine_category: "",
     pdf_file_url: "",
     vegetarian: "",
     package_type: "",
@@ -105,7 +103,7 @@ const UpdateNuRoutine = (props) => {
     onCompleted: () => {
       setValues({
         description: "",
-        target: "",
+        routine_category: "",
         pdf_file_url: "",
         vegetarian: "",
         package_type: "",
@@ -114,7 +112,7 @@ const UpdateNuRoutine = (props) => {
       });
       setErrors({
         description: "",
-        target: "",
+        routine_category: "",
         pdf_file_url: "",
         vegetarian: "",
         package_type: "",
@@ -253,8 +251,6 @@ const UpdateNuRoutine = (props) => {
     return;
   }
 
-  console.log(values);
-  console.log(values.vegetarian);
   return (
     <>
       <Box
@@ -324,11 +320,7 @@ const UpdateNuRoutine = (props) => {
               <TextField
                 id="nutrition_routine_name"
                 label="nutrition routine name"
-                value={
-                  values.nutrition_routine_name
-                    ? values.nutrition_routine_name
-                    : "-"
-                }
+                value={values.nutrition_routine_name}
                 onChange={handleChange("nutrition_routine_name")}
                 error={errors.nutrition_routine_name ? true : false}
                 helperText={errors.nutrition_routine_name}
@@ -337,11 +329,7 @@ const UpdateNuRoutine = (props) => {
               <TextField
                 id="duration_of_routine_in_days"
                 label="duration_of_routine_in_days"
-                value={
-                  values.duration_of_routine_in_days
-                    ? values.duration_of_routine_in_days
-                    : "-"
-                }
+                value={values.duration_of_routine_in_days}
                 onChange={handleChange("duration_of_routine_in_days")}
                 error={errors.duration_of_routine_in_days ? true : false}
                 helperText={errors.duration_of_routine_in_days}
@@ -364,12 +352,12 @@ const UpdateNuRoutine = (props) => {
                 )}
               </FormControl>
               <TextField
-                id="target"
-                label="target"
-                value={values.target ? values.target : "-"}
-                onChange={handleChange("target")}
-                error={errors.target ? true : false}
-                helperText={errors.target}
+                id="routine_category"
+                label="routine_category"
+                value={values.routine_category}
+                onChange={handleChange("routine_category")}
+                error={errors.routine_category ? true : false}
+                helperText={errors.routine_category}
               />
               <FormControl variant="outlined">
                 <InputLabel id="main_type">Package Type</InputLabel>
@@ -399,27 +387,27 @@ const UpdateNuRoutine = (props) => {
                 error={errors.pdf_file_url ? true : false}
                 helperText={errors.pdf_file_url}
               />
+              {/* description */}
+              <Box className="description">
+                <InputLabel style={{ marginBottom: 10, fontWeight: "bold" }}>
+                  Description
+                </InputLabel>
+                <RichTextEditor
+                  className="description-text"
+                  //onChange={handleChange("description")}
+                  onChange={onChange}
+                  value={textValue}
+                  toolbarConfig={toolbarConfig}
+                />
+                {errors.description && (
+                  <FormHelperText error> {errors.description}</FormHelperText>
+                )}
+              </Box>
             </div>
           </div>
         </CardContent>
 
-        {/* description */}
-        <Box ml="1rem">
-          <InputLabel style={{ marginBottom: 10, fontWeight: "bold" }}>
-            Description
-          </InputLabel>
-          <RichTextEditor
-            className="richtext"
-            //onChange={handleChange("description")}
-            onChange={onChange}
-            value={textValue}
-            toolbarConfig={toolbarConfig}
-          />
-          {errors.description && (
-            <FormHelperText error> {errors.description}</FormHelperText>
-          )}
-        </Box>
-        <Box className="add">
+        <Box className="btn_end">
           <LoadingButton
             variant="contained"
             //color="warning"

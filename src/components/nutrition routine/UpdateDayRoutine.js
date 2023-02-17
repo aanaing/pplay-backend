@@ -5,6 +5,7 @@ import {
   Card,
   FormHelperText,
   InputLabel,
+  Alert,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { useState, useEffect } from "react";
@@ -13,11 +14,10 @@ import RichTextEditor from "react-rte";
 import { UPDATE_EACH_DAY } from "../../gql/nuRoutine";
 
 const UpdateDayRoutine = (props) => {
-  console.log("props values are :", props);
   const [values, setValues] = useState({});
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
+  const [showAlert, setShowAlert] = useState({ message: "", isError: false });
   const [textValue, setTextValue] = useState(RichTextEditor.createEmptyValue());
 
   useEffect(() => {
@@ -54,19 +54,9 @@ const UpdateDayRoutine = (props) => {
   const handleUpdate = async () => {
     setLoading(true);
     setErrors({});
-    let isErrorExit = false;
-    let errorObject = {};
-    // if (!values.props.value[props.k]) {
-    //   errorObject.props.value[props.k] = "Description is required";
-    //   isErrorExit = true;
-    // }
-    if (isErrorExit) {
-      setErrors(errorObject);
-      setLoading(false);
-      return;
-    }
+
     try {
-      updateDays({ variables: { ...values, id: props.values.id } });
+      updateDays({ variables: { ...values, id: props.id } });
       setLoading(false);
     } catch (error) {
       console.log("error : ", error);
@@ -100,9 +90,7 @@ const UpdateDayRoutine = (props) => {
 
   const onChange = (value) => {
     setTextValue(value);
-    setValues({ ...values, day_1: value.toString("html") });
-    // setValues(props.values);
-    // setTextValue(value);
+    setValues({ ...values, [props.k]: value.toString("html") });
   };
 
   return (
@@ -144,7 +132,7 @@ const UpdateDayRoutine = (props) => {
             )}
           </Box>
         </div>
-        <Box className="add">
+        <Box className="btn_end">
           <LoadingButton
             variant="contained"
             //color="warning"
@@ -156,6 +144,22 @@ const UpdateDayRoutine = (props) => {
           </LoadingButton>
         </Box>
       </Card>
+      {showAlert.message && !showAlert.isError && (
+        <Alert
+          sx={{ position: "fixed", bottom: "1em", right: "1em" }}
+          severity="success"
+        >
+          {showAlert.message}
+        </Alert>
+      )}
+      {showAlert.message && showAlert.isError && (
+        <Alert
+          sx={{ position: "fixed", bottom: "1em", right: "1em" }}
+          severity="error"
+        >
+          {showAlert.message}
+        </Alert>
+      )}
     </>
   );
 };

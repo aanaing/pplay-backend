@@ -21,6 +21,7 @@ import {
   InputLabel,
   Select,
   FormHelperText,
+  Alert,
 } from "@mui/material";
 
 const CreateVideo = ({ handleClose, videoAlert }) => {
@@ -47,6 +48,7 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
   const [loading, setLoading] = useState(false);
   const [values, setValues] = useState({});
   const [errors, setErrors] = useState({});
+  const [showAlert, setShowAlert] = useState({ message: "", isError: false });
   const [sub, setSub] = useState({});
   const [loadSub, resultSub] = useLazyQuery(SUB_TYPE_NAME);
   const [showSubInput, setShowSubInput] = useState(false);
@@ -300,12 +302,11 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
           display: "flex",
           justifyContent: "space-between",
           color: "black",
-          maxWidth: "lg",
+          // width: "94.5vw",
           bgcolor: "#cecece",
           borderTopRightRadius: 10,
           borderTopLeftRadius: 10,
           py: 2,
-          mx: 13,
         }}
       >
         <Typography variant="h5" component="h2" color="black" sx={{ mx: 4 }}>
@@ -322,210 +323,208 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
       </Box>
       <Card
         sx={{
-          display: "flex",
-          justifyContent: "flex-start",
+          borderTopLeftRadius: 0,
+          borderTopRightRadius: 0,
           color: "white",
-          bgcolor: "white",
-          maxWidth: "lg",
-          mx: 13,
-          borderRadius: 0,
-          height: 600,
-          borderBottomLeftRadius: 10,
-          borderBottomRightRadius: 10,
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            my: 2,
-            mx: 3,
-            ml: 5,
-          }}
-        >
-          <CardMedia
-            component="img"
-            image={imagePreview}
-            alt="Video image"
-            sx={{
-              flex: 1,
-              bgcolor: "#cecece",
-              maxHeight: 300,
-              objectFit: "contain",
-              width: 300,
-              mt: 4,
-              boxShadow: 10,
-              borderRadius: 2,
-              border: 1,
-            }}
-          />
-        </Box>
+        <CardContent>
+          <div className="grid--2--cols">
+            {/* image */}
+            <Box>
+              <CardMedia
+                component="img"
+                height="300"
+                image={imagePreview}
+                alt="video image"
+                className="grid_img"
+                sx={{
+                  flex: 1,
+                  bgcolor: "#cecece",
+                  maxHeight: 300,
+                  objectFit: "contain",
+                  width: 300,
+                  mt: 4,
+                  boxShadow: 5,
+                  borderRadius: 2,
+                  border: 2,
+                }}
+              />
+            </Box>
 
-        <CardContent sx={{ mx: 1.5, my: 2, maxWidth: 500 }}>
-          <Box sx={{ display: "flex", flexDirection: "column" }}>
-            <TextField
-              id="video_url_a"
-              label="Upload Video A"
-              type="file"
-              InputLabelProps={{ shrink: "shrink" }}
-              sx={{ my: 2 }}
-              onChange={videoChangeA}
-              error={errors.video_url_a ? true : false}
-              helperText={errors.video_url_a}
-              accept="video/webm, video/mkv, video/mp4"
-            />
-            <TextField
-              id="video_url_b"
-              label="Upload Video B"
-              type="file"
-              InputLabelProps={{ shrink: "shrink" }}
-              sx={{ my: 2 }}
-              onChange={videoChangeB}
-              error={errors.video_url_b ? true : false}
-              helperText={errors.video_url_b}
-              accept="video/webm, video/mkv, video/mp4"
-            />
-            <TextField
-              id="thumbnail_image_url"
-              label="image_url"
-              type="file"
-              accept="image/png, image/jpeg, image/jpg, image/gif, image/svg+xml"
-              InputLabelProps={{ shrink: "shrink" }}
-              sx={{ my: 2 }}
-              //value={values.thumbnail_image_url}
-              onChange={thumbnailImageChange}
-              error={errors.thumbnail_image_url ? true : false}
-              helperText={errors.thumbnail_image_url}
-            />
-            <TextField
-              id="video_package_name"
-              label="Video Package Name"
-              sx={{ my: 2 }}
-              // value={values.video_package_name}
-              onChange={handleChange("video_package_name")}
-              error={errors.video_package_name ? true : false}
-              helperText={errors.video_package_name}
-            />
+            {/* list items */}
+            <div className="grid--2--cols grid-item">
+              {/* video url a */}
+              <TextField
+                id="video_url_a"
+                label="Upload Video A"
+                type="file"
+                InputLabelProps={{ shrink: "shrink" }}
+                onChange={videoChangeA}
+                error={errors.video_url_a ? true : false}
+                helperText={errors.video_url_a}
+                accept="video/webm, video/mkv, video/mp4"
+              />
+              {/* video_url_b */}
+              <TextField
+                id="video_url_b"
+                label="Upload Video B"
+                type="file"
+                InputLabelProps={{ shrink: "shrink" }}
+                onChange={videoChangeB}
+                error={errors.video_url_b ? true : false}
+                helperText={errors.video_url_b}
+                accept="video/webm, video/mkv, video/mp4"
+              />
+              {/* thumbnail_image_url */}
+              <TextField
+                id="thumbnail_image_url"
+                label="image_url"
+                type="file"
+                accept="image/png, image/jpeg, image/jpg, image/gif, image/svg+xml"
+                InputLabelProps={{ shrink: "shrink" }}
+                //value={values.thumbnail_image_url}
+                onChange={thumbnailImageChange}
+                error={errors.thumbnail_image_url ? true : false}
+                helperText={errors.thumbnail_image_url}
+              />
+              {/* video_package_name */}
+              <TextField
+                id="video_package_name"
+                label="Video Package Name"
+                // value={values.video_package_name}
+                onChange={handleChange("video_package_name")}
+                error={errors.video_package_name ? true : false}
+                helperText={errors.video_package_name}
+              />
+              {/* main_type */}
+              <FormControl variant="outlined">
+                <InputLabel id="main_type">Main Type</InputLabel>
+                <Select
+                  labelId="main_type"
+                  // value={values.main_type}
+                  label="Main Type"
+                  onChange={handleChange("main_type")}
+                  error={errors.main_type ? true : false}
+                >
+                  <MenuItem value="HOME">HOME</MenuItem>
+                  <MenuItem value="GYM">GYM</MenuItem>
+                  <MenuItem value="ZUMBA">ZUMBA</MenuItem>
+                </Select>
+                {errors.main_type && (
+                  <FormHelperText error>{errors.main_type}</FormHelperText>
+                )}
+              </FormControl>
+              {/* package_type */}
+              <FormControl variant="outlined">
+                <InputLabel id="main_type">Package Type</InputLabel>
+                <Select
+                  labelId="package_type"
+                  value={values.package_type}
+                  label="Package Type"
+                  onChange={handleChange("package_type")}
+                  error={errors.package_type ? true : false}
+                >
+                  <MenuItem value="0">Free</MenuItem>
+                  <MenuItem value="1">Basic</MenuItem>
+                  <MenuItem value="2">Medium</MenuItem>
+                  <MenuItem value="3">Premium</MenuItem>
+                  <MenuItem value="4">Special</MenuItem>
+                </Select>
+                {errors.package_type && (
+                  <FormHelperText error>{errors.package_type}</FormHelperText>
+                )}
+              </FormControl>
+              {/* target_period */}
+              <TextField
+                id="target_period"
+                label="target_period"
+                // value={values.target_period}
+                onChange={handleChange("target_period")}
+                error={errors.target_period ? true : false}
+                helperText={errors.target_period}
+              />
+              {/* duration */}
+              <TextField
+                id="duration"
+                label="duration"
+                // value={values.duration}
+                onChange={handleChange("duration")}
+                error={errors.duration ? true : false}
+                helperText={errors.duration}
+              />
+              {/* promotion */}
+              <FormControl variant="outlined">
+                <InputLabel id="promotion">Promotion</InputLabel>
+                <Select
+                  labelId="promotion"
+                  // value={values.promotion}
+                  label="Promotion"
+                  onChange={handleChange("promotion")}
+                  error={errors.promotion ? true : false}
+                >
+                  <MenuItem value="true">Yes</MenuItem>
+                  <MenuItem value="false">No</MenuItem>
+                </Select>
+                {errors.promotion && (
+                  <FormHelperText error>{errors.promotion}</FormHelperText>
+                )}
+              </FormControl>
+              {/* sub_type */}
+              <FormControl variant="outlined" disabled={showSubInput}>
+                <InputLabel id="sub_type">Sub type</InputLabel>
+                <Select
+                  labelId="sub_type"
+                  // value={values.sub_name}
+                  label="sub_type"
+                  onChange={handleChange("sub_name")}
+                  error={errors.sub_name ? true : false}
+                >
+                  {Array.isArray(sub)
+                    ? sub.map((sub) => (
+                        <MenuItem key={sub.id} value={sub.id}>
+                          {sub.sub_type_name}
+                        </MenuItem>
+                      ))
+                    : null}
+                </Select>
+                {errors.sub_name && (
+                  <FormHelperText error>{errors.sub_name}</FormHelperText>
+                )}
+              </FormControl>
+            </div>
+          </div>
+        </CardContent>
 
-            <FormControl sx={{ my: 2 }} variant="outlined">
-              <InputLabel id="main_type">Main Type</InputLabel>
-              <Select
-                labelId="main_type"
-                // value={values.main_type}
-                label="Main Type"
-                onChange={handleChange("main_type")}
-                error={errors.main_type ? true : false}
-              >
-                <MenuItem value="HOME">HOME</MenuItem>
-                <MenuItem value="GYM">GYM</MenuItem>
-                <MenuItem value="ZUMBA">ZUMBA</MenuItem>
-              </Select>
-              {errors.main_type && (
-                <FormHelperText error>{errors.main_type}</FormHelperText>
-              )}
-            </FormControl>
-          </Box>
+        <Box className="btn_end">
           <LoadingButton
             variant="contained"
             //color="warning"
             size="large"
-            sx={{ maxWidth: 100, mt: "1rem" }}
+            sx={{ height: 50, width: 100 }}
             loading={loading}
             onClick={handleCreate}
           >
             Create
           </LoadingButton>
-        </CardContent>
-        <div>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              mx: 2,
-              my: 4,
-              minWidth: 330,
-            }}
-          >
-            <FormControl sx={{ my: 2 }} variant="outlined">
-              <InputLabel id="main_type">Package Type</InputLabel>
-              <Select
-                labelId="main_type"
-                value={values.package_type}
-                label="Package Type"
-                onChange={handleChange("package_type")}
-                error={errors.package_type ? true : false}
-              >
-                <MenuItem value="0">Free</MenuItem>
-                <MenuItem value="1">Basic</MenuItem>
-                <MenuItem value="2">Medium</MenuItem>
-                <MenuItem value="3">Premium</MenuItem>
-              </Select>
-              {errors.package_type && (
-                <FormHelperText error>{errors.package_type}</FormHelperText>
-              )}
-            </FormControl>
-
-            <TextField
-              id="target_period"
-              label="target_period"
-              sx={{ my: 2 }}
-              // value={values.target_period}
-              onChange={handleChange("target_period")}
-              error={errors.target_period ? true : false}
-              helperText={errors.target_period}
-            />
-            <TextField
-              id="duration"
-              label="duration"
-              sx={{ my: 2 }}
-              // value={values.duration}
-              onChange={handleChange("duration")}
-              error={errors.duration ? true : false}
-              helperText={errors.duration}
-            />
-            <FormControl variant="outlined" sx={{ my: 2 }}>
-              <InputLabel id="promotion">Promotion</InputLabel>
-              <Select
-                labelId="promotion"
-                // value={values.promotion}
-                label="Promotion"
-                onChange={handleChange("promotion")}
-                error={errors.promotion ? true : false}
-              >
-                <MenuItem value="true">Yes</MenuItem>
-                <MenuItem value="false">No</MenuItem>
-              </Select>
-              {errors.promotion && (
-                <FormHelperText error>{errors.promotion}</FormHelperText>
-              )}
-            </FormControl>
-            <FormControl
-              variant="outlined"
-              sx={{ my: 2 }}
-              disabled={showSubInput}
-            >
-              <InputLabel id="sub_type">Sub type</InputLabel>
-              <Select
-                labelId="sub_type"
-                // value={values.sub_name}
-                label="sub_type"
-                onChange={handleChange("sub_name")}
-                error={errors.sub_name ? true : false}
-              >
-                {Array.isArray(sub)
-                  ? sub.map((sub) => (
-                      <MenuItem key={sub.id} value={sub.id}>
-                        {sub.sub_type_name}
-                      </MenuItem>
-                    ))
-                  : null}
-              </Select>
-              {errors.sub_name && (
-                <FormHelperText error>{errors.sub_name}</FormHelperText>
-              )}
-            </FormControl>
-          </Box>
-        </div>
+        </Box>
       </Card>
+      {showAlert.message && !showAlert.isError && (
+        <Alert
+          sx={{ position: "fixed", bottom: "1em", right: "1em" }}
+          severity="success"
+        >
+          {showAlert.message}
+        </Alert>
+      )}
+      {showAlert.message && showAlert.isError && (
+        <Alert
+          sx={{ position: "fixed", bottom: "1em", right: "1em" }}
+          severity="error"
+        >
+          {showAlert.message}
+        </Alert>
+      )}
     </div>
   );
 };

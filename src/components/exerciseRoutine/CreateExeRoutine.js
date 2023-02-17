@@ -14,6 +14,7 @@ import {
   MenuItem,
   FormHelperText,
   CardMedia,
+  Alert,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { validateSDL } from "graphql/validation/validate";
@@ -41,7 +42,7 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
   const [errors, setErrors] = useState({});
 
   const [loading, setLoading] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
+  const [showAlert, setShowAlert] = useState({ message: "", isError: false });
 
   const [sub, setSub] = useState([]);
   const [loadSub, resultSub] = useLazyQuery(SUB_TYPE_NAME);
@@ -63,7 +64,6 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
   }, [resultSub]);
 
   // for image
-
   const [getImageUrl] = useMutation(GET_IMAGE_UPLOAD_URL, {
     onError: (error) => {
       console.log("imge errors", error);
@@ -105,12 +105,15 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
       getImageUrl();
     }
   };
+
+  //for input box
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
     delete errors[prop];
     setErrors(errors);
   };
 
+  //for create routine
   const [createRoutine] = useMutation(CREATE_EXE_ROUTINE, {
     onError: (error) => {
       console.log("error : ", error);
@@ -127,13 +130,6 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
       handleClose();
     },
   });
-
-  const handleClosClearData = () => {
-    console.log("error");
-    setValues({});
-    setErrors({});
-    handleClose();
-  };
 
   const handleCreate = () => {
     setLoading(true);
@@ -199,6 +195,14 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
       console.log("error bbbbbbbbbbbbbbb : ", error);
     }
   };
+
+  //to clear data after clicking close btn
+  const handleClosClearData = () => {
+    console.log("error");
+    setValues({});
+    setErrors({});
+    handleClose();
+  };
   // for Description
   const onChange = (value) => {
     setTextValue(value);
@@ -230,7 +234,7 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
       { label: "OL", style: "ordered-list-item" },
     ],
   };
-  console.log(errors);
+
   return (
     <div>
       <Box
@@ -489,6 +493,22 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
           </LoadingButton>
         </Box>
       </Card>
+      {showAlert.message && !showAlert.isError && (
+        <Alert
+          sx={{ position: "fixed", bottom: "1em", right: "1em" }}
+          severity="success"
+        >
+          {showAlert.message}
+        </Alert>
+      )}
+      {showAlert.message && showAlert.isError && (
+        <Alert
+          sx={{ position: "fixed", bottom: "1em", right: "1em" }}
+          severity="error"
+        >
+          {showAlert.message}
+        </Alert>
+      )}
     </div>
   );
 };

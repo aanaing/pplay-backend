@@ -72,7 +72,7 @@ const SpecialNuRoutineId = () => {
       delete obj.created_at;
       delete obj.updated_at;
       delete obj.duration_of_routine_in_days;
-      delete obj.target;
+      delete obj.routine_category;
       delete obj.nutrition_routine_name;
       delete obj.description;
       delete obj.pdf_file_url;
@@ -229,7 +229,10 @@ const SpecialNuRoutineId = () => {
                 />
               </ListItem>
               <ListItem>
-                <ListItemText primary="Target" secondary={values.target} />
+                <ListItemText
+                  primary="Routine Category"
+                  secondary={values.routine_category}
+                />
               </ListItem>
               <ListItem>
                 <ListItemText
@@ -373,6 +376,7 @@ const SpecialNuRoutineId = () => {
             value={updateDay}
             values={days}
             k={key}
+            id={values.id}
           />
         </Box>
       </Modal>

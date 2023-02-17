@@ -102,6 +102,8 @@ const Routine = () => {
 
   // get data from db
 
+  console.log(resutRoutine);
+
   useEffect(() => {
     loadRoutine({
       variables: { limit: rowsPerPage, offset: offset, search: `%${search}%` },
@@ -221,7 +223,7 @@ const Routine = () => {
   if (!routine) {
     return <em>Loading .....</em>;
   }
-  console.log(routine);
+
   return (
     <>
       <div className="align">
@@ -310,7 +312,7 @@ const Routine = () => {
                   <StyledTableCell>Routine name</StyledTableCell>
                   <StyledTableCell>Image</StyledTableCell>
                   <StyledTableCell>Package Type</StyledTableCell>
-                  <StyledTableCell>Target</StyledTableCell>
+                  <StyledTableCell>Routine Category</StyledTableCell>
                   <StyledTableCell>Duration of routine In days</StyledTableCell>
                   <StyledTableCell>PDF download link</StyledTableCell>
                   <StyledTableCell>Vegetarian</StyledTableCell>
@@ -346,7 +348,7 @@ const Routine = () => {
                             : " - "}
                         </StyledTableCell>
                         <StyledTableCell>
-                          {row.target ? row.target : "-"}
+                          {row.routine_category ? row.routine_category : "-"}
                         </StyledTableCell>
                         <StyledTableCell style={{ textAlign: "center" }}>
                           {row.duration_of_routine_in_days

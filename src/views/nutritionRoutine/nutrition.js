@@ -73,14 +73,14 @@ const NuRoutineId = () => {
       delete obj.created_at;
       delete obj.updated_at;
       delete obj.duration_of_routine_in_days;
-      delete obj.target;
+      delete obj.routine_category;
       delete obj.nutrition_routine_name;
       delete obj.description;
       delete obj.pdf_file_url;
       delete obj.user_subscription_level;
       delete obj.vegetarian;
       delete obj.thumbnail_image_url;
-      //delete obj.id;
+      delete obj.id;
       delete obj.fk_user_subscription_level_id;
       delete obj.__typename;
       setDayArr(Object.keys(obj));
@@ -229,7 +229,10 @@ const NuRoutineId = () => {
                 />
               </ListItem>
               <ListItem>
-                <ListItemText primary="Target" secondary={values.target} />
+                <ListItemText
+                  primary="Rouitne category"
+                  secondary={values.routine_category}
+                />
               </ListItem>
               <ListItem>
                 <ListItemText
@@ -372,6 +375,7 @@ const NuRoutineId = () => {
             value={updateDay}
             values={days}
             k={key}
+            id={values.id}
           />
         </Box>
       </Modal>

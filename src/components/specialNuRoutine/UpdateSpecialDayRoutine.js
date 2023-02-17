@@ -13,20 +13,14 @@ import RichTextEditor from "react-rte";
 import { UPDATE_SPE_EACH_DAY } from "../../gql/specialNuRoutine";
 
 const UpdateSpecialDayRoutine = (props) => {
-  console.log("props values are :", props);
   const [values, setValues] = useState({});
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
+  const [showAlert, setShowAlert] = useState({ message: "", isError: false });
   const [textValue, setTextValue] = useState(RichTextEditor.createEmptyValue());
 
   useEffect(() => {
     if (props.value) {
-      // props.value = Object.assign({}, props.value);
-      // delete props.value.created_at;
-      // delete props.value.updated_at;
-      // delete props.value.__typename;
-      // console.log("original", props.value);
       setValues(props.values);
       setTextValue(
         RichTextEditor.createValueFromString(props.value[props.k] ?? "", "html")
@@ -64,7 +58,7 @@ const UpdateSpecialDayRoutine = (props) => {
     setErrors({});
 
     try {
-      updateDays({ variables: { ...props.value } });
+      updateDays({ variables: { ...values, id: props.id } });
     } catch (error) {
       console.log("error : ", error);
     }
@@ -97,7 +91,7 @@ const UpdateSpecialDayRoutine = (props) => {
 
   const onChange = (value) => {
     setTextValue(value);
-    setValues({ ...values, day_1: value.toString("html") });
+    setValues({ ...values, [props.k]: value.toString("html") });
     //setValues(values);
   };
 
@@ -143,12 +137,12 @@ const UpdateSpecialDayRoutine = (props) => {
               value={textValue}
               toolbarConfig={toolbarConfig}
             />
-            {errors.description && (
-              <FormHelperText error> {errors.description}</FormHelperText>
-            )}
+            {/* {errors.value[props.k] && (
+              <FormHelperText error> {errors.value[props.k]}</FormHelperText>
+            )} */}
           </Box>
         </div>
-        <Box className="add">
+        <Box className="btn_end">
           <LoadingButton
             variant="contained"
             //color="warning"

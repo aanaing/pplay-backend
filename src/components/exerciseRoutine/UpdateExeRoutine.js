@@ -14,6 +14,7 @@ import {
   MenuItem,
   FormHelperText,
   CardMedia,
+  Alert,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { validateSDL } from "graphql/validation/validate";
@@ -50,22 +51,17 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [isImageChange, setIsImageChange] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
+  const [showAlert, setShowAlert] = useState({ message: "", isError: false });
 
   const [textValue, setTextValue] = useState(RichTextEditor.createEmptyValue());
 
-  useEffect(() => {
-    console.log("value work");
-    if (value) {
-      value = Object.assign({}, value);
-      delete value.created_at;
-      delete value.updated_at;
-      delete value.__typename;
-      console.log("original", value);
-      setValues(value);
-    }
-  }, [value]);
+  // useEffect(() => {
+  //   if (value) {
+  //     setValues(value);
+  //   }
+  // }, [value]);
 
+  //get data from db
   useEffect(() => {
     loadSub();
   }, [loadSub]);
@@ -76,20 +72,7 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
     }
   }, [resultSub]);
 
-  const [updateRoutine] = useMutation(UPDATE_EXE_ROUTINE, {
-    onError: (error) => {
-      console.log("error:", error);
-      setLoading(false);
-    },
-    onCompleted: () => {
-      setValues({});
-      setErrors({});
-      setLoading(false);
-      routineAlert("Routine has been updated");
-      handleUpdateClose();
-    },
-  });
-
+  //assign data from db
   useEffect(() => {
     if (value) {
       setValues(value);
@@ -104,22 +87,42 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
     }
   }, [value]);
 
-  //console.log(values);
+  //for update routine
+  const [updateRoutine] = useMutation(UPDATE_EXE_ROUTINE, {
+    onError: (error) => {
+      console.log("error:", error);
+      setLoading(false);
+    },
+    onCompleted: () => {
+      setValues({});
+      setErrors({});
+      setLoading(false);
+      routineAlert("Routine has been updated");
+      handleUpdateClose();
+    },
+  });
+
+  //for modal box
+  const handleUpdateClose = () => {
+    setValues({});
+    setErrors({});
+    handleClose();
+  };
+
+  //to clear data after clicking close btn
   const handleClosClearData = () => {
     console.log("error");
     setValues({});
     setErrors({});
     handleClose();
   };
-  const handleUpdateClose = () => {
-    setValues({});
-    setErrors({});
-    handleClose();
-  };
+
+  //for input box
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
 
+  //for image
   const [getImageUrl] = useMutation(GET_IMAGE_UPLOAD_URL, {
     onError: (error) => {
       console.log("imge errors", error);
@@ -170,63 +173,11 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
     },
   });
 
+  //for create routine
   const handleCreate = () => {
     setLoading(true);
     setErrors({});
 
-    let isErrorExit = false;
-    let errorObject = {};
-
-    if (!values.exercise_routine_name) {
-      errorObject.exercise_routine_name = "Routine Name is required";
-      isErrorExit = true;
-    }
-    if (!values.thumbnail_image_url || !imageFile) {
-      errorObject.thumbnail_image_url = "Image field is required.";
-      isErrorExit = true;
-    }
-    if (!values.routine_category) {
-      errorObject.routine_category = "Routine Category is required";
-      isErrorExit = true;
-    }
-    if (!values.description) {
-      errorObject.description = "Description is required";
-      isErrorExit = true;
-    }
-    if (!values.day_1) {
-      errorObject.day_1 = "Day 1 is required";
-      isErrorExit = true;
-    }
-    if (!values.day_2) {
-      errorObject.day_2 = "Day 2 is required";
-      isErrorExit = true;
-    }
-    if (!values.day_3) {
-      errorObject.day_3 = "Day 3 is required";
-      isErrorExit = true;
-    }
-    if (!values.day_4) {
-      errorObject.day_4 = "Day 4 is required";
-      isErrorExit = true;
-    }
-    if (!values.day_5) {
-      errorObject.day_5 = "Day 5 is required";
-      isErrorExit = true;
-    }
-    if (!values.day_6) {
-      errorObject.day_6 = "Day 6 is required";
-      isErrorExit = true;
-    }
-    if (!values.day_7) {
-      errorObject.day_7 = "Day 7 is required";
-      isErrorExit = true;
-    }
-
-    if (isErrorExit) {
-      setErrors(errorObject);
-      setLoading(false);
-      return;
-    }
     try {
       if (isImageChange) {
         imageService.uploadImage(imageFileUrl, imageFile);
@@ -243,7 +194,6 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
     setTextValue(value);
     setValues({ ...values, description: value.toString("html") });
   };
-
   const toolbarConfig = {
     // Optionally specify the groups to display (displayed in the order listed).
     display: [
@@ -279,7 +229,7 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
     console.log("no data,  loading");
     return "no data";
   }
-  console.log(values);
+
   return (
     <div>
       <Box
@@ -553,6 +503,22 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
           </LoadingButton>
         </Box>
       </Card>
+      {showAlert.message && !showAlert.isError && (
+        <Alert
+          sx={{ position: "fixed", bottom: "1em", right: "1em" }}
+          severity="success"
+        >
+          {showAlert.message}
+        </Alert>
+      )}
+      {showAlert.message && showAlert.isError && (
+        <Alert
+          sx={{ position: "fixed", bottom: "1em", right: "1em" }}
+          severity="error"
+        >
+          {showAlert.message}
+        </Alert>
+      )}
     </div>
   );
 };

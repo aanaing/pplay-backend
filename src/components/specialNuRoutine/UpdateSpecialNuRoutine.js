@@ -55,17 +55,16 @@ const UpdateNuRoutine = (props) => {
   const [loadUser, resultUser] = useLazyQuery(USER_ID);
   const [user, setUser] = useState({});
 
+  //get user datas
   useEffect(() => {
     loadUser();
   }, [loadUser]);
 
   useEffect(() => {
-    if (resultUser) {
-      setUser(resultUser);
+    if (resultUser.data) {
+      setUser(resultUser.data.users);
     }
   }, [resultUser]);
-
-  console.log(resultUser);
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -169,6 +168,28 @@ const UpdateNuRoutine = (props) => {
       review: "",
       barcode: "",
     });
+    let isErrorExit = false;
+    let errorObject = {};
+    if (!values.package_type) {
+      errorObject.package_type = "Package type is required";
+      isErrorExit = true;
+    }
+    if (!values.user_name) {
+      errorObject.user_name = "username is required";
+      isErrorExit = true;
+    }
+
+    if (!values.vegetarian) {
+      errorObject.vegetarian = "vegetarian is required";
+      isErrorExit = true;
+    }
+
+    if (isErrorExit) {
+      setErrors({ ...errorObject });
+      console.log(errorObject);
+      setLoading(false);
+      return;
+    }
 
     try {
       if (isImageChange) {
@@ -219,10 +240,7 @@ const UpdateNuRoutine = (props) => {
   if (!resultUser) {
     return;
   }
-  // let user = result.data.users;
-  console.log(props.value);
-  console.log(values);
-  console.log(values.nutrition_routine_name);
+
   return (
     <>
       <Box
@@ -239,7 +257,7 @@ const UpdateNuRoutine = (props) => {
         }}
       >
         <Typography variant="h5" component="h2" color="black" sx={{ mx: 4 }}>
-          Update Nutrition Routine
+          Update Special Nutrition Routine
         </Typography>
         <Button
           onClick={handleClosClearData}
@@ -332,12 +350,12 @@ const UpdateNuRoutine = (props) => {
                 )}
               </FormControl>
               <TextField
-                id="target"
-                label="target"
-                value={values.target ? values.target : "-"}
-                onChange={handleChange("target")}
-                error={errors.target ? true : false}
-                helperText={errors.target}
+                id="routine_category"
+                label="routine_category"
+                value={values.routine_category ? values.routine_category : "-"}
+                onChange={handleChange("routine_category")}
+                error={errors.routine_category ? true : false}
+                helperText={errors.routine_category}
               />
               <FormControl variant="outlined">
                 <InputLabel id="main_type">Package Type</InputLabel>
@@ -373,8 +391,8 @@ const UpdateNuRoutine = (props) => {
                       ))
                     : null}
                 </Select>
-                {errors.day_3 && (
-                  <FormHelperText error>{errors.day_3}</FormHelperText>
+                {errors.user_name && (
+                  <FormHelperText error>{errors.user_name}</FormHelperText>
                 )}
               </FormControl>
               <TextField
@@ -387,27 +405,27 @@ const UpdateNuRoutine = (props) => {
                 error={errors.pdf_file_url ? true : false}
                 helperText={errors.pdf_file_url}
               />
+              {/* description */}
+              <Box className="description">
+                <InputLabel style={{ marginBottom: 10, fontWeight: "bold" }}>
+                  Description
+                </InputLabel>
+                <RichTextEditor
+                  className="description-text"
+                  //onChange={handleChange("description")}
+                  onChange={onChange}
+                  value={textValue}
+                  toolbarConfig={toolbarConfig}
+                />
+                {errors.description && (
+                  <FormHelperText error> {errors.description}</FormHelperText>
+                )}
+              </Box>
             </div>
           </div>
         </CardContent>
 
-        {/* description */}
-        <Box ml="1rem">
-          <InputLabel style={{ marginBottom: 10, fontWeight: "bold" }}>
-            Description
-          </InputLabel>
-          <RichTextEditor
-            className="richtext"
-            //onChange={handleChange("description")}
-            onChange={onChange}
-            value={textValue}
-            toolbarConfig={toolbarConfig}
-          />
-          {errors.description && (
-            <FormHelperText error> {errors.description}</FormHelperText>
-          )}
-        </Box>
-        <Box className="add">
+        <Box className="btn_end">
           <LoadingButton
             variant="contained"
             //color="warning"

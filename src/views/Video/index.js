@@ -52,13 +52,14 @@ import RemoveVideo from "../../components/video/RemoveVideo";
 const style = {
   position: "absolute",
   top: "50%",
-  left: "54%",
+  left: "50%",
   transform: "translate(-50%, -50%)",
   width: "100vw",
-  //bgcolor: "white",
+  height: "100vh",
+  overflow: "scroll",
+  bgcolor: "background.paper",
   // border: "2px solid #000",
-  // boxShadow: 24,
-  p: 8,
+  boxShadow: 24,
 };
 
 const styleR = {

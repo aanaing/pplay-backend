@@ -65,7 +65,7 @@ const CreateSpecialNuRoutine = ({ handleClose }) => {
   }, [loadUser]);
 
   useEffect(() => {
-    if (resultUser) {
+    if (resultUser.data) {
       setUser(resultUser.data.users);
     }
   }, [resultUser]);
@@ -257,7 +257,7 @@ const CreateSpecialNuRoutine = ({ handleClose }) => {
         }}
       >
         <Typography variant="h5" component="h2" color="black" sx={{ mx: 4 }}>
-          Create Nutrition Routine
+          Create Special Nutrition Routine
         </Typography>
         <Button
           onClick={handleClosClearData}
@@ -269,7 +269,7 @@ const CreateSpecialNuRoutine = ({ handleClose }) => {
         </Button>
       </Box>
 
-      <Card>
+      <Card sx={{ color: "white" }}>
         <CardContent>
           <div className="grid--2--cols">
             {/* image */}
@@ -284,6 +284,7 @@ const CreateSpecialNuRoutine = ({ handleClose }) => {
                   mt: 4,
                   boxShadow: 5,
                   borderRadius: 2,
+                  border: 1.5,
                 }}
                 component="img"
                 height="300"
@@ -362,12 +363,12 @@ const CreateSpecialNuRoutine = ({ handleClose }) => {
                 )}
               </FormControl>
               <TextField
-                id="target"
-                label="target"
-                //value={values.target}
-                onChange={handleChange("target")}
-                error={errors.target ? true : false}
-                helperText={errors.target}
+                id="routine_category"
+                label="routine_category"
+                //value={values.routine_category}
+                onChange={handleChange("routine_category")}
+                error={errors.routine_category ? true : false}
+                helperText={errors.routine_category}
               />
               <FormControl variant="outlined">
                 <InputLabel id="main_type">Package Type</InputLabel>
@@ -397,27 +398,27 @@ const CreateSpecialNuRoutine = ({ handleClose }) => {
                 error={errors.pdf_file_url ? true : false}
                 helperText={errors.pdf_file_url}
               />
+              {/* description */}
+              <Box className="description">
+                <InputLabel style={{ marginBottom: 10, fontWeight: "bold" }}>
+                  Description
+                </InputLabel>
+                <RichTextEditor
+                  className="description-text"
+                  //onChange={handleChange("description")}
+                  onChange={onChange}
+                  value={textValue}
+                  toolbarConfig={toolbarConfig}
+                />
+                {errors.description && (
+                  <FormHelperText error> {errors.description}</FormHelperText>
+                )}
+              </Box>
             </div>
           </div>
         </CardContent>
 
-        {/* description */}
-        <Box ml="1rem">
-          <InputLabel style={{ marginBottom: 10, fontWeight: "bold" }}>
-            Description
-          </InputLabel>
-          <RichTextEditor
-            className="richtext"
-            //onChange={handleChange("description")}
-            onChange={onChange}
-            value={textValue}
-            toolbarConfig={toolbarConfig}
-          />
-          {errors.description && (
-            <FormHelperText error> {errors.description}</FormHelperText>
-          )}
-        </Box>
-        <Box className="add">
+        <Box className="btn_end">
           <LoadingButton
             variant="contained"
             //color="warning"

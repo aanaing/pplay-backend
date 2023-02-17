@@ -54,8 +54,6 @@ const CreateNuRoutine = ({ handleClose }) => {
 
   const [textValue, setTextValue] = useState(RichTextEditor.createEmptyValue());
 
-  // const [textValue, setTextValue] = useState(null);
-
   /*---------------------------*/
 
   const handleChange = (prop) => (event) => {
@@ -79,6 +77,7 @@ const CreateNuRoutine = ({ handleClose }) => {
     },
   });
 
+  //get data from db
   const [createNuRoutine] = useMutation(CREATE_NODAYS, {
     onError: (error) => {
       console.log("error : ", error);
@@ -132,6 +131,7 @@ const CreateNuRoutine = ({ handleClose }) => {
     }
   };
 
+  //for create routine
   const handleCreate = async () => {
     setLoading(true);
     setErrors({});
@@ -177,22 +177,21 @@ const CreateNuRoutine = ({ handleClose }) => {
 
     try {
       await imageService.uploadImage(imageFileUrl, imageFile);
-
       createNuRoutine({ variables: { ...values } });
     } catch (error) {
-      console.log("error bbbbbbbbbbbbbbb : ", error);
+      console.log("error : ", error);
     }
-  };
-
-  const onChange = (value) => {
-    setTextValue(value);
-    setValues({ ...values, description: value.toString("html") });
   };
 
   const handleClosClearData = () => {
     setValues({});
     setErrors({});
     handleClose();
+  };
+
+  const onChange = (value) => {
+    setTextValue(value);
+    setValues({ ...values, description: value.toString("html") });
   };
 
   const toolbarConfig = {
@@ -220,8 +219,6 @@ const CreateNuRoutine = ({ handleClose }) => {
       { label: "OL", style: "ordered-list-item" },
     ],
   };
-
-  console.log(values);
 
   return (
     <>
@@ -323,12 +320,12 @@ const CreateNuRoutine = ({ handleClose }) => {
                 )}
               </FormControl>
               <TextField
-                id="target"
-                label="target"
-                //value={values.target}
-                onChange={handleChange("target")}
-                error={errors.target ? true : false}
-                helperText={errors.target}
+                id="routine_category"
+                label="routine_category"
+                //value={values.routine_category}
+                onChange={handleChange("routine_category")}
+                error={errors.routine_category ? true : false}
+                helperText={errors.routine_category}
               />
               <FormControl variant="outlined">
                 <InputLabel id="main_type">Package Type</InputLabel>
@@ -365,7 +362,6 @@ const CreateNuRoutine = ({ handleClose }) => {
                 </InputLabel>
                 <RichTextEditor
                   className="description-text"
-                  //onChange={handleChange("description")}
                   onChange={onChange}
                   value={textValue}
                   toolbarConfig={toolbarConfig}

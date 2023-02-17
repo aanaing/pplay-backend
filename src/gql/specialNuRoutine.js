@@ -8,7 +8,7 @@ export const GET_ALL_SPE_NUROUTINES = gql`
       offset: $offset
       where: { nutrition_routine_name: { _ilike: $search } }
     ) {
-      target
+      routine_category
       created_at
       day_1
       day_10
@@ -71,7 +71,7 @@ export const GET_ALL_SPE_NUROUTINES = gql`
 export const SPE_ROUTINE_BY_ID = gql`
   query MyQuery($id: uuid!) {
     special_nutrition_routine_by_pk(id: $id) {
-      target
+      routine_category
       created_at
       day_1
       day_10
@@ -119,6 +119,67 @@ export const SPE_ROUTINE_BY_ID = gql`
         subscription_type
         updated_at
       }
+      day_31
+      day_32
+      day_33
+      day_34
+      day_35
+      day_36
+      day_37
+      day_38
+      day_39
+      day_40
+      day_41
+      day_42
+      day_43
+      day_44
+      day_45
+      day_46
+      day_47
+      day_48
+      day_49
+      day_50
+      day_51
+      day_52
+      day_53
+      day_54
+      day_55
+      day_56
+      day_57
+      day_58
+      day_59
+      day_60
+      day_61
+      day_62
+      day_63
+      day_64
+      day_65
+      day_66
+      day_67
+      day_68
+      day_69
+      day_70
+      day_71
+      day_72
+      day_73
+      day_74
+      day_75
+      day_76
+      day_77
+      day_78
+      day_79
+      day_70
+      day_80
+      day_81
+      day_82
+      day_83
+      day_84
+      day_85
+      day_86
+      day_87
+      day_88
+      day_89
+      day_90
     }
   }
 `;
@@ -148,7 +209,7 @@ export const CREATE_NODAYS = gql`
     $description: String!
     $nutrition_routine_name: String!
     $duration_of_routine_in_days: Int!
-    $target: String!
+    $routine_category: String!
     $pdf_file_url: String!
     $package_type: Int!
     $vegetarian: Boolean!
@@ -162,7 +223,7 @@ export const CREATE_NODAYS = gql`
         fk_user_subscription_level_id: $package_type
         nutrition_routine_name: $nutrition_routine_name
         pdf_file_url: $pdf_file_url
-        target: $target
+        routine_category: $routine_category
         thumbnail_image_url: $thumbnail_image_url
         vegetarian: $vegetarian
         fk_user_id: $user_name
@@ -205,7 +266,7 @@ export const CREATE_NODAYS = gql`
       id
       nutrition_routine_name
       pdf_file_url
-      target
+      routine_category
       thumbnail_image_url
       updated_at
       fk_user_id
@@ -218,7 +279,7 @@ export const UPDATE_NODAYS = gql`
   mutation UpdateNoDays(
     $id: uuid!
     $description: String!
-    $target: String!
+    $routine_category: String!
     $pdf_file_url: String!
     $thumbnail_image_url: String!
     $vegetarian: Boolean!
@@ -235,7 +296,7 @@ export const UPDATE_NODAYS = gql`
         fk_user_subscription_level_id: $package_type
         nutrition_routine_name: $nutrition_routine_name
         pdf_file_url: $pdf_file_url
-        target: $target
+        routine_category: $routine_category
         thumbnail_image_url: $thumbnail_image_url
         vegetarian: $vegetarian
         fk_user_id: $user_name
@@ -278,7 +339,7 @@ export const UPDATE_NODAYS = gql`
       id
       nutrition_routine_name
       pdf_file_url
-      target
+      routine_category
       thumbnail_image_url
       updated_at
       fk_user_id
@@ -321,7 +382,66 @@ export const UPDATE_SPE_EACH_DAY = gql`
     $day_28: String!
     $day_29: String!
     $day_30: String!
-    $user_name: uuid!
+    $day_31: String!
+    $day_32: String!
+    $day_33: String!
+    $day_34: String!
+    $day_35: String!
+    $day_36: String!
+    $day_37: String!
+    $day_38: String!
+    $day_39: String!
+    $day_40: String!
+    $day_41: String!
+    $day_42: String!
+    $day_43: String!
+    $day_44: String!
+    $day_45: String!
+    $day_46: String!
+    $day_47: String!
+    $day_48: String!
+    $day_49: String!
+    $day_50: String!
+    $day_51: String!
+    $day_52: String!
+    $day_53: String!
+    $day_54: String!
+    $day_55: String!
+    $day_56: String!
+    $day_57: String!
+    $day_58: String!
+    $day_59: String!
+    $day_60: String!
+    $day_61: String!
+    $day_62: String!
+    $day_63: String!
+    $day_64: String!
+    $day_65: String!
+    $day_66: String!
+    $day_67: String!
+    $day_68: String!
+    $day_69: String!
+    $day_70: String!
+    $day_71: String!
+    $day_72: String!
+    $day_73: String!
+    $day_74: String!
+    $day_75: String!
+    $day_76: String!
+    $day_77: String!
+    $day_78: String!
+    $day_79: String!
+    $day_80: String!
+    $day_81: String!
+    $day_82: String!
+    $day_83: String!
+    $day_84: String!
+    $day_85: String!
+    $day_86: String!
+    $day_87: String!
+    $day_88: String!
+    $day_89: String!
+    $day_90: String!
   ) {
     update_special_nutrition_routine_by_pk(
       pk_columns: { id: $id }
@@ -356,7 +476,66 @@ export const UPDATE_SPE_EACH_DAY = gql`
         day_7: $day_7
         day_8: $day_8
         day_9: $day_9
-        fk_user_id: $user_name
+        day_31: $day_31
+        day_32: $day_32
+        day_33: $day_33
+        day_34: $day_34
+        day_35: $day_35
+        day_36: $day_36
+        day_37: $day_37
+        day_38: $day_38
+        day_39: $day_39
+        day_40: $day_40
+        day_41: $day_41
+        day_42: $day_42
+        day_43: $day_43
+        day_44: $day_44
+        day_45: $day_45
+        day_46: $day_46
+        day_47: $day_47
+        day_48: $day_48
+        day_49: $day_49
+        day_50: $day_50
+        day_51: $day_51
+        day_52: $day_52
+        day_53: $day_53
+        day_54: $day_54
+        day_55: $day_55
+        day_56: $day_56
+        day_57: $day_57
+        day_58: $day_58
+        day_59: $day_59
+        day_60: $day_60
+        day_61: $day_61
+        day_62: $day_62
+        day_63: $day_63
+        day_64: $day_64
+        day_65: $day_65
+        day_66: $day_66
+        day_67: $day_67
+        day_68: $day_68
+        day_69: $day_69
+        day_70: $day_70
+        day_71: $day_71
+        day_72: $day_72
+        day_73: $day_73
+        day_74: $day_74
+        day_75: $day_75
+        day_76: $day_76
+        day_77: $day_77
+        day_78: $day_78
+        day_79: $day_79
+        day_80: $day_80
+        day_81: $day_81
+        day_82: $day_82
+        day_83: $day_83
+        day_84: $day_84
+        day_85: $day_85
+        day_86: $day_86
+        day_87: $day_87
+        day_88: $day_88
+        day_89: $day_89
+        day_90: $day_90
       }
     ) {
       day_1
@@ -396,11 +575,72 @@ export const UPDATE_SPE_EACH_DAY = gql`
       id
       nutrition_routine_name
       pdf_file_url
-      target
+      routine_category
       thumbnail_image_url
       updated_at
       vegetarian
       fk_user_id
+      day_31
+      day_32
+      day_33
+      day_34
+      day_35
+      day_36
+      day_37
+      day_38
+      day_39
+      day_40
+      day_41
+      day_42
+      day_43
+      day_44
+      day_45
+      day_46
+      day_47
+      day_48
+      day_49
+      day_50
+      day_51
+      day_52
+      day_53
+      day_54
+      day_55
+      day_56
+      day_57
+      day_58
+      day_59
+      day_60
+      day_61
+      day_62
+      day_63
+      day_64
+      day_65
+      day_66
+      day_67
+      day_68
+      day_69
+      day_70
+      day_71
+      day_72
+      day_73
+      day_74
+      day_75
+      day_76
+      day_77
+      day_78
+      day_79
+      day_70
+      day_80
+      day_81
+      day_82
+      day_83
+      day_84
+      day_85
+      day_86
+      day_87
+      day_88
+      day_89
+      day_90
     }
   }
 `;

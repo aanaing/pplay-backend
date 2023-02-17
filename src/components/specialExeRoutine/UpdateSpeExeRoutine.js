@@ -54,7 +54,7 @@ const UpdateSpeExeRoutine = ({ handleClose, routineAlert, value }) => {
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [isImageChange, setIsImageChange] = useState(false);
   const [textValue, setTextValue] = useState(RichTextEditor.createEmptyValue());
-  const [showAlert, setShowAlert] = useState(false);
+  const [showAlert, setShowAlert] = useState({ message: "", isError: false });
 
   useEffect(() => {
     loadUser();
@@ -67,16 +67,15 @@ const UpdateSpeExeRoutine = ({ handleClose, routineAlert, value }) => {
   }, [resultUser]);
 
   useEffect(() => {
-    console.log("value work");
     if (value) {
       setValues(value);
       setTextValue(
         RichTextEditor.createValueFromString(value.description, "html")
       );
       setImagePreview(value.thumbnail_image_url);
-      let image_url = value.thumbnail_image_url;
+      let image = value.thumbnail_image_url;
       setOldImageName(
-        image_url.substring(image_url.lastIndexOf("/") + 1, image_url.lenght)
+        image.substring(image.lastIndexOf("/") + 1, image.lenght)
       );
     }
   }, [value]);
@@ -97,7 +96,6 @@ const UpdateSpeExeRoutine = ({ handleClose, routineAlert, value }) => {
   // }
 
   const handleClosClearData = () => {
-    console.log("error");
     setValues({});
     setErrors({});
     handleClose();
@@ -113,6 +111,7 @@ const UpdateSpeExeRoutine = ({ handleClose, routineAlert, value }) => {
     },
     onCompleted: (result) => {
       setImageFileUrl(result.getImageUploadUrl.imageUploadUrl);
+      setIsImageChange(true);
       setValues({
         ...values,
         thumbnail_image_url: `https://axra.sgp1.digitaloceanspaces.com/VJun/${result.getImageUploadUrl.imageName}`,
@@ -166,9 +165,9 @@ const UpdateSpeExeRoutine = ({ handleClose, routineAlert, value }) => {
     },
   });
 
-  useEffect(() => {
-    setValues(value);
-  }, [value]);
+  // useEffect(() => {
+  //   setValues(value);
+  // }, [value]);
 
   const handleUpdateClose = () => {
     setValues({});
@@ -179,57 +178,15 @@ const UpdateSpeExeRoutine = ({ handleClose, routineAlert, value }) => {
     setValues({ ...values, [prop]: event.target.value });
   };
 
-  const handleCreate = () => {
+  const handleUpdate = () => {
     setLoading(true);
     setErrors({});
 
-    let isErrorExit = false;
-    let errorObject = {};
-
-    if (!values.exercise_routine_name) {
-      errorObject.exercise_routine_name = "Routine Name is required";
-      isErrorExit = true;
-    }
-    if (!values.day_1) {
-      errorObject.day_1 = "Day 1 is required";
-      isErrorExit = true;
-    }
-    if (!values.day_2) {
-      errorObject.day_2 = "Day 2 is required";
-      isErrorExit = true;
-    }
-    if (!values.day_3) {
-      errorObject.day_3 = "Day 3 is required";
-      isErrorExit = true;
-    }
-    if (!values.day_4) {
-      errorObject.day_4 = "Day 4 is required";
-      isErrorExit = true;
-    }
-    if (!values.day_5) {
-      errorObject.day_5 = "Day 5 is required";
-      isErrorExit = true;
-    }
-    if (!values.day_6) {
-      errorObject.day_6 = "Day 6 is required";
-      isErrorExit = true;
-    }
-    if (!values.day_7) {
-      errorObject.day_7 = "Day 7 is required";
-      isErrorExit = true;
-    }
-
-    if (isErrorExit) {
-      setErrors(errorObject);
-      setLoading(false);
-      return;
-    }
     try {
       if (isImageChange) {
         imageService.uploadImage(imageFileUrl, imageFile);
         deleteImage({ variables: { image_name: oldImageName } });
       }
-      console.log(values);
       updateRoutine({ variables: { ...values } });
     } catch (e) {
       console.log("error:", e.message);
@@ -277,7 +234,6 @@ const UpdateSpeExeRoutine = ({ handleClose, routineAlert, value }) => {
     console.log("no data,  loading");
     return "no data";
   }
-  console.log(values);
 
   return (
     <div>
@@ -371,7 +327,6 @@ const UpdateSpeExeRoutine = ({ handleClose, routineAlert, value }) => {
                 {Array.isArray(sub)
                   ? sub.map((sub) => {
                       if (sub.id === values.day_1) {
-                        console.log("default values");
                       }
                       //  console.log(sub.id);
                       return (
@@ -565,7 +520,7 @@ const UpdateSpeExeRoutine = ({ handleClose, routineAlert, value }) => {
             size="large"
             sx={{ height: 50, width: 100 }}
             loading={loading}
-            onClick={handleCreate}
+            onClick={handleUpdate}
           >
             Update
           </LoadingButton>

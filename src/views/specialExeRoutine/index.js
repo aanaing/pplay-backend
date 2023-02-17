@@ -233,7 +233,7 @@ const Routine = () => {
             <Link to="/" className="dashboard">
               Dashboard
             </Link>
-            <span>Exercise routine</span>
+            <span>Special Exercise routine</span>
           </Breadcrumbs>
         </div>
         {/* search */}

@@ -65,7 +65,6 @@ const style = {
   bgcolor: "background.paper",
   // border: "2px solid #000",
   boxShadow: 24,
-  p: 4,
 };
 
 const Routine = () => {
@@ -313,7 +312,7 @@ const Routine = () => {
                   <StyledTableCell>Routine name</StyledTableCell>
                   <StyledTableCell>Image</StyledTableCell>
                   <StyledTableCell>Package Type</StyledTableCell>
-                  <StyledTableCell>Target</StyledTableCell>
+                  <StyledTableCell>Routine Category</StyledTableCell>
                   <StyledTableCell>Duration of routine In days</StyledTableCell>
                   <StyledTableCell>PDF download link</StyledTableCell>
                   <StyledTableCell>Vegetarian</StyledTableCell>
@@ -353,7 +352,7 @@ const Routine = () => {
                             : " - "}
                         </StyledTableCell>
                         <StyledTableCell>
-                          {row.target ? row.target : "-"}
+                          {row.routine_category ? row.routine_category : "-"}
                         </StyledTableCell>
                         <StyledTableCell style={{ textAlign: "center" }}>
                           {row.duration_of_routine_in_days
@@ -417,28 +416,7 @@ const Routine = () => {
           />
         </Box>
       </div>
-      {/* delete routine */}
-      {/* <div>
-        <Modal
-          keepMounted
-          open={removeOpen}
-          onClose={handleRemoveClose}
-          aria-labelledby="keep-mounted-modal-title"
-          aria-describedby="keep-mounted-modal-description"
-        >
-          <Box style={styleP} sx={{ px: 4, py: 4, borderColor: "black" }}>
-            <RemoveNuRoutine />
-            <Box sx={{ textAlign: "right", mt: 2 }}>
-              <Button color="primary" onClick={handleRemoveClose}>
-                Cancel
-              </Button>
-              <Button color="error" onClick={handleRemove}>
-                Confirm
-              </Button>
-            </Box>
-          </Box>
-        </Modal>
-      </div> */}
+
       {/* Create Nutrition routine */}
       <div>
         <Modal
@@ -446,48 +424,12 @@ const Routine = () => {
           onClose={handleCreateClose}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
-          sx={{ width: "100vw" }}
         >
           <Box sx={style}>
             <CreateSpecialNuRoutine handleClose={handleCreateClose} />
           </Box>
         </Modal>
       </div>
-
-      {/* update exe routine */}
-      {/* <div>
-        <Modal
-          keepMounted
-          open={updateOpen}
-          onClose={handleUpdateClose}
-          aria-labelledby="keep-mounted-modal-title"
-          aria-describedby="keep-mounted-modal-description"
-        >
-          <Box style={style}>
-            <UpdateNuRoutine
-              routineAlert={routineAlert}
-              handleClose={handleUpdateClose}
-              value={updateRoutine}
-            />
-          </Box>
-        </Modal>
-        {showAlert.message && !showAlert.isError && (
-          <Alert
-            sx={{ position: "fixed", bottom: "1em", right: "1em" }}
-            severity="success"
-          >
-            {showAlert.message}
-          </Alert>
-        )}
-        {showAlert.message && showAlert.isError && (
-          <Alert
-            sx={{ position: "fixed", bottom: "1em", right: "1em" }}
-            severity="error"
-          >
-            {showAlert.message}
-          </Alert>
-        )}
-      </div> */}
     </>
   );
 };

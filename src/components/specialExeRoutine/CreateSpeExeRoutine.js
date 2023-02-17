@@ -50,7 +50,7 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [textValue, setTextValue] = useState(RichTextEditor.createEmptyValue());
-  const [showAlert, setShowAlert] = useState(false);
+  const [showAlert, setShowAlert] = useState({ message: "", isError: false });
 
   useEffect(() => {
     loadSub();
