@@ -100,6 +100,7 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
       routineAlert("Routine has been updated");
       handleUpdateClose();
     },
+    refetchQueries: [UPDATE_EXE_ROUTINE],
   });
 
   //for modal box

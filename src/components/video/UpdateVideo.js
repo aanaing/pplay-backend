@@ -3,6 +3,7 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 import imageService from "../../services/image";
 import { GET_IMAGE_UPLOAD_URL, DELETE_IMAGE } from "../../gql/misc";
 import { Box } from "@mui/system";
+import RichTextEditor from "react-rte";
 import {
   UPDATE_VIDEOS,
   SUB_TYPE_NAME,
@@ -44,8 +45,14 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
   const [imagePreview, setImagePreview] = useState(null);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
+  const [videoAFile, setVideoAFile] = useState(null);
+  const [videoAFileUrl, setVideoAFileUrl] = useState(null);
+  const [videoBFile, setVideoBFile] = useState(null);
+  const [videoBFileUrl, setVideoBFileUrl] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [showAlert, setshowAlert] = useState(false);
+  const [showAlert, setShowAlert] = useState({ message: "", isError: false });
+
+  const [textValue, setTextValue] = useState(RichTextEditor.createEmptyValue());
   const [values, setValues] = useState({
     main_type: "",
     package_type: "",
@@ -103,18 +110,44 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
   };
 
   // -------------------- for image change----------
-  const [getImageUrl] = useMutation(GET_IMAGE_UPLOAD_URL, {
+  // const [getImageUrl] = useMutation(GET_IMAGE_UPLOAD_URL, {
+  //   onError: (error) => {
+  //     console.log("error : ", error);
+  //   },
+  //   onCompleted: (result) => {
+  //     setImageFileUrl(result.getImageUploadUrl.imageUploadUrl);
+  //     setIsImageChange(true);
+  //     setValues({
+  //       ...values,
+  //       video_url_a: `https://axra.sgp1.digitaloceanspaces.com/VJun/${result.getImageUploadUrl.imageName}`,
+  //       video_url_b: `https://axra.sgp1.digitaloceanspaces.com/VJun/${result.getImageUploadUrl.imageName}`,
+  //       thumbnail_image_url: `https://axra.sgp1.digitaloceanspaces.com/VJun/${result.getImageUploadUrl.imageName}`,
+  //     });
+  //   },
+  // });
+
+  const [getVideoAUrl] = useMutation(GET_IMAGE_UPLOAD_URL, {
     onError: (error) => {
       console.log("error : ", error);
     },
     onCompleted: (result) => {
-      setImageFileUrl(result.getImageUploadUrl.imageUploadUrl);
-      setIsImageChange(true);
+      setVideoAFileUrl(result.getImageUploadUrl.imageUploadUrl);
       setValues({
         ...values,
         video_url_a: `https://axra.sgp1.digitaloceanspaces.com/VJun/${result.getImageUploadUrl.imageName}`,
+      });
+    },
+  });
+
+  const [getVideoBUrl] = useMutation(GET_IMAGE_UPLOAD_URL, {
+    onError: (error) => {
+      console.log("error : ", error);
+    },
+    onCompleted: (result) => {
+      setVideoBFileUrl(result.getImageUploadUrl.imageUploadUrl);
+      setValues({
+        ...values,
         video_url_b: `https://axra.sgp1.digitaloceanspaces.com/VJun/${result.getImageUploadUrl.imageName}`,
-        thumbnail_image_url: `https://axra.sgp1.digitaloceanspaces.com/VJun/${result.getImageUploadUrl.imageName}`,
       });
     },
   });
@@ -236,26 +269,44 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
     video.sub_name,
   ]);
 
-  const thumbnailImageChange = async (e) => {
+  const [getImageUrl] = useMutation(GET_IMAGE_UPLOAD_URL, {
+    onError: (error) => {
+      console.log("imge errors", error);
+      setShowAlert({ message: "Error on server", isError: true });
+      setTimeout(() => {
+        setShowAlert({ message: "", isError: false });
+      }, 1000);
+    },
+    onCompleted: (result) => {
+      setImageFileUrl(result.getImageUploadUrl.imageUploadUrl);
+      setIsImageChange(true);
+      setValues({
+        ...values,
+        thumbnail_image_url: `https://axra.sgp1.digitaloceanspaces.com/VJun/${result.getImageUploadUrl.imageName}`,
+      });
+    },
+  });
+
+  const imageChange = async (e) => {
     if (e.target.files && e.target.files[0]) {
-      let thumbImg = e.target.files[0];
-      if (!thumbnailfileTypes.includes(thumbImg.type)) {
+      let img = e.target.files[0];
+      if (!thumbnailfileTypes.includes(img.type)) {
         setErrors({
           ...errors,
           thumbnail_image_url:
-            "Please select images. (PNG, JPG, JPEG, GIF, ...)",
+            "Please select image. (PNG, JPG, JPEG, GIF, ...)",
         });
         return;
       }
-      if (thumbImg.size > 10485760) {
+      if (img.size > 10485760) {
         setErrors({
           ...errors,
           thumbnail_image_url: "Image file size must be smaller than 10MB.",
         });
         return;
       }
-      setImageFile(thumbImg);
-      setImagePreview(URL.createObjectURL(thumbImg));
+      setImageFile(img);
+      setImagePreview(URL.createObjectURL(img));
       getImageUrl();
     }
   };
@@ -271,19 +322,18 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
         });
         return;
       }
-      if (videofile.size > 1048576000) {
+      if (videofile.size > 104857600) {
         setErrors({
           ...errors,
           video_url_a: "Video file size must be smaller than 100MB.",
         });
         return;
       }
-      setImageFile(videofile);
+      setVideoAFile(videofile);
       //setImagePreview(URL.createObjectURL(videofile));
-      getImageUrl();
+      getVideoAUrl();
     }
   };
-
   const videoChangeB = async (e) => {
     if (e.target.files && e.target.files[0]) {
       let videofile = e.target.files[0];
@@ -295,16 +345,16 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
         });
         return;
       }
-      if (videofile.size > 1048576000) {
+      if (videofile.size > 104857600) {
         setErrors({
           ...errors,
           video_url_b: "Video file size must be smaller than 100MB.",
         });
         return;
       }
-      setImageFile(videofile);
+      setVideoBFile(videofile);
       //setImagePreview(URL.createObjectURL(videofile));
-      getImageUrl();
+      getVideoBUrl();
     }
   };
 
@@ -331,13 +381,44 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
       if (values.main_type === "ZUMBA") {
         values.sub_name = null;
         setValues(values);
-        // console.log("update video 1", values);
       }
 
       updateVideos({ variables: { ...values, id: video.id } });
     } catch (error) {
       console.log("error : ", error);
     }
+  };
+
+  // for Description
+  const onChange = (value) => {
+    setTextValue(value);
+    setValues({ ...values, description: value.toString("html") });
+  };
+
+  const toolbarConfig = {
+    // Optionally specify the groups to display (displayed in the order listed).
+    display: [
+      "INLINE_STYLE_BUTTONS",
+      "BLOCK_TYPE_BUTTONS",
+      "LINK_BUTTONS",
+      "BLOCK_TYPE_DROPDOWN",
+      "HISTORY_BUTTONS",
+    ],
+    INLINE_STYLE_BUTTONS: [
+      { label: "Bold", style: "BOLD", className: "custom-css-class" },
+      { label: "Italic", style: "ITALIC" },
+      { label: "Underline", style: "UNDERLINE" },
+    ],
+    BLOCK_TYPE_DROPDOWN: [
+      { label: "Normal", style: "unstyled" },
+      { label: "Heading Large", style: "header-one" },
+      { label: "Heading Medium", style: "header-two" },
+      { label: "Heading Small", style: "header-three" },
+    ],
+    BLOCK_TYPE_BUTTONS: [
+      { label: "UL", style: "unordered-list-item" },
+      { label: "OL", style: "ordered-list-item" },
+    ],
   };
 
   return (
@@ -429,7 +510,7 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
                 accept="image/png, image/jpeg, image/jpg, image/gif, image/svg+xml"
                 InputLabelProps={{ shrink: "shrink" }}
                 //value={values.thumbnail_image_url}
-                onChange={thumbnailImageChange}
+                onChange={imageChange}
                 error={errors.thumbnail_image_url ? true : false}
                 helperText={errors.thumbnail_image_url}
               />
@@ -537,6 +618,22 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
                   <FormHelperText error>{errors.sub_name}</FormHelperText>
                 )}
               </FormControl>
+              {/* description */}
+              <Box className="description">
+                <InputLabel style={{ marginBottom: 10, fontWeight: "bold" }}>
+                  Description
+                </InputLabel>
+                <RichTextEditor
+                  className="description-text"
+                  //onChange={handleChange("description")}
+                  onChange={onChange}
+                  value={textValue}
+                  toolbarConfig={toolbarConfig}
+                />
+                {errors.description && (
+                  <FormHelperText error> {errors.description}</FormHelperText>
+                )}
+              </Box>
             </div>
           </div>
         </CardContent>

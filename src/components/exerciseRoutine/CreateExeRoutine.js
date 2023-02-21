@@ -129,6 +129,7 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
       routineAlert("New Routine has been added");
       handleClose();
     },
+    refetchQueries: [CREATE_EXE_ROUTINE],
   });
 
   const handleCreate = () => {

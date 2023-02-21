@@ -69,11 +69,15 @@ export const UPDATE_USER = gql`
 `;
 
 export const UPDATE_SUBSCRIPTION = gql`
-  mutation Subscription($id: uuid!, $date: Int!, $type: String!) {
+  mutation UserScritpion(
+    $durationInDays: Int!
+    $subscription_type: String!
+    $userId: uuid!
+  ) {
     subscription(
-      monthInDuration: $date
-      subscription_type: $type
-      userId: $id
+      durationInDays: $durationInDays
+      subscription_type: $subscription_type
+      userId: $userId
     ) {
       error
       message

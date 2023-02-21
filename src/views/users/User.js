@@ -88,7 +88,7 @@ const User = () => {
       user = { ...result.data.users_by_pk };
     }
   } else user = { ...result.data.users_by_pk, address: "-" };
-  // console.log(user.gender);
+
   return (
     <div>
       <div role="presentation" className="align">
@@ -260,10 +260,15 @@ const User = () => {
               labelId="demo-simple-select-helper-label"
               id="demo-simple-select-helper"
               label="Subscription Type"
+              // defaultValue="0"
               value={subType}
-              onChange={(e) => setSubType(e.target.value)}
-              helperText="Please select your subscription"
+              onChange={(e) => {
+                setSubType(e.target.value);
+              }}
             >
+              <MenuItem disabled value="choose">
+                Choose Option
+              </MenuItem>
               <MenuItem value="1">Basic</MenuItem>
               <MenuItem value="2">Medium</MenuItem>
               <MenuItem value="3">Premium</MenuItem>
@@ -329,7 +334,11 @@ const User = () => {
           //color="warning"
           onClick={() => {
             editSubscription({
-              variables: { id: user.id, type: subType, date: date },
+              variables: {
+                userId: user.id,
+                subscription_type: subType,
+                durationInDays: date,
+              },
             });
           }}
         >

@@ -173,11 +173,11 @@ const Routine = () => {
   };
 
   // ----------------------- UPDATE Routine --------------
-  const handleUpdateOpen = (row) => {
-    setUpdateRoutine(row);
-    //setRoutine(row);
-    setUpdateOpen(true);
-  };
+  // const handleUpdateOpen = (row) => {
+  //   setUpdateRoutine(row);
+  //   //setRoutine(row);
+  //   setUpdateOpen(true);
+  // };
   const handleUpdateClose = () => {
     console.log("index");
     resutRoutine.refetch();

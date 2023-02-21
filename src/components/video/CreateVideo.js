@@ -3,6 +3,7 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 import imageService from "../../services/image";
 import { GET_IMAGE_UPLOAD_URL } from "../../gql/misc";
 import { Box } from "@mui/system";
+import RichTextEditor from "react-rte";
 import {
   CREATE_VIDEOS,
   CREATE_VIDEOS_ZUMBA,
@@ -52,7 +53,8 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
   const [sub, setSub] = useState({});
   const [loadSub, resultSub] = useLazyQuery(SUB_TYPE_NAME);
   const [showSubInput, setShowSubInput] = useState(false);
-  console.log(values);
+
+  const [textValue, setTextValue] = useState(RichTextEditor.createEmptyValue());
 
   useEffect(() => {
     loadSub();
@@ -184,13 +186,13 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
         });
         return;
       }
-      if (videofile.size > 104857600) {
-        setErrors({
-          ...errors,
-          video_url_a: "Video file size must be smaller than 100MB.",
-        });
-        return;
-      }
+      // if (videofile.size > 104857600) {
+      //   setErrors({
+      //     ...errors,
+      //     video_url_a: "Video file size must be smaller than 100MB.",
+      //   });
+      //   return;
+      // }
       setVideoAFile(videofile);
       //setImagePreview(URL.createObjectURL(videofile));
       getVideoAUrl();
@@ -207,13 +209,13 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
         });
         return;
       }
-      if (videofile.size > 104857600) {
-        setErrors({
-          ...errors,
-          video_url_b: "Video file size must be smaller than 100MB.",
-        });
-        return;
-      }
+      // if (videofile.size > 104857600) {
+      //   setErrors({
+      //     ...errors,
+      //     video_url_b: "Video file size must be smaller than 100MB.",
+      //   });
+      //   return;
+      // }
       setVideoBFile(videofile);
       //setImagePreview(URL.createObjectURL(videofile));
       getVideoBUrl();
@@ -236,6 +238,10 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
     }
     if (!values.thumbnail_image_url || !imageFile) {
       errorObject.thumbnail_image_url = "Video Image field is required.";
+      isErrorExit = true;
+    }
+    if (!values.description) {
+      errorObject.description = "Description is required";
       isErrorExit = true;
     }
     if (!values.video_package_name) {
@@ -294,7 +300,38 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
     }
   };
 
-  // console.log(values);
+  // for Description
+  const onChange = (value) => {
+    setTextValue(value);
+    setValues({ ...values, description: value.toString("html") });
+  };
+
+  const toolbarConfig = {
+    // Optionally specify the groups to display (displayed in the order listed).
+    display: [
+      "INLINE_STYLE_BUTTONS",
+      "BLOCK_TYPE_BUTTONS",
+      "LINK_BUTTONS",
+      "BLOCK_TYPE_DROPDOWN",
+      "HISTORY_BUTTONS",
+    ],
+    INLINE_STYLE_BUTTONS: [
+      { label: "Bold", style: "BOLD", className: "custom-css-class" },
+      { label: "Italic", style: "ITALIC" },
+      { label: "Underline", style: "UNDERLINE" },
+    ],
+    BLOCK_TYPE_DROPDOWN: [
+      { label: "Normal", style: "unstyled" },
+      { label: "Heading Large", style: "header-one" },
+      { label: "Heading Medium", style: "header-two" },
+      { label: "Heading Small", style: "header-three" },
+    ],
+    BLOCK_TYPE_BUTTONS: [
+      { label: "UL", style: "unordered-list-item" },
+      { label: "OL", style: "ordered-list-item" },
+    ],
+  };
+
   return (
     <div>
       <Box
@@ -325,7 +362,6 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
         sx={{
           borderTopLeftRadius: 0,
           borderTopRightRadius: 0,
-          color: "white",
         }}
       >
         <CardContent>
@@ -347,7 +383,6 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
                   mt: 4,
                   boxShadow: 5,
                   borderRadius: 2,
-                  border: 2,
                 }}
               />
             </Box>
@@ -492,6 +527,22 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
                   <FormHelperText error>{errors.sub_name}</FormHelperText>
                 )}
               </FormControl>
+              {/* description */}
+              <Box className="description">
+                <InputLabel style={{ marginBottom: 10, fontWeight: "bold" }}>
+                  Description
+                </InputLabel>
+                <RichTextEditor
+                  className="description-text"
+                  //onChange={handleChange("description")}
+                  onChange={onChange}
+                  value={textValue}
+                  toolbarConfig={toolbarConfig}
+                />
+                {errors.description && (
+                  <FormHelperText error> {errors.description}</FormHelperText>
+                )}
+              </Box>
             </div>
           </div>
         </CardContent>
