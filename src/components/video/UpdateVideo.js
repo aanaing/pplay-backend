@@ -109,23 +109,6 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
     setValues({ ...values, [prop]: event.target.value });
   };
 
-  // -------------------- for image change----------
-  // const [getImageUrl] = useMutation(GET_IMAGE_UPLOAD_URL, {
-  //   onError: (error) => {
-  //     console.log("error : ", error);
-  //   },
-  //   onCompleted: (result) => {
-  //     setImageFileUrl(result.getImageUploadUrl.imageUploadUrl);
-  //     setIsImageChange(true);
-  //     setValues({
-  //       ...values,
-  //       video_url_a: `https://axra.sgp1.digitaloceanspaces.com/VJun/${result.getImageUploadUrl.imageName}`,
-  //       video_url_b: `https://axra.sgp1.digitaloceanspaces.com/VJun/${result.getImageUploadUrl.imageName}`,
-  //       thumbnail_image_url: `https://axra.sgp1.digitaloceanspaces.com/VJun/${result.getImageUploadUrl.imageName}`,
-  //     });
-  //   },
-  // });
-
   const [getVideoAUrl] = useMutation(GET_IMAGE_UPLOAD_URL, {
     onError: (error) => {
       console.log("error : ", error);
@@ -250,8 +233,12 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
         video_url_b: video.video_url_b,
         duration: video.duration,
         sub_name: video.video_sub_type ? video.video_sub_type.id : "-",
+        description: video.description,
       });
       setImagePreview(video.thumbnail_image_url);
+      setTextValue(
+        RichTextEditor.createValueFromString(video.description, "html")
+      );
     }
 
     setOldImageName();
@@ -392,6 +379,7 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
   // for Description
   const onChange = (value) => {
     setTextValue(value);
+    console.log(textValue);
     setValues({ ...values, description: value.toString("html") });
   };
 
@@ -452,7 +440,6 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
         sx={{
           borderTopLeftRadius: 0,
           borderTopRightRadius: 0,
-          color: "white",
         }}
       >
         <CardContent>
@@ -474,7 +461,6 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
                   mt: 4,
                   boxShadow: 5,
                   borderRadius: 2,
-                  border: 2,
                 }}
               />
             </Box>
@@ -485,7 +471,7 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
                 id="video_url_a"
                 label="Upload Video A"
                 type="file"
-                InputLabelProps={{ shrink: "shrink" }}
+                InputLabelProps={{ shrink: true }}
                 onChange={videoChangeA}
                 error={errors.video_url_a ? true : false}
                 helperText={errors.video_url_a}
@@ -496,7 +482,7 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
                 id="video_url_b"
                 label="Upload Video B"
                 type="file"
-                InputLabelProps={{ shrink: "shrink" }}
+                InputLabelProps={{ shrink: true }}
                 onChange={videoChangeB}
                 error={errors.video_url_b ? true : false}
                 helperText={errors.video_url_b}
@@ -508,7 +494,7 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
                 label="image_url"
                 type="file"
                 accept="image/png, image/jpeg, image/jpg, image/gif, image/svg+xml"
-                InputLabelProps={{ shrink: "shrink" }}
+                InputLabelProps={{ shrink: true }}
                 //value={values.thumbnail_image_url}
                 onChange={imageChange}
                 error={errors.thumbnail_image_url ? true : false}
@@ -524,15 +510,19 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
                 helperText={errors.video_package_name}
               />
               {/* main_type */}
-              <FormControl variant="outlined">
+              <FormControl>
                 <InputLabel id="main_type">Main Type</InputLabel>
                 <Select
                   labelId="main_type"
                   value={values.main_type}
                   label="Main Type"
+                  defaultValue=""
                   onChange={handleChange("main_type")}
                   error={errors.main_type ? true : false}
                 >
+                  <MenuItem value="" disabled>
+                    Value
+                  </MenuItem>
                   <MenuItem value="HOME">HOME</MenuItem>
                   <MenuItem value="GYM">GYM</MenuItem>
                   <MenuItem value="ZUMBA">ZUMBA</MenuItem>
@@ -542,15 +532,19 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
                 )}
               </FormControl>
               {/* package_type */}
-              <FormControl variant="outlined">
+              <FormControl>
                 <InputLabel id="main_type">Package Type</InputLabel>
                 <Select
                   labelId="package_type"
                   value={values.package_type}
+                  defaultValue=""
                   label="Package Type"
                   onChange={handleChange("package_type")}
                   error={errors.package_type ? true : false}
                 >
+                  <MenuItem value="" disabled>
+                    Value
+                  </MenuItem>
                   <MenuItem value="0">Free</MenuItem>
                   <MenuItem value="1">Basic</MenuItem>
                   <MenuItem value="2">Medium</MenuItem>
@@ -580,15 +574,17 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
                 helperText={errors.duration}
               />
               {/* promotion */}
-              <FormControl variant="outlined">
+              <FormControl>
                 <InputLabel id="promotion">Promotion</InputLabel>
                 <Select
                   labelId="promotion"
                   value={values.promotion}
                   label="Promotion"
+                  defaultValue=""
                   onChange={handleChange("promotion")}
                   error={errors.promotion ? true : false}
                 >
+                  <MenuItem>Value</MenuItem>
                   <MenuItem value="true">Yes</MenuItem>
                   <MenuItem value="false">No</MenuItem>
                 </Select>
@@ -597,15 +593,19 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
                 )}
               </FormControl>
               {/* sub_type */}
-              <FormControl variant="outlined" disabled={showSubInput}>
+              <FormControl disabled={showSubInput}>
                 <InputLabel id="sub_type">Sub type</InputLabel>
                 <Select
                   labelId="sub_type"
                   value={values.sub_name}
                   label="sub_type"
+                  defaultValue=""
                   onChange={handleChange("sub_name")}
                   error={errors.sub_name ? true : false}
                 >
+                  <MenuItem value="" disabled>
+                    Value
+                  </MenuItem>
                   {Array.isArray(sub)
                     ? sub.map((sub) => (
                         <MenuItem key={sub.id} value={sub.id}>

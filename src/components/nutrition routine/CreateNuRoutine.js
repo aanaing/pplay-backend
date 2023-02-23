@@ -278,7 +278,7 @@ const CreateNuRoutine = ({ handleClose }) => {
                 label="image_url"
                 type="file"
                 accept="image/png, image/jpeg, image/jpg, image/gif, image/svg+xml"
-                InputLabelProps={{ shrink: "shrink" }}
+                InputLabelProps={{ shrink: true }}
                 //value={values.thumbnail_image_url}
                 onChange={imageChange}
                 error={errors.thumbnail_image_url ? true : false}
@@ -303,7 +303,7 @@ const CreateNuRoutine = ({ handleClose }) => {
                 helperText={errors.duration_of_routine_in_days}
               />
 
-              <FormControl variant="outlined">
+              <FormControl>
                 <InputLabel id="vegetarian">Vegetarian</InputLabel>
                 <Select
                   labelId="vegetarian"
@@ -312,6 +312,9 @@ const CreateNuRoutine = ({ handleClose }) => {
                   onChange={handleChange("vegetarian")}
                   error={errors.vegetarian ? true : false}
                 >
+                  <MenuItem value="" disabled>
+                    value
+                  </MenuItem>
                   <MenuItem value="0">False</MenuItem>
                   <MenuItem value="1">True</MenuItem>
                 </Select>
@@ -327,7 +330,7 @@ const CreateNuRoutine = ({ handleClose }) => {
                 error={errors.routine_category ? true : false}
                 helperText={errors.routine_category}
               />
-              <FormControl variant="outlined">
+              <FormControl>
                 <InputLabel id="main_type">Package Type</InputLabel>
                 <Select
                   labelId="main_type"
@@ -349,7 +352,7 @@ const CreateNuRoutine = ({ handleClose }) => {
                 id="pdf_file_url"
                 label="pdf_file_url"
                 type="file"
-                InputLabelProps={{ shrink: "shrink" }}
+                InputLabelProps={{ shrink: true }}
                 //value={values.pdf_file_url}
                 onChange={handleChange("pdf_file_url")}
                 error={errors.pdf_file_url ? true : false}

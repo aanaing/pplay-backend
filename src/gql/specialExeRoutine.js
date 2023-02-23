@@ -24,6 +24,7 @@ export const GET_ALL_SPECIAL_EXE_ROUTINE = gql`
       routine_category
       description
       user {
+        id
         username
       }
     }
@@ -151,6 +152,7 @@ export const UPDATE_SPECIAL_EXE_ROUTINE = gql`
       routine_category
       description
       user {
+        id
         username
       }
     }

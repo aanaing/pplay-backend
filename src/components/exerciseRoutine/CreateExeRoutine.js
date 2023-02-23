@@ -309,7 +309,7 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
               label="image_url"
               type="file"
               accept="image/png, image/jpeg, image/jpg, image/gif, image/svg+xml"
-              InputLabelProps={{ shrink: "shrink" }}
+              InputLabelProps={{ shrink: true }}
               //value={values.thumbnail_image_url}
               onChange={imageChange}
               error={errors.thumbnail_image_url ? true : false}
@@ -317,14 +317,18 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
             />
 
             {/* day_1 */}
-            <FormControl variant="outlined">
+            <FormControl>
               <InputLabel id="sub_type">day_1</InputLabel>
               <Select
                 labelId="day_1"
                 label="day_1"
+                defaultValue=""
                 onChange={handleChange("day_1")}
                 error={errors.day_1 ? true : false}
               >
+                <MenuItem value="" disabled>
+                  Value
+                </MenuItem>
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -338,14 +342,18 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
               )}
             </FormControl>
             {/* day_2 */}
-            <FormControl variant="outlined">
+            <FormControl>
               <InputLabel id="sub_type">day_2</InputLabel>
               <Select
                 labelId="day_2"
                 label="day_2"
+                defaultValue=""
                 onChange={handleChange("day_2")}
                 error={errors.day_2 ? true : false}
               >
+                <MenuItem value="" disabled>
+                  value
+                </MenuItem>
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -359,7 +367,7 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
               )}
             </FormControl>
             {/* day_3 */}
-            <FormControl variant="outlined">
+            <FormControl>
               <InputLabel id="sub_type">day_3</InputLabel>
               <Select
                 labelId="day_3"
@@ -380,7 +388,7 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
               )}
             </FormControl>
             {/* day4 */}
-            <FormControl variant="outlined">
+            <FormControl>
               <InputLabel id="sub_type">day_4</InputLabel>
               <Select
                 labelId="day_4"
@@ -401,7 +409,7 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
               )}
             </FormControl>
             {/* day_5 */}
-            <FormControl variant="outlined">
+            <FormControl>
               <InputLabel id="sub_type">day_5</InputLabel>
               <Select
                 labelId="day_5"
@@ -422,7 +430,7 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
               )}
             </FormControl>
             {/* day_6 */}
-            <FormControl variant="outlined">
+            <FormControl>
               <InputLabel id="sub_type">day_6</InputLabel>
               <Select
                 labelId="day_6"
@@ -443,7 +451,7 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
               )}
             </FormControl>
             {/* day_7 */}
-            <FormControl variant="outlined">
+            <FormControl>
               <InputLabel id="sub_type">day_7</InputLabel>
               <Select
                 labelId="day_7"

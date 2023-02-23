@@ -46,12 +46,15 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
   const [videoAFileUrl, setVideoAFileUrl] = useState(null);
   const [videoBFile, setVideoBFile] = useState(null);
   const [videoBFileUrl, setVideoBFileUrl] = useState(null);
+
   const [loading, setLoading] = useState(false);
   const [values, setValues] = useState({});
   const [errors, setErrors] = useState({});
   const [showAlert, setShowAlert] = useState({ message: "", isError: false });
+
   const [sub, setSub] = useState({});
   const [loadSub, resultSub] = useLazyQuery(SUB_TYPE_NAME);
+
   const [showSubInput, setShowSubInput] = useState(false);
 
   const [textValue, setTextValue] = useState(RichTextEditor.createEmptyValue());
@@ -281,7 +284,6 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
       console.log(errorObject);
       return;
     }
-    //    console.log("create button 2", values);
 
     try {
       await imageService.uploadImage(imageFileUrl, imageFile);
@@ -294,7 +296,6 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
       }
       setValues({});
       setErrors({});
-      console.log("create button 3", values);
     } catch (error) {
       console.log("error : ", error);
     }
@@ -394,7 +395,7 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
                 id="video_url_a"
                 label="Upload Video A"
                 type="file"
-                InputLabelProps={{ shrink: "shrink" }}
+                InputLabelProps={{ shrink: true }}
                 onChange={videoChangeA}
                 error={errors.video_url_a ? true : false}
                 helperText={errors.video_url_a}
@@ -405,7 +406,7 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
                 id="video_url_b"
                 label="Upload Video B"
                 type="file"
-                InputLabelProps={{ shrink: "shrink" }}
+                InputLabelProps={{ shrink: true }}
                 onChange={videoChangeB}
                 error={errors.video_url_b ? true : false}
                 helperText={errors.video_url_b}
@@ -417,7 +418,7 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
                 label="image_url"
                 type="file"
                 accept="image/png, image/jpeg, image/jpg, image/gif, image/svg+xml"
-                InputLabelProps={{ shrink: "shrink" }}
+                InputLabelProps={{ shrink: true }}
                 //value={values.thumbnail_image_url}
                 onChange={thumbnailImageChange}
                 error={errors.thumbnail_image_url ? true : false}
@@ -433,15 +434,19 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
                 helperText={errors.video_package_name}
               />
               {/* main_type */}
-              <FormControl variant="outlined">
+              <FormControl>
                 <InputLabel id="main_type">Main Type</InputLabel>
                 <Select
                   labelId="main_type"
                   // value={values.main_type}
                   label="Main Type"
+                  defaultValue=""
                   onChange={handleChange("main_type")}
                   error={errors.main_type ? true : false}
                 >
+                  <MenuItem value="" disabled>
+                    Value
+                  </MenuItem>
                   <MenuItem value="HOME">HOME</MenuItem>
                   <MenuItem value="GYM">GYM</MenuItem>
                   <MenuItem value="ZUMBA">ZUMBA</MenuItem>
@@ -451,15 +456,19 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
                 )}
               </FormControl>
               {/* package_type */}
-              <FormControl variant="outlined">
+              <FormControl>
                 <InputLabel id="main_type">Package Type</InputLabel>
                 <Select
                   labelId="package_type"
                   value={values.package_type}
                   label="Package Type"
+                  defaultValue=""
                   onChange={handleChange("package_type")}
                   error={errors.package_type ? true : false}
                 >
+                  <MenuItem value="" disabled>
+                    Value
+                  </MenuItem>
                   <MenuItem value="0">Free</MenuItem>
                   <MenuItem value="1">Basic</MenuItem>
                   <MenuItem value="2">Medium</MenuItem>
@@ -489,15 +498,19 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
                 helperText={errors.duration}
               />
               {/* promotion */}
-              <FormControl variant="outlined">
+              <FormControl>
                 <InputLabel id="promotion">Promotion</InputLabel>
                 <Select
                   labelId="promotion"
                   // value={values.promotion}
                   label="Promotion"
+                  defaultValue=""
                   onChange={handleChange("promotion")}
                   error={errors.promotion ? true : false}
                 >
+                  <MenuItem value="" disabled>
+                    Value
+                  </MenuItem>
                   <MenuItem value="true">Yes</MenuItem>
                   <MenuItem value="false">No</MenuItem>
                 </Select>
@@ -506,15 +519,19 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
                 )}
               </FormControl>
               {/* sub_type */}
-              <FormControl variant="outlined" disabled={showSubInput}>
+              <FormControl disabled={showSubInput}>
                 <InputLabel id="sub_type">Sub type</InputLabel>
                 <Select
                   labelId="sub_type"
                   // value={values.sub_name}
                   label="sub_type"
+                  defaultValue=""
                   onChange={handleChange("sub_name")}
                   error={errors.sub_name ? true : false}
                 >
+                  <MenuItem value="" disabled>
+                    Value
+                  </MenuItem>
                   {Array.isArray(sub)
                     ? sub.map((sub) => (
                         <MenuItem key={sub.id} value={sub.id}>

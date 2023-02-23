@@ -72,21 +72,6 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
     }
   }, [resultSub]);
 
-  //assign data from db
-  useEffect(() => {
-    if (value) {
-      setValues(value);
-      setTextValue(
-        RichTextEditor.createValueFromString(value.description, "html")
-      );
-      setImagePreview(value.thumbnail_image_url);
-      let image = value.thumbnail_image_url;
-      setOldImageName(
-        image.substring(image.lastIndexOf("/") + 1, image.lenght)
-      );
-    }
-  }, [value]);
-
   //for update routine
   const [updateRoutine] = useMutation(UPDATE_EXE_ROUTINE, {
     onError: (error) => {
@@ -221,6 +206,21 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
     ],
   };
 
+  //assign data from db
+  useEffect(() => {
+    if (value) {
+      setValues(value);
+      setTextValue(
+        RichTextEditor.createValueFromString(value.description, "html")
+      );
+      setImagePreview(value.thumbnail_image_url);
+      let image = value.thumbnail_image_url;
+      setOldImageName(
+        image.substring(image.lastIndexOf("/") + 1, image.lenght)
+      );
+    }
+  }, [value]);
+
   if (!values) {
     console.log("no values, loading");
     return "no values";
@@ -304,7 +304,7 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
               label="image_url"
               type="file"
               accept="image/png, image/jpeg, image/jpg, image/gif, image/svg+xml"
-              InputLabelProps={{ shrink: "shrink" }}
+              InputLabelProps={{ shrink: true }}
               //value={values.thumbnail_image_url}
               onChange={imageChange}
               error={errors.thumbnail_image_url ? true : false}
@@ -312,7 +312,7 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
             />
 
             {/* day_1 */}
-            <FormControl variant="outlined">
+            <FormControl>
               <InputLabel id="sub_type">day_1</InputLabel>
               <Select
                 labelId="day_1"
@@ -323,10 +323,10 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
               >
                 {Array.isArray(sub)
                   ? sub.map((sub) => {
-                      if (sub.id === values.day_1) {
-                        // console.log("default values");
-                      }
-                      //console.log(sub.id);
+                      // if (sub.id === values.day_1) {
+
+                      // }
+
                       return (
                         <MenuItem key={sub.id} value={sub.id}>
                           {sub.sub_type_name}
@@ -341,7 +341,7 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
             </FormControl>
             {/* day_2 */}
 
-            <FormControl variant="outlined">
+            <FormControl>
               <InputLabel id="sub_type">day_2</InputLabel>
               <Select
                 labelId="day_2"
@@ -363,7 +363,7 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
               )}
             </FormControl>
             {/* day_3 */}
-            <FormControl variant="outlined">
+            <FormControl>
               <InputLabel id="sub_type">day_3</InputLabel>
               <Select
                 labelId="day_3"
@@ -386,7 +386,7 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
             </FormControl>
 
             {/* day_4 */}
-            <FormControl variant="outlined">
+            <FormControl>
               <InputLabel id="sub_type">day_4</InputLabel>
               <Select
                 labelId="day_4"
@@ -408,7 +408,7 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
               )}
             </FormControl>
             {/* day_5 */}
-            <FormControl variant="outlined">
+            <FormControl>
               <InputLabel id="sub_type">day_5</InputLabel>
               <Select
                 labelId="day_5"
@@ -430,7 +430,7 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
               )}
             </FormControl>
             {/* day_6 */}
-            <FormControl variant="outlined">
+            <FormControl>
               <InputLabel id="sub_type">day_6</InputLabel>
               <Select
                 labelId="day_6"
@@ -452,7 +452,7 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
               )}
             </FormControl>
             {/* day_7 */}
-            <FormControl variant="outlined">
+            <FormControl>
               <InputLabel id="sub_type">day_7</InputLabel>
               <Select
                 labelId="day_7"

@@ -28,7 +28,7 @@ import { GET_IMAGE_UPLOAD_URL, DELETE_IMAGE } from "../../gql/misc";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { LoadingButton } from "@mui/lab";
 
-const UpdateNuRoutine = (props) => {
+const UpdateSpeNuRoutine = ({ routineAlert, handleClose, value }) => {
   const fileTypes = [
     "image/apng",
     "image/bmp",
@@ -109,27 +109,24 @@ const UpdateNuRoutine = (props) => {
       setImageFile("");
       setImagePreview("");
       setLoading(false);
-      props.routineAlert("Routine have been updated.", false);
-      props.handleClose();
+      routineAlert("Routine have been updated.", false);
+      handleClose();
     },
   });
 
   useEffect(() => {
-    if (props.value) {
-      let val = props.value;
-      setValues(props.value);
+    if (value) {
+      setValues({ ...value, user: value.fk_user_id });
       setTextValue(
-        RichTextEditor.createValueFromString(val.description, "html")
+        RichTextEditor.createValueFromString(value.description, "html")
       );
-      console.log(val.thumbnail_image_url);
-      setImagePreview(val.thumbnail_image_url);
-      let image_url = val.thumbnail_image_url;
+      setImagePreview(value.thumbnail_image_url);
+      let image_url = value.thumbnail_image_url;
       // setOldImageName(
       //   image_url.substring(image_url.lastIndexOf("/") + 1, image_url.lenght)
       // );
-      console.log(image_url);
     }
-  }, [props.value]);
+  }, [value]);
 
   const imageChange = async (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -197,7 +194,7 @@ const UpdateNuRoutine = (props) => {
         deleteImage({ variables: { image_name: oldImageName } });
       }
 
-      updateRoutine({ variables: { ...values, id: props.value.id } });
+      updateRoutine({ variables: { ...values, id: value.id } });
     } catch (error) {
       console.log("error : ", error);
     }
@@ -235,12 +232,12 @@ const UpdateNuRoutine = (props) => {
   const handleClosClearData = () => {
     setValues({});
     setErrors({});
-    props.handleClose();
+    handleClose();
   };
   if (!resultUser) {
     return;
   }
-
+  console.log(values);
   return (
     <>
       <Box
@@ -295,18 +292,19 @@ const UpdateNuRoutine = (props) => {
 
             {/* list items */}
             <div className="grid-item grid--2--cols">
+              {/* thumbnail_image_url */}
               <TextField
                 id="thumbnail_image_url"
                 label="image_url"
                 type="file"
                 accept="image/png, image/jpeg, image/jpg, image/gif, image/svg+xml"
-                InputLabelProps={{ shrink: "shrink" }}
+                InputLabelProps={{ shrink: true }}
                 //value={values.thumbnail_image_url}
                 onChange={imageChange}
                 error={errors.thumbnail_image_url ? true : false}
                 helperText={errors.thumbnail_image_url}
               />
-
+              {/* nutrition_routine_name */}
               <TextField
                 id="nutrition_routine_name"
                 label="nutrition routine name"
@@ -319,7 +317,7 @@ const UpdateNuRoutine = (props) => {
                 error={errors.nutrition_routine_name ? true : false}
                 helperText={errors.nutrition_routine_name}
               />
-
+              {/* duration_of_routine_in_days */}
               <TextField
                 id="duration_of_routine_in_days"
                 label="duration_of_routine_in_days"
@@ -332,16 +330,20 @@ const UpdateNuRoutine = (props) => {
                 error={errors.duration_of_routine_in_days ? true : false}
                 helperText={errors.duration_of_routine_in_days}
               />
-
-              <FormControl variant="outlined">
+              {/* vegetarian */}
+              <FormControl>
                 <InputLabel id="vegetarian">Vegetarian</InputLabel>
                 <Select
                   labelId="vegetarian"
-                  value={values.vegetarian ? "Yes" : "No"}
+                  value={values.vegetarian}
                   label="vegetarian"
+                  defaultValue=""
                   onChange={handleChange("vegetarian")}
                   error={errors.vegetarian ? true : false}
                 >
+                  <MenuItem value="" disabled>
+                    Value
+                  </MenuItem>
                   <MenuItem value="0">False</MenuItem>
                   <MenuItem value="1">True</MenuItem>
                 </Select>
@@ -349,6 +351,7 @@ const UpdateNuRoutine = (props) => {
                   <FormHelperText error>{errors.vegetarian}</FormHelperText>
                 )}
               </FormControl>
+              {/* routine_category */}
               <TextField
                 id="routine_category"
                 label="routine_category"
@@ -357,16 +360,23 @@ const UpdateNuRoutine = (props) => {
                 error={errors.routine_category ? true : false}
                 helperText={errors.routine_category}
               />
-              <FormControl variant="outlined">
+              {/* package_type */}
+              <FormControl>
                 <InputLabel id="main_type">Package Type</InputLabel>
                 <Select
-                  labelId="main_type"
-                  // value={values.package_type}
+                  labelId="package_type"
+                  value={values.fk_user_subscription_level_id}
                   label="Package Type"
+                  defaultValue=""
                   onChange={handleChange("package_type")}
                   error={errors.package_type ? true : false}
                 >
-                  <MenuItem value="0">Free</MenuItem>
+                  <MenuItem value="" disabled>
+                    Value
+                  </MenuItem>
+                  <MenuItem value="0" selected>
+                    Free
+                  </MenuItem>
                   <MenuItem value="1">Basic</MenuItem>
                   <MenuItem value="2">Medium</MenuItem>
                   <MenuItem value="3">Premium</MenuItem>
@@ -375,17 +385,24 @@ const UpdateNuRoutine = (props) => {
                   <FormHelperText error>{errors.package_type}</FormHelperText>
                 )}
               </FormControl>
-              <FormControl variant="outlined">
+              {/* user_name */}
+
+              <FormControl>
                 <InputLabel id="User ID">User Name</InputLabel>
                 <Select
                   labelId="User Name"
                   label="User Name"
+                  defaultValue=""
+                  value={values.fk_user_id ? values.fk_user_id : "-"}
                   onChange={handleChange("user_name")}
                   error={errors.user_name ? true : false}
                 >
+                  <MenuItem value="" disabled>
+                    Value
+                  </MenuItem>
                   {Array.isArray(user)
                     ? user.map((u) => (
-                        <MenuItem key={u.id} value={u.id}>
+                        <MenuItem key={u.id} value={u.id} selected>
                           {u.username}
                         </MenuItem>
                       ))
@@ -395,11 +412,12 @@ const UpdateNuRoutine = (props) => {
                   <FormHelperText error>{errors.user_name}</FormHelperText>
                 )}
               </FormControl>
+              {/* pdf_file_url */}
               <TextField
                 id="pdf_file_url"
                 label="pdf_file_url"
                 type="file"
-                InputLabelProps={{ shrink: "shrink" }}
+                InputLabelProps={{ shrink: true }}
                 //value={values.pdf_file_url}
                 onChange={handleChange("pdf_file_url")}
                 error={errors.pdf_file_url ? true : false}
@@ -458,4 +476,4 @@ const UpdateNuRoutine = (props) => {
     </>
   );
 };
-export default UpdateNuRoutine;
+export default UpdateSpeNuRoutine;

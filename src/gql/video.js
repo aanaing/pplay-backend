@@ -17,6 +17,7 @@ export const ALL_VIDEOS = gql`
       video_package_name
       video_url_a
       video_url_b
+      description
       user_subscription_level {
         subscription_type
         id
@@ -61,6 +62,7 @@ export const CREATE_VIDEOS = gql`
     $promotion: Boolean!
     $sub_name: uuid!
     $package_type: Int!
+    $description: String!
   ) {
     insert_video_list_one(
       object: {
@@ -74,6 +76,7 @@ export const CREATE_VIDEOS = gql`
         video_url_a: $video_url_a
         video_url_b: $video_url_b
         thumbnail_image_url: $thumbnail_image_url
+        description: $description
       }
     ) {
       created_at
@@ -89,6 +92,7 @@ export const CREATE_VIDEOS = gql`
       video_package_name
       video_url_a
       video_url_b
+      description
     }
   }
 `;
@@ -105,6 +109,7 @@ export const CREATE_VIDEOS_ZUMBA = gql`
     $thumbnail_image_url: String!
     $promotion: Boolean!
     $package_type: Int!
+    $description: String!
   ) {
     insert_video_list_one(
       object: {
@@ -117,6 +122,7 @@ export const CREATE_VIDEOS_ZUMBA = gql`
         video_url_a: $video_url_a
         video_url_b: $video_url_b
         thumbnail_image_url: $thumbnail_image_url
+        description: $description
       }
     ) {
       created_at
@@ -132,6 +138,7 @@ export const CREATE_VIDEOS_ZUMBA = gql`
       video_package_name
       video_url_a
       video_url_b
+      description
     }
   }
 `;
@@ -150,6 +157,7 @@ export const UPDATE_VIDEOS = gql`
     $promotion: Boolean!
     $sub_name: uuid
     $package_type: Int!
+    $description: String!
   ) {
     update_video_list_by_pk(
       pk_columns: { id: $id }
@@ -164,6 +172,7 @@ export const UPDATE_VIDEOS = gql`
         video_package_name: $video_package_name
         video_url_a: $video_url_a
         video_url_b: $video_url_b
+        description: $description
       }
     ) {
       created_at
@@ -179,6 +188,7 @@ export const UPDATE_VIDEOS = gql`
       video_package_name
       video_url_a
       video_url_b
+      description
       user_subscription_level {
         id
         subscription_type
@@ -204,6 +214,7 @@ export const UPDATE_VIDEOS_ZUMBA = gql`
     $thumbnail_image_url: String!
     $promotion: Boolean!
     $package_type: Int!
+    $description: String!
   ) {
     update_video_list_by_pk(
       pk_columns: { id: $id }
@@ -217,6 +228,7 @@ export const UPDATE_VIDEOS_ZUMBA = gql`
         video_package_name: $video_package_name
         video_url_a: $video_url_a
         video_url_b: $video_url_b
+        description: $description
       }
     ) {
       created_at
@@ -231,6 +243,7 @@ export const UPDATE_VIDEOS_ZUMBA = gql`
       video_package_name
       video_url_a
       video_url_b
+      description
       user_subscription_level {
         id
         subscription_type
