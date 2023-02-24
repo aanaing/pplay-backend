@@ -26,22 +26,23 @@ import {
 } from "@mui/material";
 
 const CreateVideo = ({ handleClose, videoAlert }) => {
-  const fileTypes = ["video/webm", "video/mkv", "video/mp4"];
+  const fileTypes = ["video/webm", "video/mp4"];
   const thumbnailfileTypes = [
-    "image/apng",
-    "image/bmp",
-    "image/gif",
+    // "image/apng",
+    // "image/bmp",
+    // "image/gif",
     "image/jpeg",
-    "image/pjpeg",
-    "image/png",
-    "image/svg+xml",
-    "image/tiff",
-    "image/webp",
+    // "image/pjpeg",
+    // "image/png",
+    // "image/svg+xml",
+    // "image/tiff",
+    // "image/webp",
   ];
 
   const [imagePreview, setImagePreview] = useState(null);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
+
   const [videoAFile, setVideoAFile] = useState(null);
   const [videoAFileUrl, setVideoAFileUrl] = useState(null);
   const [videoBFile, setVideoBFile] = useState(null);
@@ -70,17 +71,13 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
   }, [resultSub]);
 
   const handleChange = (prop) => (event) => {
-    // console.log(prop, event.target.value);
     if (event.target.value === "ZUMBA") {
       setShowSubInput(true);
     }
-
     if (event.target.value === "HOME" || event.target.value === "GYM") {
       setShowSubInput(false);
     }
-
     setValues({ ...values, [prop]: event.target.value });
-    // console.log(values);
   };
 
   const [getImageUrl] = useMutation(GET_IMAGE_UPLOAD_URL, {
@@ -149,7 +146,7 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
       setImageFile("");
       setImagePreview("");
       setLoading(false);
-      videoAlert("New Video have been created.");
+      videoAlert("New Video have been created.", false);
       handleClose();
     },
   });
@@ -160,8 +157,7 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
       if (!thumbnailfileTypes.includes(thumbImg.type)) {
         setErrors({
           ...errors,
-          thumbnail_image_url:
-            "Please select images. (PNG, JPG, JPEG, GIF, ...)",
+          thumbnail_image_url: "Please select images. (JPEG)",
         });
         return;
       }
@@ -185,7 +181,7 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
       if (!fileTypes.includes(videofile.type)) {
         setErrors({
           ...errors,
-          video_url_a: "Please select video. (mp4,mkv,...)",
+          video_url_a: "Please select video. (mp4,webm,...)",
         });
         return;
       }
@@ -208,7 +204,7 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
       if (!fileTypes.includes(videofile.type)) {
         setErrors({
           ...errors,
-          video_url_b: "Please select video. (mp4,mkv,...)",
+          video_url_b: "Please select video. (mp4,webm,)",
         });
         return;
       }
@@ -399,7 +395,7 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
                 onChange={videoChangeA}
                 error={errors.video_url_a ? true : false}
                 helperText={errors.video_url_a}
-                accept="video/webm, video/mkv, video/mp4"
+                accept="video/webm,video/mp4"
               />
               {/* video_url_b */}
               <TextField
@@ -410,14 +406,14 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
                 onChange={videoChangeB}
                 error={errors.video_url_b ? true : false}
                 helperText={errors.video_url_b}
-                accept="video/webm, video/mkv, video/mp4"
+                accept="video/webm video/mp4"
               />
               {/* thumbnail_image_url */}
               <TextField
                 id="thumbnail_image_url"
                 label="image_url"
                 type="file"
-                accept="image/png, image/jpeg, image/jpg, image/gif, image/svg+xml"
+                accept="image/jpeg"
                 InputLabelProps={{ shrink: true }}
                 //value={values.thumbnail_image_url}
                 onChange={thumbnailImageChange}

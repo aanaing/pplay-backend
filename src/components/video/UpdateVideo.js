@@ -28,17 +28,17 @@ import {
 
 const UpdateVideo = ({ handleClose, videoAlert, video }) => {
   console.log(video);
-  const fileTypes = ["video/webm", "video/mkv", "video/mp4"];
+  const fileTypes = ["video/webm", "video/mp4"];
   const thumbnailfileTypes = [
-    "image/apng",
-    "image/bmp",
-    "image/gif",
+    // "image/apng",
+    // "image/bmp",
+    // "image/gif",
     "image/jpeg",
-    "image/pjpeg",
-    "image/png",
-    "image/svg+xml",
-    "image/tiff",
-    "image/webp",
+    // "image/pjpeg",
+    // "image/png",
+    // "image/svg+xml",
+    // "image/tiff",
+    // "image/webp",
   ];
 
   const [isImageChange, setIsImageChange] = useState(false);
@@ -281,8 +281,7 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
       if (!thumbnailfileTypes.includes(img.type)) {
         setErrors({
           ...errors,
-          thumbnail_image_url:
-            "Please select image. (PNG, JPG, JPEG, GIF, ...)",
+          thumbnail_image_url: "Please select image. (JPEG)",
         });
         return;
       }
@@ -306,7 +305,7 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
       if (!fileTypes.includes(videofile.type)) {
         setErrors({
           ...errors,
-          video_url_a: "Please select video. (mp4,mkv,...)",
+          video_url_a: "Please select video. (mp4,webm,..)",
         });
         return;
       }
@@ -322,6 +321,7 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
       getVideoAUrl();
     }
   };
+
   const videoChangeB = async (e) => {
     if (e.target.files && e.target.files[0]) {
       let videofile = e.target.files[0];
@@ -329,7 +329,7 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
       if (!fileTypes.includes(videofile.type)) {
         setErrors({
           ...errors,
-          video_url_b: "Please select video. (mp4,mkv,...)",
+          video_url_b: "Please select video. (mp4)",
         });
         return;
       }
@@ -342,7 +342,7 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
       }
       setVideoBFile(videofile);
       //setImagePreview(URL.createObjectURL(videofile));
-      getVideoBUrl();
+      getVideoAUrl();
     }
   };
 
@@ -476,7 +476,7 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
                 onChange={videoChangeA}
                 error={errors.video_url_a ? true : false}
                 helperText={errors.video_url_a}
-                accept="video/webm, video/mkv, video/mp4"
+                accept="video/webm,video/mp4"
               />
               {/* video_url_b */}
               <TextField
@@ -487,14 +487,14 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
                 onChange={videoChangeB}
                 error={errors.video_url_b ? true : false}
                 helperText={errors.video_url_b}
-                accept="video/webm, video/mkv, video/mp4"
+                accept="video/webm,video/mp4"
               />
               {/* thumbnail_image_url */}
               <TextField
                 id="thumbnail_image_url"
                 label="image_url"
                 type="file"
-                accept="image/png, image/jpeg, image/jpg, image/gif, image/svg+xml"
+                accept="image/jpeg"
                 InputLabelProps={{ shrink: true }}
                 //value={values.thumbnail_image_url}
                 onChange={imageChange}

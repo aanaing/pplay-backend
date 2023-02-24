@@ -114,6 +114,34 @@ thead .MuiTableCell-root:last-child {
   justify-content: flex-end;
   margin-top: 1rem;
 }
+.flex--3--cols {
+  /* display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 1rem 2rem; */
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem 2rem;
+}
+.first--cols-box {
+  display: flex;
+  gap: 8rem;
+}
+.first--cols {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.user-text-box {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+.btn-user-update {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .grid--2--cols {
   display: grid;
