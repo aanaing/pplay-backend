@@ -27,6 +27,7 @@ import {
 } from "@mui/material";
 
 const UpdateVideo = ({ handleClose, videoAlert, video }) => {
+  console.log(video);
   const fileTypes = ["video/webm", "video/mkv", "video/mp4"];
   const thumbnailfileTypes = [
     "image/apng",
