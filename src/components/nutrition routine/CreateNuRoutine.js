@@ -28,20 +28,24 @@ import { GET_IMAGE_UPLOAD_URL } from "../../gql/misc";
 import { useMutation, useQuery } from "@apollo/client";
 import { LoadingButton } from "@mui/lab";
 
-const CreateNuRoutine = ({ handleClose }) => {
-  const fileTypes = [
-    "image/apng",
-    "image/bmp",
-    "image/gif",
-    "image/jpeg",
-    "image/pjpeg",
-    "image/png",
-    "image/svg+xml",
-    "image/tiff",
-    "image/webp",
-    "image/x-icon",
-  ];
+const fileTypes = [
+  "image/apng",
+  "image/bmp",
+  "image/gif",
+  "image/jpeg",
+  "image/pjpeg",
+  "image/png",
+  "image/svg+xml",
+  "image/tiff",
+  "image/webp",
+  "image/x-icon",
+];
+const pdfFileTypes = ["application/pdf"];
 
+const imageType = "image/*";
+const pdfType = "application/pdf";
+
+const CreateNuRoutine = ({ handleClose }) => {
   const [values, setValues] = useState({});
   const [errors, setErrors] = useState({});
 
@@ -52,6 +56,9 @@ const CreateNuRoutine = ({ handleClose }) => {
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
 
+  const [pdfFile, setPdfFile] = useState(null);
+  const [pdfFileUrl, setPdfFileUrl] = useState(null);
+
   const [textValue, setTextValue] = useState(RichTextEditor.createEmptyValue());
 
   /*---------------------------*/
@@ -60,6 +67,7 @@ const CreateNuRoutine = ({ handleClose }) => {
     setValues({ ...values, [prop]: event.target.value });
   };
 
+  //for image upload
   const [getImageUrl] = useMutation(GET_IMAGE_UPLOAD_URL, {
     onError: (error) => {
       console.log("imge errors", error);
@@ -72,10 +80,52 @@ const CreateNuRoutine = ({ handleClose }) => {
       setImageFileUrl(result.getImageUploadUrl.imageUploadUrl);
       setValues({
         ...values,
-        thumbnail_image_url: `https://axra.sgp1.digitaloceanspaces.com/VJun/${result.getImageUploadUrl.imageName}`,
+        thumbnail_image_url: `https://axra.sgp1.digitaloceanspaces.com/PowerPlay/${result.getImageUploadUrl.imageName}`,
       });
     },
   });
+
+  //PDF file Upload Url
+  const [getPdfUrl] = useMutation(GET_IMAGE_UPLOAD_URL, {
+    onError: (error) => {
+      console.log("imge errors", error);
+      setShowAlert({ message: "Error on server", isError: true });
+      setTimeout(() => {
+        setShowAlert({ message: "", isError: false });
+      }, 1000);
+    },
+    onCompleted: (result) => {
+      setPdfFileUrl(result.getImageUploadUrl.imageUploadUrl);
+      setValues({
+        ...values,
+        pdf_file_url: `https://axra.sgp1.digitaloceanspaces.com/PowerPlay/${result.getImageUploadUrl.imageName}`,
+      });
+    },
+  });
+
+  //PDF file change
+  const pdfChange = async (e) => {
+    if (e.target.files && e.target.files[0]) {
+      console.log(e.target.files);
+      let img = e.target.files[0];
+      if (!pdfFileTypes.includes(img.type)) {
+        setErrors({
+          ...errors,
+          pdf_file_url: "Please select PDF. (.pdf)",
+        });
+        return;
+      }
+      if (img.size > 10485760) {
+        setErrors({
+          ...errors,
+          pdf_file_url: "Pdf file size must be smaller than 10MB.",
+        });
+        return;
+      }
+      setPdfFile(img);
+      getPdfUrl({ variables: { contentType: pdfType } });
+    }
+  };
 
   //get data from db
   const [createNuRoutine] = useMutation(CREATE_NODAYS, {
@@ -89,6 +139,7 @@ const CreateNuRoutine = ({ handleClose }) => {
     },
     onCompleted: () => {
       setValues({});
+      setShowAlert({ message: "New Routine has been added", isError: true });
       setErrors({});
 
       setTextValue(RichTextEditor.createEmptyValue());
@@ -127,7 +178,7 @@ const CreateNuRoutine = ({ handleClose }) => {
       }
       setImageFile(img);
       setImagePreview(URL.createObjectURL(img));
-      getImageUrl();
+      getImageUrl({ variables: { contentType: imageType } });
     }
   };
 
@@ -352,9 +403,10 @@ const CreateNuRoutine = ({ handleClose }) => {
                 id="pdf_file_url"
                 label="pdf_file_url"
                 type="file"
+                accept="pdf"
                 InputLabelProps={{ shrink: true }}
-                //value={values.pdf_file_url}
-                onChange={handleChange("pdf_file_url")}
+                //value={values.thumbnail_image_url}
+                onChange={pdfChange}
                 error={errors.pdf_file_url ? true : false}
                 helperText={errors.pdf_file_url}
               />

@@ -22,20 +22,24 @@ import { GET_IMAGE_UPLOAD_URL, DELETE_IMAGE } from "../../gql/misc";
 import { useMutation, useQuery } from "@apollo/client";
 import { LoadingButton } from "@mui/lab";
 
-const UpdateNuRoutine = ({ routineAlert, handleClose, value }) => {
-  const fileTypes = [
-    "image/apng",
-    "image/bmp",
-    "image/gif",
-    "image/jpeg",
-    "image/pjpeg",
-    "image/png",
-    "image/svg+xml",
-    "image/tiff",
-    "image/webp",
-    "image/x-icon",
-  ];
+const fileTypes = [
+  "image/apng",
+  "image/bmp",
+  "image/gif",
+  "image/jpeg",
+  "image/pjpeg",
+  "image/png",
+  "image/svg+xml",
+  "image/tiff",
+  "image/webp",
+  "image/x-icon",
+];
+const pdfFileTypes = ["application/pdf"];
 
+const imageType = "image/*";
+const pdfType = "application/pdf";
+
+const UpdateNuRoutine = ({ routineAlert, handleClose, value }) => {
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState({ message: "", isError: false });
   const [values, setValues] = useState({
@@ -61,6 +65,12 @@ const UpdateNuRoutine = ({ routineAlert, handleClose, value }) => {
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [isImageChange, setIsImageChange] = useState(false);
+
+  const [pdfFile, setPdfFile] = useState(null);
+  const [pdfFileUrl, setPdfFileUrl] = useState(null);
+  const [isPdfChange, setPdfChange] = useState(false);
+  const [oldPdfName, setOldPdfName] = useState(null);
+
   const [textValue, setTextValue] = useState(RichTextEditor.createEmptyValue());
 
   const handleChange = (prop) => (event) => {
@@ -86,7 +96,7 @@ const UpdateNuRoutine = ({ routineAlert, handleClose, value }) => {
       setIsImageChange(true);
       setValues({
         ...values,
-        thumbnail_image_url: `https://axra.sgp1.digitaloceanspaces.com/VJun/${result.getImageUploadUrl.imageName}`,
+        thumbnail_image_url: `https://axra.sgp1.digitaloceanspaces.com/PowerPlay/${result.getImageUploadUrl.imageName}`,
       });
     },
   });
@@ -104,6 +114,7 @@ const UpdateNuRoutine = ({ routineAlert, handleClose, value }) => {
       setValues({});
       setErrors({});
       setImageFile("");
+      setPdfFile("");
       setImagePreview("");
       setLoading(false);
       routineAlert("Routine have been updated.", false);
@@ -123,6 +134,10 @@ const UpdateNuRoutine = ({ routineAlert, handleClose, value }) => {
       //   setOldImageName(
       //   val.image_url.substring(image_url.lastIndexOf("/") + 1, image_url.lenght)
       //  );
+      let pdf_url = value.pdf_file_url;
+      // setOldPdfName(
+      //   pdf_url.substring(pdf_url.lastIndexOf("/") + 1, pdf_url.lenght)
+      // );
     }
   }, [value]);
 
@@ -146,10 +161,51 @@ const UpdateNuRoutine = ({ routineAlert, handleClose, value }) => {
       }
       setImageFile(img);
       setImagePreview(URL.createObjectURL(img));
-      getImageUrl();
+      getImageUrl({ variables: { contentType: imageType } });
     }
   };
 
+  //PDF file change
+  const pdfChange = async (e) => {
+    if (e.target.files && e.target.files[0]) {
+      console.log(e.target.files);
+      let img = e.target.files[0];
+      if (!pdfFileTypes.includes(img.type)) {
+        setErrors({
+          ...errors,
+          pdf_file_url: "Please select PDF. (.pdf)",
+        });
+        return;
+      }
+      if (img.size > 10485760) {
+        setErrors({
+          ...errors,
+          pdf_file_url: "Pdf file size must be smaller than 10MB.",
+        });
+        return;
+      }
+      setPdfFile(img);
+      getPdfUrl({ variables: { contentType: pdfType } });
+    }
+  };
+
+  //PDF file Upload Url
+  const [getPdfUrl] = useMutation(GET_IMAGE_UPLOAD_URL, {
+    onError: (error) => {
+      console.log("imge errors", error);
+      setShowAlert({ message: "Error on server", isError: true });
+      setTimeout(() => {
+        setShowAlert({ message: "", isError: false });
+      }, 1000);
+    },
+    onCompleted: (result) => {
+      setPdfFileUrl(result.getImageUploadUrl.imageUploadUrl);
+      setValues({
+        ...values,
+        pdf_file_url: `https://axra.sgp1.digitaloceanspaces.com/PowerPlay/${result.getImageUploadUrl.imageName}`,
+      });
+    },
+  });
   const handleUpdate = async () => {
     setLoading(true);
     setErrors({});
@@ -173,6 +229,10 @@ const UpdateNuRoutine = ({ routineAlert, handleClose, value }) => {
       if (isImageChange) {
         await imageService.uploadImage(imageFileUrl, imageFile);
         deleteImage({ variables: { image_name: oldImageName } });
+      }
+      if (isPdfChange) {
+        await imageService.uploadImage(pdfFileUrl, pdfFile);
+        deleteImage({ variables: { image_name: oldPdfName } });
       }
       updateRoutine({ variables: { ...values, id: value.id } });
     } catch (error) {
@@ -363,14 +423,16 @@ const UpdateNuRoutine = ({ routineAlert, handleClose, value }) => {
                   <FormHelperText error>{errors.package_type}</FormHelperText>
                 )}
               </FormControl>
+
               {/* pdf_file_url */}
               <TextField
                 id="pdf_file_url"
                 label="pdf_file_url"
                 type="file"
+                accept="pdf"
                 InputLabelProps={{ shrink: true }}
-                //value={values.pdf_file_url}
-                onChange={handleChange("pdf_file_url")}
+                //value={values.thumbnail_image_url}
+                onChange={pdfChange}
                 error={errors.pdf_file_url ? true : false}
                 helperText={errors.pdf_file_url}
               />

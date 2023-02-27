@@ -36,7 +36,7 @@ const fileTypes = [
   "image/webp",
   "image/x-icon",
 ];
-
+const imageType = "image/*";
 const CreateExeRoutine = ({ handleClose, routineAlert }) => {
   const [values, setValues] = useState({});
   const [errors, setErrors] = useState({});
@@ -76,7 +76,7 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
       setImageFileUrl(result.getImageUploadUrl.imageUploadUrl);
       setValues({
         ...values,
-        thumbnail_image_url: `https://axra.sgp1.digitaloceanspaces.com/VJun/${result.getImageUploadUrl.imageName}`,
+        thumbnail_image_url: `https://axra.sgp1.digitaloceanspaces.com/PowerPlay/${result.getImageUploadUrl.imageName}`,
       });
     },
   });
@@ -102,7 +102,7 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
       }
       setImageFile(img);
       setImagePreview(URL.createObjectURL(img));
-      getImageUrl();
+      getImageUrl({ variables: { contentType: imageType } });
     }
   };
 

@@ -42,6 +42,9 @@ const CreateSpecialNuRoutine = ({ handleClose }) => {
     "image/webp",
     "image/x-icon",
   ];
+  const imageType = "image/*";
+  const pdfFileTypes = ["application/pdf"];
+  const pdfType = "application/pdf";
 
   const [values, setValues] = useState({});
   const [errors, setErrors] = useState({});
@@ -52,7 +55,11 @@ const CreateSpecialNuRoutine = ({ handleClose }) => {
   const [imagePreview, setImagePreview] = useState(null);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
+
   const [textValue, setTextValue] = useState(RichTextEditor.createEmptyValue());
+
+  const [pdfFile, setPdfFile] = useState(null);
+  const [pdfFileUrl, setPdfFileUrl] = useState(null);
 
   const [user, setUser] = useState({});
   const [loadUser, resultUser] = useLazyQuery(USER_ID);
@@ -88,7 +95,25 @@ const CreateSpecialNuRoutine = ({ handleClose }) => {
       setImageFileUrl(result.getImageUploadUrl.imageUploadUrl);
       setValues({
         ...values,
-        thumbnail_image_url: `https://axra.sgp1.digitaloceanspaces.com/VJun/${result.getImageUploadUrl.imageName}`,
+        thumbnail_image_url: `https://axra.sgp1.digitaloceanspaces.com/PowerPlay/${result.getImageUploadUrl.imageName}`,
+      });
+    },
+  });
+
+  //PDF file Upload Url
+  const [getPdfUrl] = useMutation(GET_IMAGE_UPLOAD_URL, {
+    onError: (error) => {
+      console.log("imge errors", error);
+      setShowAlert({ message: "Error on server", isError: true });
+      setTimeout(() => {
+        setShowAlert({ message: "", isError: false });
+      }, 1000);
+    },
+    onCompleted: (result) => {
+      setPdfFileUrl(result.getImageUploadUrl.imageUploadUrl);
+      setValues({
+        ...values,
+        pdf_file_url: `https://axra.sgp1.digitaloceanspaces.com/PowerPlay/${result.getImageUploadUrl.imageName}`,
       });
     },
   });
@@ -105,10 +130,9 @@ const CreateSpecialNuRoutine = ({ handleClose }) => {
     onCompleted: () => {
       setValues({});
       setErrors({});
-
       setTextValue(RichTextEditor.createEmptyValue());
-
       setImageFile("");
+      setPdfFile("");
       setImagePreview("");
       setLoading(false);
       setShowAlert({
@@ -123,7 +147,7 @@ const CreateSpecialNuRoutine = ({ handleClose }) => {
 
   const imageChange = async (e) => {
     if (e.target.files && e.target.files[0]) {
-      console.log(e.target.files);
+      console.log(e.target.files[0]);
       let img = e.target.files[0];
       if (!fileTypes.includes(img.type)) {
         setErrors({
@@ -142,7 +166,31 @@ const CreateSpecialNuRoutine = ({ handleClose }) => {
       }
       setImageFile(img);
       setImagePreview(URL.createObjectURL(img));
-      getImageUrl();
+      getImageUrl({ variables: { contentType: imageType } });
+    }
+  };
+
+  //PDF file change
+  const pdfChange = async (e) => {
+    if (e.target.files && e.target.files[0]) {
+      console.log(e.target.files);
+      let img = e.target.files[0];
+      if (!pdfFileTypes.includes(img.type)) {
+        setErrors({
+          ...errors,
+          pdf_file_url: "Please select PDF. (.pdf)",
+        });
+        return;
+      }
+      if (img.size > 10485760) {
+        setErrors({
+          ...errors,
+          pdf_file_url: "Pdf file size must be smaller than 10MB.",
+        });
+        return;
+      }
+      setPdfFile(img);
+      getPdfUrl({ variables: { contentType: pdfType } });
     }
   };
 
@@ -173,7 +221,7 @@ const CreateSpecialNuRoutine = ({ handleClose }) => {
       errorObject.description = "description is required";
       isErrorExit = true;
     }
-    if (!values.pdf_file_url) {
+    if (!values.pdf_file_url || !pdfFile) {
       errorObject.pdf_file_url = "pdf_file_url is required";
       isErrorExit = true;
     }
@@ -195,9 +243,8 @@ const CreateSpecialNuRoutine = ({ handleClose }) => {
 
     try {
       await imageService.uploadImage(imageFileUrl, imageFile);
-      //await routine.uploadImage(pdfFileUrl, pdfFile);
+      await imageService.uploadImage(pdfFileUrl, pdfFile);
       createNuRoutine({ variables: { ...values } });
-      // console.log(values);
     } catch (error) {
       console.log("error bbbbbbbbbbbbbbb : ", error);
     }
@@ -269,7 +316,7 @@ const CreateSpecialNuRoutine = ({ handleClose }) => {
         </Button>
       </Box>
 
-      <Card sx={{ color: "white" }}>
+      <Card>
         <CardContent>
           <div className="grid--2--cols">
             {/* image */}
@@ -284,7 +331,6 @@ const CreateSpecialNuRoutine = ({ handleClose }) => {
                   mt: 4,
                   boxShadow: 5,
                   borderRadius: 2,
-                  border: 1.5,
                 }}
                 component="img"
                 height="300"
@@ -404,9 +450,10 @@ const CreateSpecialNuRoutine = ({ handleClose }) => {
                 id="pdf_file_url"
                 label="pdf_file_url"
                 type="file"
+                accept="pdf"
                 InputLabelProps={{ shrink: true }}
-                //value={values.pdf_file_url}
-                onChange={handleChange("pdf_file_url")}
+                //value={values.thumbnail_image_url}
+                onChange={pdfChange}
                 error={errors.pdf_file_url ? true : false}
                 helperText={errors.pdf_file_url}
               />

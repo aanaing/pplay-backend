@@ -39,20 +39,25 @@ const fileTypes = [
   "image/webp",
   "image/x-icon",
 ];
+const imageType = "image/*";
 
 const UpdateSpeExeRoutine = ({ handleClose, routineAlert, value }) => {
   const [values, setValues] = useState(null);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+
   const [sub, setSub] = useState(null);
   const [loadSub, resultSub] = useLazyQuery(SUB_TYPE_NAME);
+
   const [user, setUser] = useState([]);
   const [loadUser, resultUser] = useLazyQuery(USER_ID);
+
   const [oldImageName, setOldImageName] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [isImageChange, setIsImageChange] = useState(false);
+
   const [textValue, setTextValue] = useState(RichTextEditor.createEmptyValue());
   const [showAlert, setShowAlert] = useState({ message: "", isError: false });
 
@@ -95,7 +100,7 @@ const UpdateSpeExeRoutine = ({ handleClose, routineAlert, value }) => {
       setIsImageChange(true);
       setValues({
         ...values,
-        thumbnail_image_url: `https://axra.sgp1.digitaloceanspaces.com/VJun/${result.getImageUploadUrl.imageName}`,
+        thumbnail_image_url: `https://axra.sgp1.digitaloceanspaces.com/PowerPlay/${result.getImageUploadUrl.imageName}`,
       });
     },
   });
@@ -121,7 +126,7 @@ const UpdateSpeExeRoutine = ({ handleClose, routineAlert, value }) => {
       }
       setImageFile(img);
       setImagePreview(URL.createObjectURL(img));
-      getImageUrl();
+      getImageUrl({ variables: { contentType: imageType } });
     }
   };
 

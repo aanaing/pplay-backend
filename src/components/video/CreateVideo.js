@@ -28,17 +28,18 @@ import {
 const CreateVideo = ({ handleClose, videoAlert }) => {
   const fileTypes = ["video/webm", "video/mp4"];
   const thumbnailfileTypes = [
-    // "image/apng",
-    // "image/bmp",
-    // "image/gif",
+    "image/apng",
+    "image/bmp",
+    "image/gif",
     "image/jpeg",
-    // "image/pjpeg",
-    // "image/png",
-    // "image/svg+xml",
-    // "image/tiff",
-    // "image/webp",
+    "image/pjpeg",
+    "image/png",
+    "image/svg+xml",
+    "image/tiff",
+    "image/webp",
   ];
-
+  const imageType = "image/*";
+  const videoType = "video/*";
   const [imagePreview, setImagePreview] = useState(null);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
@@ -88,7 +89,7 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
       setImageFileUrl(result.getImageUploadUrl.imageUploadUrl);
       setValues({
         ...values,
-        thumbnail_image_url: `https://axra.sgp1.digitaloceanspaces.com/VJun/${result.getImageUploadUrl.imageName}`,
+        thumbnail_image_url: `https://axra.sgp1.digitaloceanspaces.com/PowerPlay/${result.getImageUploadUrl.imageName}`,
       });
     },
   });
@@ -101,7 +102,7 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
       setVideoAFileUrl(result.getImageUploadUrl.imageUploadUrl);
       setValues({
         ...values,
-        video_url_a: `https://axra.sgp1.digitaloceanspaces.com/VJun/${result.getImageUploadUrl.imageName}`,
+        video_url_a: `https://axra.sgp1.digitaloceanspaces.com/PowerPlay/${result.getImageUploadUrl.imageName}`,
       });
     },
   });
@@ -114,7 +115,7 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
       setVideoBFileUrl(result.getImageUploadUrl.imageUploadUrl);
       setValues({
         ...values,
-        video_url_b: `https://axra.sgp1.digitaloceanspaces.com/VJun/${result.getImageUploadUrl.imageName}`,
+        video_url_b: `https://axra.sgp1.digitaloceanspaces.com/PowerPlay/${result.getImageUploadUrl.imageName}`,
       });
     },
   });
@@ -157,7 +158,7 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
       if (!thumbnailfileTypes.includes(thumbImg.type)) {
         setErrors({
           ...errors,
-          thumbnail_image_url: "Please select images. (JPEG)",
+          thumbnail_image_url: "Please select images. (JPEG,PNG,...)",
         });
         return;
       }
@@ -170,7 +171,7 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
       }
       setImageFile(thumbImg);
       setImagePreview(URL.createObjectURL(thumbImg));
-      getImageUrl();
+      getImageUrl({ variables: { contentType: imageType } });
     }
   };
 
@@ -194,7 +195,7 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
       // }
       setVideoAFile(videofile);
       //setImagePreview(URL.createObjectURL(videofile));
-      getVideoAUrl();
+      getVideoAUrl({ variables: { contentType: videoType } });
     }
   };
   const videoChangeB = async (e) => {
@@ -217,7 +218,7 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
       // }
       setVideoBFile(videofile);
       //setImagePreview(URL.createObjectURL(videofile));
-      getVideoBUrl();
+      getVideoBUrl({ variables: { contentType: videoType } });
     }
   };
 

@@ -27,29 +27,38 @@ import {
 } from "@mui/material";
 
 const UpdateVideo = ({ handleClose, videoAlert, video }) => {
-  console.log(video);
   const fileTypes = ["video/webm", "video/mp4"];
   const thumbnailfileTypes = [
-    // "image/apng",
-    // "image/bmp",
-    // "image/gif",
+    "image/apng",
+    "image/bmp",
+    "image/gif",
     "image/jpeg",
-    // "image/pjpeg",
-    // "image/png",
-    // "image/svg+xml",
-    // "image/tiff",
-    // "image/webp",
+    "image/pjpeg",
+    "image/png",
+    "image/svg+xml",
+    "image/tiff",
+    "image/webp",
   ];
+  const videoFileTypes = ["video/mp4", "video/webm", "video/mkv"];
+  const videoType = "video/*";
+  const imageType = "image/*";
 
   const [isImageChange, setIsImageChange] = useState(false);
   const [oldImageName, setOldImageName] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
+
   const [videoAFile, setVideoAFile] = useState(null);
   const [videoAFileUrl, setVideoAFileUrl] = useState(null);
+  const [isVideoAChange, setIsVideoAChange] = useState(false);
+  const [oldVideoAName, setOldVideoAName] = useState(null);
+
   const [videoBFile, setVideoBFile] = useState(null);
   const [videoBFileUrl, setVideoBFileUrl] = useState(null);
+  const [isVideoBChange, setIsVideoBChange] = useState(false);
+  const [oldVideoBName, setOldVideoBName] = useState(null);
+
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState({ message: "", isError: false });
 
@@ -82,6 +91,7 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
   const [sub, setSub] = useState("");
   const [loadSub, resutSub] = useLazyQuery(SUB_TYPE_NAME);
   const [showSubInput, setShowSubInput] = useState(false);
+
   useEffect(() => {
     loadSub();
   }, [loadSub]);
@@ -109,32 +119,6 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
     }
     setValues({ ...values, [prop]: event.target.value });
   };
-
-  const [getVideoAUrl] = useMutation(GET_IMAGE_UPLOAD_URL, {
-    onError: (error) => {
-      console.log("error : ", error);
-    },
-    onCompleted: (result) => {
-      setVideoAFileUrl(result.getImageUploadUrl.imageUploadUrl);
-      setValues({
-        ...values,
-        video_url_a: `https://axra.sgp1.digitaloceanspaces.com/VJun/${result.getImageUploadUrl.imageName}`,
-      });
-    },
-  });
-
-  const [getVideoBUrl] = useMutation(GET_IMAGE_UPLOAD_URL, {
-    onError: (error) => {
-      console.log("error : ", error);
-    },
-    onCompleted: (result) => {
-      setVideoBFileUrl(result.getImageUploadUrl.imageUploadUrl);
-      setValues({
-        ...values,
-        video_url_b: `https://axra.sgp1.digitaloceanspaces.com/VJun/${result.getImageUploadUrl.imageName}`,
-      });
-    },
-  });
 
   const [deleteImage] = useMutation(DELETE_IMAGE, {
     onError: (error) => {
@@ -177,6 +161,8 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
       });
       setImageFile("");
       setImagePreview("");
+      setVideoAFile("");
+      setVideoBFile("");
       setLoading(false);
       videoAlert("New Video have been created.");
       handleClose();
@@ -214,6 +200,8 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
         sub_name: "",
       });
       setImageFile("");
+      setVideoAFile("");
+      setVideoBFile("");
       setImagePreview("");
       setLoading(false);
       videoAlert("New Video have been created.");
@@ -241,9 +229,18 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
         RichTextEditor.createValueFromString(video.description, "html")
       );
     }
-
-    setOldImageName();
-    // image_url.substring(image_url.lastIndexOf("/") + 1, image_url.lenght);
+    let image_url = video.thumbnail_image_url;
+    setOldImageName(
+      image_url.substring(image_url.lastIndexOf("/") + 1, image_url.lenght)
+    );
+    let videoA_url = video.video_url_a;
+    setOldVideoAName(
+      videoA_url.substring(videoA_url.lastIndexOf("/") + 1, videoA_url.lenght)
+    );
+    let videoB_url = video.video_url_a;
+    setOldVideoBName(
+      videoB_url.substring(videoB_url.lastIndexOf("/") + 1, videoB_url.lenght)
+    );
   }, [
     video.main_type,
     video.package_type,
@@ -257,6 +254,34 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
     video.sub_name,
   ]);
 
+  const [getVideoAUrl] = useMutation(GET_IMAGE_UPLOAD_URL, {
+    onError: (error) => {
+      console.log("error : ", error);
+    },
+    onCompleted: (result) => {
+      setVideoAFileUrl(result.getImageUploadUrl.imageUploadUrl);
+      setIsVideoAChange(true);
+      setValues({
+        ...values,
+        video_url_a: `https://axra.sgp1.digitaloceanspaces.com/PowerPlay/${result.getImageUploadUrl.imageName}`,
+      });
+    },
+  });
+
+  const [getVideoBUrl] = useMutation(GET_IMAGE_UPLOAD_URL, {
+    onError: (error) => {
+      console.log("error : ", error);
+    },
+    onCompleted: (result) => {
+      setVideoBFileUrl(result.getImageUploadUrl.imageUploadUrl);
+      setIsVideoBChange(true);
+      setValues({
+        ...values,
+        video_url_b: `https://axra.sgp1.digitaloceanspaces.com/PowerPlay/${result.getImageUploadUrl.imageName}`,
+      });
+    },
+  });
+
   const [getImageUrl] = useMutation(GET_IMAGE_UPLOAD_URL, {
     onError: (error) => {
       console.log("imge errors", error);
@@ -268,9 +293,10 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
     onCompleted: (result) => {
       setImageFileUrl(result.getImageUploadUrl.imageUploadUrl);
       setIsImageChange(true);
+
       setValues({
         ...values,
-        thumbnail_image_url: `https://axra.sgp1.digitaloceanspaces.com/VJun/${result.getImageUploadUrl.imageName}`,
+        thumbnail_image_url: `https://axra.sgp1.digitaloceanspaces.com/PowerPlay/${result.getImageUploadUrl.imageName}`,
       });
     },
   });
@@ -294,7 +320,7 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
       }
       setImageFile(img);
       setImagePreview(URL.createObjectURL(img));
-      getImageUrl();
+      getImageUrl({ variables: { contentType: imageType } });
     }
   };
 
@@ -302,23 +328,22 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
     if (e.target.files && e.target.files[0]) {
       let videofile = e.target.files[0];
 
-      if (!fileTypes.includes(videofile.type)) {
+      if (!videoFileTypes.includes(videofile.type)) {
         setErrors({
           ...errors,
           video_url_a: "Please select video. (mp4,webm,..)",
         });
         return;
       }
-      if (videofile.size > 104857600) {
-        setErrors({
-          ...errors,
-          video_url_a: "Video file size must be smaller than 100MB.",
-        });
-        return;
-      }
+      // if (videofile.size > 104857600) {
+      //   setErrors({
+      //     ...errors,
+      //     video_url_a: "Video file size must be smaller than 100MB.",
+      //   });
+      //   return;
+      // }
       setVideoAFile(videofile);
-      //setImagePreview(URL.createObjectURL(videofile));
-      getVideoAUrl();
+      getVideoAUrl({ variables: { contentType: videoType } });
     }
   };
 
@@ -326,23 +351,22 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
     if (e.target.files && e.target.files[0]) {
       let videofile = e.target.files[0];
 
-      if (!fileTypes.includes(videofile.type)) {
+      if (!videoFileTypes.includes(videofile.type)) {
         setErrors({
           ...errors,
           video_url_b: "Please select video. (mp4)",
         });
         return;
       }
-      if (videofile.size > 104857600) {
-        setErrors({
-          ...errors,
-          video_url_b: "Video file size must be smaller than 100MB.",
-        });
-        return;
-      }
+      // if (videofile.size > 104857600) {
+      //   setErrors({
+      //     ...errors,
+      //     video_url_b: "Video file size must be smaller than 100MB.",
+      //   });
+      //   return;
+      // }
       setVideoBFile(videofile);
-      //setImagePreview(URL.createObjectURL(videofile));
-      getVideoAUrl();
+      getVideoBUrl({ variables: { contentType: videoType } });
     }
   };
 
@@ -365,6 +389,14 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
       if (isImageChange) {
         await imageService.uploadImage(imageFileUrl, imageFile);
         deleteImage({ variables: { image_name: oldImageName } });
+      }
+      if (isVideoAChange) {
+        await imageService.uploadImage(videoAFileUrl, videoAFile);
+        deleteImage({ variables: { image_name: oldVideoAName } });
+      }
+      if (isVideoBChange) {
+        await imageService.uploadImage(videoBFileUrl, videoBFile);
+        deleteImage({ variables: { image_name: oldVideoBName } });
       }
       if (values.main_type === "ZUMBA") {
         values.sub_name = null;
