@@ -53,7 +53,6 @@ const CreateNuRoutine = ({ handleClose }) => {
   const [imagePreview, setImagePreview] = useState(null);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
-
   const [pdfFile,setPdfFile]=useState(null);
   const [pdfFileUrl,setPdfFileUrl]=useState(null);
   const [textValue, setTextValue] = useState(RichTextEditor.createEmptyValue());
