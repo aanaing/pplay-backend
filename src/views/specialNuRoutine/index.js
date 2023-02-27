@@ -179,7 +179,7 @@ const Routine = () => {
     setUpdateOpen(true);
   };
   const handleUpdateClose = () => {
-    console.log("index");
+    //console.log("index");
     resutRoutine.refetch();
     setUpdateOpen(false);
   };

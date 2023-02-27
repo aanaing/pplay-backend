@@ -77,7 +77,7 @@ const Routine = () => {
   const [loadRoutine, resutRoutine] = useLazyQuery(GET_ALL_SPECIAL_EXE_ROUTINE);
   const [loadSubType, resultSubType] = useLazyQuery(SUB_TYPE_NAME);
   const [routine, setRoutine] = useState({});
-  console.log(resutRoutine);
+  
 
   // ---------------------****------------------------
 
@@ -174,8 +174,7 @@ const Routine = () => {
     //setRoutine(row);
     setUpdateOpen(true);
   };
-  const handleUpdateClose = () => {
-    console.log("index");
+  const handleUpdateClose = () => {    
     resutRoutine.refetch();
     setUpdateOpen(false);
   };

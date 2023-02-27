@@ -146,7 +146,7 @@ const Index = () => {
       setVideo(result.data.video_list);
     }
   }, [result]);
-  console.log(video);
+  //console.log(video);
 
   useEffect(() => {
     if (resultCategory.data) {
@@ -307,7 +307,7 @@ const Index = () => {
       </div>
     );
   }
-  console.log(video.user_subscription_level);
+ // console.log(video.user_subscription_level);
   return (
     <div>
       <div className="align">

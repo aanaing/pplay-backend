@@ -101,9 +101,6 @@ const Routine = () => {
   };
 
   // get data from db
-
-  console.log(resutRoutine);
-
   useEffect(() => {
     loadRoutine({
       variables: { limit: rowsPerPage, offset: offset, search: `%${search}%` },
@@ -118,6 +115,7 @@ const Routine = () => {
       );
     }
   }, [resutRoutine]);
+ 
 
   //------------- REMOVE ROUTINE -------------
   const [deleteRoutine] = useMutation(DELETE_NUROUTINE, {
@@ -140,7 +138,7 @@ const Routine = () => {
       return;
     }
     deleteRoutine({ variables: { id: removeRoutine.id } });
-    resutRoutine.refetch();
+    resutRoutine.refetch()
     setRemoveOpen(false);
   };
 
@@ -179,7 +177,7 @@ const Routine = () => {
   //   setUpdateOpen(true);
   // };
   const handleUpdateClose = () => {
-    console.log("index");
+    
     resutRoutine.refetch();
     setUpdateOpen(false);
   };

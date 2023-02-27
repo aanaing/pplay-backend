@@ -91,7 +91,7 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
 
   const imageChange = async (e) => {
     if (e.target.files && e.target.files[0]) {
-      console.log(e.target.files);
+     // console.log(e.target.files);
       let img = e.target.files[0];
       if (!fileTypes.includes(img.type)) {
         setErrors({
@@ -124,10 +124,10 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
     onError: (error) => {
       console.log("error : ", error);
       setLoading(false);
-      console.log("wrong");
+     // console.log("wrong");
     },
     onCompleted: () => {
-      console.log("right");
+      //console.log("right");
       setValues({});
       setErrors({});
       setLoading(false);
@@ -311,7 +311,7 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
               label="image_url"
               type="file"
               accept="image/png, image/jpeg, image/jpg, image/gif, image/svg+xml"
-              InputLabelProps={{ shrink: "shrink" }}
+              InputLabelProps={{ shrink: true }}
               //value={values.thumbnail_image_url}
               onChange={imageChange}
               error={errors.thumbnail_image_url ? true : false}
@@ -319,14 +319,17 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
             />
 
             {/* day_1 */}
-            <FormControl variant="outlined">
+            <FormControl>
               <InputLabel id="sub_type">day_1</InputLabel>
               <Select
                 labelId="day_1"
                 label="day_1"
+                defaultValue=''
+                
                 onChange={handleChange("day_1")}
                 error={errors.day_1 ? true : false}
               >
+              <MenuItem value='' disabled>Sub Type</MenuItem>
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -340,14 +343,16 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
               )}
             </FormControl>
             {/* day_2 */}
-            <FormControl variant="outlined">
+            <FormControl >
               <InputLabel id="sub_type">day_2</InputLabel>
               <Select
                 labelId="day_2"
                 label="day_2"
+                defaultValue=''
                 onChange={handleChange("day_2")}
                 error={errors.day_2 ? true : false}
               >
+              <MenuItem value='' disabled>Sub Type</MenuItem>
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -361,14 +366,16 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
               )}
             </FormControl>
             {/* day_3 */}
-            <FormControl variant="outlined">
+            <FormControl >
               <InputLabel id="sub_type">day_3</InputLabel>
               <Select
                 labelId="day_3"
                 label="day_3"
+                defaultValue=''
                 onChange={handleChange("day_3")}
                 error={errors.day_3 ? true : false}
               >
+              <MenuItem value='' disabled>Sub Type</MenuItem>
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -382,14 +389,16 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
               )}
             </FormControl>
             {/* day4 */}
-            <FormControl variant="outlined">
+            <FormControl >
               <InputLabel id="sub_type">day_4</InputLabel>
               <Select
                 labelId="day_4"
                 label="day_4"
+                defaultValue=''
                 onChange={handleChange("day_4")}
                 error={errors.day_4 ? true : false}
               >
+              <MenuItem value='' disabled>Sub Type</MenuItem>
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -403,14 +412,16 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
               )}
             </FormControl>
             {/* day_5 */}
-            <FormControl variant="outlined">
+            <FormControl >
               <InputLabel id="sub_type">day_5</InputLabel>
               <Select
                 labelId="day_5"
                 label="day_5"
+                defaultValue=''
                 onChange={handleChange("day_5")}
                 error={errors.day_5 ? true : false}
               >
+              <MenuItem value='' disabled>Sub Type</MenuItem>
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -424,14 +435,16 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
               )}
             </FormControl>
             {/* day_6 */}
-            <FormControl variant="outlined">
+            <FormControl >
               <InputLabel id="sub_type">day_6</InputLabel>
               <Select
                 labelId="day_6"
                 label="day_6"
+                defaultValue=''
                 onChange={handleChange("day_6")}
                 error={errors.day_6 ? true : false}
               >
+              <MenuItem value='' disabled>Sub Type</MenuItem>
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -445,14 +458,17 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
               )}
             </FormControl>
             {/* day_7 */}
-            <FormControl variant="outlined">
+            <FormControl >
               <InputLabel id="sub_type">day_7</InputLabel>
               <Select
                 labelId="day_7"
                 label="day_7"
+                defaultValue=''
                 onChange={handleChange("day_7")}
                 error={errors.day_7 ? true : false}
               >
+                <MenuItem value='' disabled>Sub Type</MenuItem>
+
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -466,14 +482,16 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
               )}
             </FormControl>
             {/* User */}
-            <FormControl variant="outlined">
+            <FormControl>
               <InputLabel id="User ID">User Name</InputLabel>
               <Select
                 labelId="User Name"
                 label="User Name"
+                defaultValue=''
                 onChange={handleChange("user_name")}
                 error={errors.user_name ? true : false}
               >
+                <MenuItem value='' disabled>User Name</MenuItem>
                 {Array.isArray(user)
                   ? user.map((u) => (
                       <MenuItem key={u.id} value={u.id}>

@@ -123,7 +123,7 @@ const CreateSpecialNuRoutine = ({ handleClose }) => {
 
   const imageChange = async (e) => {
     if (e.target.files && e.target.files[0]) {
-      console.log(e.target.files);
+     // console.log(e.target.files);
       let img = e.target.files[0];
       if (!fileTypes.includes(img.type)) {
         setErrors({
@@ -301,7 +301,7 @@ const CreateSpecialNuRoutine = ({ handleClose }) => {
                 label="image_url"
                 type="file"
                 accept="image/png, image/jpeg, image/jpg, image/gif, image/svg+xml"
-                InputLabelProps={{ shrink: "shrink" }}
+                InputLabelProps={{ shrink: true }}
                 //value={values.thumbnail_image_url}
                 onChange={imageChange}
                 error={errors.thumbnail_image_url ? true : false}
@@ -326,15 +326,17 @@ const CreateSpecialNuRoutine = ({ handleClose }) => {
                 helperText={errors.duration_of_routine_in_days}
               />
 
-              <FormControl variant="outlined">
+              <FormControl>
                 <InputLabel id="vegetarian">Vegetarian</InputLabel>
                 <Select
                   labelId="vegetarian"
                   // value={values.package_type}
                   label="vegetarian"
+                  defaultValue=''
                   onChange={handleChange("vegetarian")}
                   error={errors.vegetarian ? true : false}
                 >
+                  <MenuItem value='' disabled>value</MenuItem>
                   <MenuItem value="0">False</MenuItem>
                   <MenuItem value="1">True</MenuItem>
                 </Select>
@@ -342,14 +344,16 @@ const CreateSpecialNuRoutine = ({ handleClose }) => {
                   <FormHelperText error>{errors.vegetarian}</FormHelperText>
                 )}
               </FormControl>
-              <FormControl variant="outlined">
+              <FormControl>
                 <InputLabel id="User ID">User Name</InputLabel>
                 <Select
                   labelId="User Name"
                   label="User Name"
+                  defaultValue=''
                   onChange={handleChange("user_name")}
                   error={errors.user_name ? true : false}
                 >
+                  <MenuItem value='' disabled>User Name</MenuItem>
                   {Array.isArray(user)
                     ? user.map((u) => (
                         <MenuItem key={u.id} value={u.id}>
@@ -370,15 +374,17 @@ const CreateSpecialNuRoutine = ({ handleClose }) => {
                 error={errors.routine_category ? true : false}
                 helperText={errors.routine_category}
               />
-              <FormControl variant="outlined">
+              <FormControl>
                 <InputLabel id="main_type">Package Type</InputLabel>
                 <Select
                   labelId="main_type"
+                  defaultValue=''
                   // value={values.package_type}
                   label="Package Type"
                   onChange={handleChange("package_type")}
                   error={errors.package_type ? true : false}
                 >
+                  <MenuItem value='0' disabled>Package Type</MenuItem>
                   <MenuItem value="0">Free</MenuItem>
                   <MenuItem value="1">Basic</MenuItem>
                   <MenuItem value="2">Medium</MenuItem>
@@ -392,7 +398,7 @@ const CreateSpecialNuRoutine = ({ handleClose }) => {
                 id="pdf_file_url"
                 label="pdf_file_url"
                 type="file"
-                InputLabelProps={{ shrink: "shrink" }}
+                InputLabelProps={{ shrink: true }}
                 //value={values.pdf_file_url}
                 onChange={handleChange("pdf_file_url")}
                 error={errors.pdf_file_url ? true : false}

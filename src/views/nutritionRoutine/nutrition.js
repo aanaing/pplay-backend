@@ -84,7 +84,7 @@ const NuRoutineId = () => {
       delete obj.fk_user_subscription_level_id;
       delete obj.__typename;
       setDayArr(Object.keys(obj));
-      console.log("object", obj);
+      //console.log("object", obj);
       setDays(obj);
     }
   }, [values]);
@@ -134,7 +134,7 @@ const NuRoutineId = () => {
   };
 
   const handleEditOpen = (value, key) => {
-    console.log(`value is ${value} and key is ${key}`);
+    //console.log(`value is ${value} and key is ${key}`);
     setUpdateDayOpen(true);
     setUpdateDay({ [key]: value });
     //console.log("updateDay is ", updateDay);

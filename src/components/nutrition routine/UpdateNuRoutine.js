@@ -22,7 +22,7 @@ import { GET_IMAGE_UPLOAD_URL, DELETE_IMAGE } from "../../gql/misc";
 import { useMutation, useQuery } from "@apollo/client";
 import { LoadingButton } from "@mui/lab";
 
-const UpdateNuRoutine = (props) => {
+const UpdateNuRoutine = ({value,handleClose,routineAlert}) => {
   const fileTypes = [
     "image/apng",
     "image/bmp",
@@ -39,23 +39,9 @@ const UpdateNuRoutine = (props) => {
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState({ message: "", isError: false });
   const [values, setValues] = useState({
-    description: "",
-    routine_category: "",
-    pdf_file_url: "",
-    vegetarian: "",
-    package_type: "",
-    thumbnail_image_url: "",
-    duration_of_routine_in_days: "",
+    
   });
-  const [errors, setErrors] = useState({
-    description: "",
-    routine_category: "",
-    pdf_file_url: "",
-    vegetarian: "",
-    package_type: "",
-    thumbnail_image_url: "",
-    duration_of_routine_in_days: "",
-  });
+  const [errors, setErrors] = useState({});
   const [imagePreview, setImagePreview] = useState(null);
   const [oldImageName, setOldImageName] = useState(null);
   const [imageFile, setImageFile] = useState(null);
@@ -67,6 +53,7 @@ const UpdateNuRoutine = (props) => {
     setValues({ ...values, [prop]: event.target.value });
   };
 
+  //for image
   const [deleteImage] = useMutation(DELETE_IMAGE, {
     onError: (error) => {
       console.log("error : ", error);
@@ -74,6 +61,7 @@ const UpdateNuRoutine = (props) => {
     },
   });
 
+  //image upload
   const [getImageUrl] = useMutation(GET_IMAGE_UPLOAD_URL, {
     onError: () => {
       setShowAlert({ message: "Error on server", isError: true });
@@ -122,28 +110,29 @@ const UpdateNuRoutine = (props) => {
       setImageFile("");
       setImagePreview("");
       setLoading(false);
-      props.routineAlert("Routine have been updated.", false);
-      props.handleClose();
+      routineAlert("Routine have been updated.", false);
+      handleClose();
     },
   });
 
+
+  //assign value to values from db
   useEffect(() => {
-    if (props.value) {
-      let val = props.value;
-      console.log(props.value);
-      setValues(props.value);
+    if (value) {      
+     // console.log(props.value)
+      setValues({...value,package_type:value.user_subscription_level});
       setTextValue(
-        RichTextEditor.createValueFromString(val.description, "html")
+        RichTextEditor.createValueFromString(value.description, "html")
       );
-      console.log(val.thumbnail_image_url);
-      setImagePreview(val.thumbnail_image_url);
-      let image_url = val.thumbnail_image_url;
+      
+      setImagePreview(value.thumbnail_image_url);
+      let image_url = value.thumbnail_image_url;
       //   setOldImageName(
       //   val.image_url.substring(image_url.lastIndexOf("/") + 1, image_url.lenght)
       //  );
-      console.log(image_url);
+      
     }
-  }, [props.value]);
+  }, [value]);
 
   const imageChange = async (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -169,19 +158,10 @@ const UpdateNuRoutine = (props) => {
     }
   };
 
+  //update routine
   const handleUpdate = async () => {
     setLoading(true);
-    setErrors({
-      name: "",
-      price: "",
-      description: "",
-      value_image_url: "",
-      category: "",
-      brand: "",
-      discount: "",
-      review: "",
-      barcode: "",
-    });
+    setErrors({});
     let isErrorExit = false;
     let errorObject = {};
     if (!values.package_type) {
@@ -203,12 +183,13 @@ const UpdateNuRoutine = (props) => {
         await imageService.uploadImage(imageFileUrl, imageFile);
         deleteImage({ variables: { image_name: oldImageName } });
       }
-      updateRoutine({ variables: { ...values, id: props.value.id } });
+      updateRoutine({ variables: { ...values, id: value.id } });
     } catch (error) {
       console.log("error : ", error);
     }
   };
 
+  //for description
   const toolbarConfig = {
     // Optionally specify the groups to display (displayed in the order listed).
     display: [
@@ -238,17 +219,18 @@ const UpdateNuRoutine = (props) => {
     setTextValue(value);
     setValues({ ...values, description: value.toString("html") });
   };
+
   const handleClosClearData = () => {
     setValues({});
     setErrors({});
-    props.handleClose();
+    handleClose();
   };
 
   if (!values) {
-    return;
+    return 'values';
   }
-  if (!props.value) {
-    return;
+  if (!value) {
+    return 'value';
   }
 
   return (
@@ -305,18 +287,19 @@ const UpdateNuRoutine = (props) => {
 
             {/* list items */}
             <div className="grid--2--cols grid-item ">
+            {/* thumbnail_image_url */}
               <TextField
                 id="thumbnail_image_url"
                 label="image_url"
                 type="file"
                 accept="image/png, image/jpeg, image/jpg, image/gif, image/svg+xml"
-                InputLabelProps={{ shrink: "shrink" }}
+                InputLabelProps={{ shrink: true }}
                 //value={values.thumbnail_image_url}
                 onChange={imageChange}
                 error={errors.thumbnail_image_url ? true : false}
                 helperText={errors.thumbnail_image_url}
               />
-
+              {/* nutrition_routine_name */}
               <TextField
                 id="nutrition_routine_name"
                 label="nutrition routine name"
@@ -325,7 +308,7 @@ const UpdateNuRoutine = (props) => {
                 error={errors.nutrition_routine_name ? true : false}
                 helperText={errors.nutrition_routine_name}
               />
-
+                {/* duration_of_routine_in_days */}
               <TextField
                 id="duration_of_routine_in_days"
                 label="duration_of_routine_in_days"
@@ -334,16 +317,18 @@ const UpdateNuRoutine = (props) => {
                 error={errors.duration_of_routine_in_days ? true : false}
                 helperText={errors.duration_of_routine_in_days}
               />
-
-              <FormControl variant="outlined">
+              {/* vegetarian */}
+              <FormControl >
                 <InputLabel id="vegetarian">Vegetarian</InputLabel>
                 <Select
                   labelId="vegetarian"
-                  // value={values.vegetarian === "true" ? "Yes" : "No"}
+                  defaultValue=""
+                  value={values.vegetarian === "true" ? "Yes" : "No"}
                   label="vegetarian"
                   onChange={handleChange("vegetarian")}
                   error={errors.vegetarian ? true : false}
                 >
+                  <MenuItem value='' disabled>Value</MenuItem>
                   <MenuItem value="0">False</MenuItem>
                   <MenuItem value="1">True</MenuItem>
                 </Select>
@@ -351,6 +336,8 @@ const UpdateNuRoutine = (props) => {
                   <FormHelperText error>{errors.vegetarian}</FormHelperText>
                 )}
               </FormControl>
+
+              {/* routine_category */}
               <TextField
                 id="routine_category"
                 label="routine_category"
@@ -359,15 +346,18 @@ const UpdateNuRoutine = (props) => {
                 error={errors.routine_category ? true : false}
                 helperText={errors.routine_category}
               />
-              <FormControl variant="outlined">
+              {/* main_type */}
+              <FormControl>
                 <InputLabel id="main_type">Package Type</InputLabel>
                 <Select
                   labelId="main_type"
+                  defaultValue=''
                   value={values.package_type}
                   label="Package Type"
                   onChange={handleChange("package_type")}
                   error={errors.package_type ? true : false}
                 >
+                  <MenuItem value='' disabled>Package Type</MenuItem>
                   <MenuItem value="0">Free</MenuItem>
                   <MenuItem value="1">Basic</MenuItem>
                   <MenuItem value="2">Medium</MenuItem>
@@ -381,7 +371,7 @@ const UpdateNuRoutine = (props) => {
                 id="pdf_file_url"
                 label="pdf_file_url"
                 type="file"
-                InputLabelProps={{ shrink: "shrink" }}
+                InputLabelProps={{ shrink: true }}
                 //value={values.pdf_file_url}
                 onChange={handleChange("pdf_file_url")}
                 error={errors.pdf_file_url ? true : false}

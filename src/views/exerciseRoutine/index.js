@@ -95,7 +95,7 @@ const Routine = () => {
   useEffect(() => {
     if (resutRoutine.data) {
       setRoutine(resutRoutine.data.exercise_routine);
-      console.log(resutRoutine.data.exercise_routine);
+      
     }
   }, [resutRoutine]);
 

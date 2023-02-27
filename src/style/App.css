@@ -158,6 +158,10 @@ thead .MuiTableCell-root:last-child {
   justify-content: flex-end;
   margin-bottom: 2rem;
   margin-right: 2rem;
+  
+}
+.btn-nut{
+  margin-top: 1rem;
 }
 .container {
   background-color: white;

@@ -22,6 +22,7 @@ const UpdateDayRoutine = (props) => {
 
   useEffect(() => {
     if (props.value) {
+      
       setValues(props.values);
       setTextValue(
         RichTextEditor.createValueFromString(props.value[props.k] ?? "", "html")
@@ -132,11 +133,12 @@ const UpdateDayRoutine = (props) => {
             )}
           </Box>
         </div>
-        <Box className="btn_end">
+        <Box className="btn_end btn-nut">
           <LoadingButton
             variant="contained"
             //color="warning"
             size="large"
+            sx={{height:50}}
             loading={loading}
             onClick={handleUpdate}
           >

@@ -55,6 +55,67 @@ export const GET_ALL_NUROUTINES = gql`
         subscription_type
         updated_at
       }
+      day_31
+      day_32
+      day_33
+      day_34
+      day_35
+      day_36
+      day_37
+      day_38
+      day_39
+      day_40
+      day_41
+      day_42
+      day_43
+      day_44
+      day_45
+      day_46
+      day_47
+      day_48
+      day_49
+      day_50
+      day_51
+      day_52
+      day_53
+      day_54
+      day_55
+      day_56
+      day_57
+      day_58
+      day_59
+      day_60
+      day_61
+      day_62
+      day_63
+      day_64
+      day_65
+      day_66
+      day_67
+      day_68
+      day_69
+      day_70
+      day_71
+      day_72
+      day_73
+      day_74
+      day_75
+      day_76
+      day_77
+      day_78
+      day_79
+      day_70
+      day_80
+      day_81
+      day_82
+      day_83
+      day_84
+      day_85
+      day_86
+      day_87
+      day_88
+      day_89
+      day_90
     }
     nutrition_routine_aggregate(
       where: { nutrition_routine_name: { _ilike: $search } }
@@ -326,6 +387,12 @@ export const UPDATE_NODAYS = gql`
       thumbnail_image_url
       updated_at
       vegetarian
+      user_subscription_level {
+        created_at
+        id
+        subscription_type
+        updated_at
+      }
     }
   }
 `;

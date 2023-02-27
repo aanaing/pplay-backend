@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import { USER, UPDATE_USER, UPDATE_SUBSCRIPTION } from "../../gql/users";
-
+import { LoadingButton } from "@mui/lab";
 import {
   Breadcrumbs,
   Typography,
@@ -58,7 +58,7 @@ const User = () => {
     },
     onCompleted: (data) => {
       const { message } = data.subscription;
-      console.log(message);
+      //console.log(message);
       setSubType("");
       setDate(0);
       setShowAlert({ message: "User have been updated.", isError: false });
@@ -328,7 +328,7 @@ const User = () => {
         )}
       </CardActions>
       <Box>
-        <Button
+        <LoadingButton
           sx={{ marginLeft: 19, mt: 2 }}
           variant="contained"
           //color="warning"
@@ -343,7 +343,7 @@ const User = () => {
           }}
         >
           Update
-        </Button>
+        </LoadingButton>
       </Box>
     </div>
   );

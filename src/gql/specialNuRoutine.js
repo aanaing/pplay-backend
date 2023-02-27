@@ -56,6 +56,10 @@ export const GET_ALL_SPE_NUROUTINES = gql`
         subscription_type
         updated_at
       }
+      user {
+        id
+        username
+      }
     }
     special_nutrition_routine_aggregate(
       where: { nutrition_routine_name: { _ilike: $search } }
@@ -118,6 +122,10 @@ export const SPE_ROUTINE_BY_ID = gql`
         id
         subscription_type
         updated_at
+      }
+      user {
+        id
+        username
       }
       day_31
       day_32
@@ -344,6 +352,16 @@ export const UPDATE_NODAYS = gql`
       updated_at
       fk_user_id
       vegetarian
+      user_subscription_level {
+        created_at
+        id
+        subscription_type
+        updated_at
+      }
+      user {
+        id
+        username
+      }
     }
   }
 `;

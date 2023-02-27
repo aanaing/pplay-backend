@@ -83,8 +83,9 @@ const SpecialNuRoutineId = () => {
       delete obj.fk_user_subscription_level_id;
       delete obj.__typename;
       delete obj.fk_user_id;
+      delete obj.user;
       setDayArr(Object.keys(obj));
-      // console.log("object", obj);
+      console.log(obj)
       setDays(obj);
     }
   }, [values]);
@@ -116,27 +117,43 @@ const SpecialNuRoutineId = () => {
       console.log("error : ", error);
     },
   });
+
+  //------------------REMOVE----------------------
   const handleRemoveOpen = (values) => {
     setRemoveRoutine(values);
     result.refetch();
     setRemoveOpen(true);
   };
   const handleRemoveClose = () => setRemoveOpen(false);
+
+  
+  //------------------UPDATE----------------------
   const handleUpdateOpen = (values) => {
+   // console.log('values',values)
+    if(!values){
+      return 'values'
+    }
+   if(values){
     setUpdateRoutine(values);
     setUpdateOpen(true);
+   }
+    
   };
+//console.log('update rouinte',updateRoutine)
 
   const handleUpdateClose = () => {
-    result.refetch();
+    result.refetch();    
     setUpdateOpen(false);
+    
+    
   };
 
+  //------------------UPDATE EACH DAY----------------------
   const handleEditOpen = (value, key) => {
-    console.log(`value is ${value} and key is ${key}`);
+    //console.log(`value is ${value} and key is ${key}`);
     setUpdateDayOpen(true);
     setUpdateDay({ [key]: value });
-    console.log("updateDay is ", updateDay);
+    //console.log("updateDay is ", updateDay);
     setKey(key);
   };
 
@@ -145,6 +162,7 @@ const SpecialNuRoutineId = () => {
     setUpdateDayOpen(false);
   };
 
+  // REMOVE ROUTINE
   const handleRemove = () => {
     if (!removeRoutine) {
       return;
@@ -168,7 +186,7 @@ const SpecialNuRoutineId = () => {
     }, 3000);
   };
   if (!values) {
-    return;
+    return values;
   }
 
   return (
