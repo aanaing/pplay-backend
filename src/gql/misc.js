@@ -10,10 +10,11 @@ export const DELETE_IMAGE = gql`
 `;
 
 export const GET_IMAGE_UPLOAD_URL = gql`
-  mutation MyMutation {
-    getImageUploadUrl {
+  mutation MyMutation($contentType:String!) {
+    getImageUploadUrl(contentType:$contentType) {
       error
       imageName
+      contentType
       imageUploadUrl
       message
     }

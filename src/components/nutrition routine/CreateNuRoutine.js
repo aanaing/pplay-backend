@@ -41,7 +41,7 @@ const CreateNuRoutine = ({ handleClose }) => {
     "image/webp",
     "image/x-icon",
   ];
-  const pdfFileTypes=['application/pdf']
+  const pdfFileTypes=['pdf','pdf/A','pdf/V','pdf/x','pdf/UA']
   const pdfType='application/pdf'
 
   const [values, setValues] = useState({});
