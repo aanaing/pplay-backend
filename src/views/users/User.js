@@ -1,8 +1,19 @@
 import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
+<<<<<<< HEAD
 import { USER, UPDATE_USER, UPDATE_SUBSCRIPTION } from "../../gql/users";
 import { LoadingButton } from "@mui/lab";
+=======
+import { LoadingButton } from "@mui/lab";
+import {
+  USER,
+  UPDATE_USER,
+  UPDATE_SUBSCRIPTION,
+  UPDATE_POINTS,
+} from "../../gql/users";
+
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
 import {
   Breadcrumbs,
   Typography,
@@ -29,8 +40,9 @@ const User = () => {
   const [showAlert, setShowAlert] = useState({ message: "", isError: false });
   const [subType, setSubType] = useState("");
   const [date, setDate] = useState(0);
+  const [point, setPoint] = useState(0);
 
-  //database part
+  //update user
   const [editUser] = useMutation(UPDATE_USER, {
     onError: (error) => {
       console.log("error : ", error);
@@ -48,6 +60,7 @@ const User = () => {
     refetchQueries: [User],
   });
 
+  //update subscription
   const [editSubscription] = useMutation(UPDATE_SUBSCRIPTION, {
     onError: (error) => {
       console.log("error : ", error);
@@ -61,6 +74,25 @@ const User = () => {
       //console.log(message);
       setSubType("");
       setDate(0);
+      setShowAlert({ message: "User have been updated.", isError: false });
+      setTimeout(() => {
+        setShowAlert({ message: "", isError: false });
+      }, 3000);
+    },
+    refetchQueries: [User],
+  });
+
+  //Updat points
+  const [editPoint] = useMutation(UPDATE_POINTS, {
+    onError: (error) => {
+      console.log("error : ", error);
+      setShowAlert({ message: "Error on server", isError: true });
+      setTimeout(() => {
+        setShowAlert({ message: "", isError: false });
+      }, 3000);
+    },
+    onCompleted: () => {
+      setPoint(0);
       setShowAlert({ message: "User have been updated.", isError: false });
       setTimeout(() => {
         setShowAlert({ message: "", isError: false });
@@ -88,7 +120,7 @@ const User = () => {
       user = { ...result.data.users_by_pk };
     }
   } else user = { ...result.data.users_by_pk, address: "-" };
-
+  console.log(user);
   return (
     <div>
       <div role="presentation" className="align">
@@ -173,6 +205,13 @@ const User = () => {
                 secondaryTypographyProps={{ color: "#59595a" }}
               />
             </ListItem>
+            <ListItem>
+              <ListItemText
+                primary="Nutrition Routine Start Date"
+                secondary={user.nutrition_routing_start_date}
+                secondaryTypographyProps={{ color: "#59595a" }}
+              />
+            </ListItem>
           </Box>
           <Box>
             <ListItem>
@@ -217,116 +256,129 @@ const User = () => {
                 secondaryTypographyProps={{ color: "#59595a" }}
               />
             </ListItem>
+            <ListItem>
+              <ListItemText
+                primary="Points"
+                secondary={user.points}
+                secondaryTypographyProps={{ color: "#59595a" }}
+              />
+            </ListItem>
           </Box>
         </Paper>
       </CardContent>
 
-      <CardActions sx={{ justifyContent: "space-between" }}>
-        <Box sx={{ display: "flex" }}>
-          <FormControl sx={{ m: 1, minWidth: 120 }}>
-            <InputLabel
-              id="demo-simple-select-helper-label"
-              sx={{ color: "black" }}
-            >
-              Subscription Type
-            </InputLabel>
-            <Select
-              //sx={style}
-              sx={{
-                // "& .MuiInputLabel-root": { color: "white" }, //styles the label
-                // ".MuiOutlinedInput-notchedOutline": {
-                //   borderColor: "#ed8618",
-                // },
-
-                // "&:hover .MuiOutlinedInput-notchedOutline": {
-                //   borderColor: "#ed8618",
-                // },
-
-                // "&.MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-                //   borderColor: "#ed8618",
-                // },
-                // "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
-                //   {
-                //     borderColor: "#ed8618",
-                //   },
-                // "&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                //   {
-                //     borderColor: "#ed8618",
-                //   },
-
-                width: 200,
-                color: "black",
-              }}
-              labelId="demo-simple-select-helper-label"
-              id="demo-simple-select-helper"
-              label="Subscription Type"
-              // defaultValue="0"
-              value={subType}
+      <CardActions className="flex--3--cols">
+        <Box className="first--cols">
+          <Box className="user-text-box">
+            <TextField
+              label="Points"
+              value={point}
               onChange={(e) => {
-                setSubType(e.target.value);
+                e.preventDefault();
+                setPoint(Number(e.target.value));
+              }}
+            ></TextField>
+          </Box>
+
+          <Box className="btn-user-update ">
+            <Button
+              size="large"
+              variant="contained"
+              onClick={() => {
+                editPoint({
+                  variables: { userId: user.id, pointAmount: user.points },
+                });
               }}
             >
-              <MenuItem disabled value="choose">
-                Choose Option
-              </MenuItem>
-              <MenuItem value="1">Basic</MenuItem>
-              <MenuItem value="2">Medium</MenuItem>
-              <MenuItem value="3">Premium</MenuItem>
-              <MenuItem value="4">Special Package</MenuItem>
-            </Select>
-          </FormControl>
-
-          <TextField
-            //sx={style}
-            sx={{
-              // "& .MuiInputLabel-root": { color: "black" }, //styles the label
-              // ".MuiOutlinedInput-notchedOutline": {
-              //   borderColor: "black",
-              // },
-              // "&:hover .MuiOutlinedInput-notchedOutline": {
-              //   borderColor: "#ed8618",
-              // },
-              // "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
-              //   {
-              //     borderColor: "#ed8618",
-              //   },
-              width: 200,
-              mt: 1,
-              color: "black",
-            }}
-            variant="outlined"
-            label="Date"
-            value={date}
-            onChange={(e) => {
-              e.preventDefault();
-              setDate(Number(e.target.value));
-            }}
-          />
+              update
+            </Button>
+          </Box>
         </Box>
 
-        {user.disabled ? (
-          <Button
-            className="btn"
-            variant="contained"
-            //color="warning"
-            onClick={() =>
-              editUser({ variables: { id: user.id, disabled: false } })
-            }
-          >
-            Enable
-          </Button>
-        ) : (
-          <Button
-            variant="contained"
-            //color="warning"
-            onClick={() =>
-              editUser({ variables: { id: user.id, disabled: true } })
-            }
-          >
-            Disable
-          </Button>
-        )}
+        {/* subscription Update */}
+        <Box className="first--cols">
+          <Box className="user-text-box">
+            {/* subscription */}
+
+            <FormControl>
+              <InputLabel>Subscription Type</InputLabel>
+              <Select
+                sx={{ width: 210, mr: 2 }}
+                labelId="demo-simple-select-helper-label"
+                id="demo-simple-select-helper"
+                label="Subscription Type"
+                defaultValue=""
+                value={subType}
+                onChange={(e) => {
+                  setSubType(e.target.value);
+                }}
+              >
+                <MenuItem disabled value="">
+                  Choose Option
+                </MenuItem>
+                <MenuItem value="1">Basic</MenuItem>
+                <MenuItem value="2">Medium</MenuItem>
+                <MenuItem value="3">Premium</MenuItem>
+                <MenuItem value="4">Special Package</MenuItem>
+              </Select>
+            </FormControl>
+            {/* Date */}
+            <TextField
+              label="Date"
+              value={date}
+              onChange={(e) => {
+                e.preventDefault();
+                setDate(Number(e.target.value));
+              }}
+            />
+          </Box>
+
+          <Box className="btn-user-update">
+            <Button
+              variant="contained"
+              size="large"
+              onClick={() => {
+                editSubscription({
+                  variables: {
+                    userId: user.id,
+                    subscription_type: subType,
+                    durationInDays: date,
+                  },
+                });
+              }}
+            >
+              Update
+            </Button>
+          </Box>
+        </Box>
+
+        <Box>
+          {user.disabled ? (
+            <Button
+              variant="contained"
+              size="large"
+              color="warning"
+              onClick={() =>
+                editUser({ variables: { id: user.id, disabled: false } })
+              }
+            >
+              Enable
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              size="large"
+              color="error"
+              onClick={() =>
+                editUser({ variables: { id: user.id, disabled: true } })
+              }
+            >
+              Disable
+            </Button>
+          )}
+        </Box>
       </CardActions>
+<<<<<<< HEAD
       <Box>
         <LoadingButton
           sx={{ marginLeft: 19, mt: 2 }}
@@ -345,6 +397,8 @@ const User = () => {
           Update
         </LoadingButton>
       </Box>
+=======
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
     </div>
   );
 };

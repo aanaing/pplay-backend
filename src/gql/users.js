@@ -48,6 +48,8 @@ export const USER = gql`
       dob
       address
       updated_at
+      points
+      nutrition_routing_start_date
     }
   }
 `;
@@ -68,6 +70,7 @@ export const UPDATE_USER = gql`
   }
 `;
 
+//user subscription
 export const UPDATE_SUBSCRIPTION = gql`
   mutation UserScritpion(
     $durationInDays: Int!
@@ -79,6 +82,16 @@ export const UPDATE_SUBSCRIPTION = gql`
       subscription_type: $subscription_type
       userId: $userId
     ) {
+      error
+      message
+    }
+  }
+`;
+
+//add points
+export const UPDATE_POINTS = gql`
+  mutation addPoint($pointAmount: Int!, $userId: uuid!) {
+    addPoint(pointAmount: $pointAmount, userId: $userId) {
       error
       message
     }

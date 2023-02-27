@@ -68,7 +68,10 @@ const UpdateSpeExeRoutine = ({ handleClose, routineAlert, value }) => {
     }
   }, [resultUser]);
 
+<<<<<<< HEAD
  
+=======
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
   useEffect(() => {
     loadSub();
   }, [loadSub]);
@@ -79,8 +82,11 @@ const UpdateSpeExeRoutine = ({ handleClose, routineAlert, value }) => {
     }
   }, [resultSub]);
 
+<<<<<<< HEAD
   
 
+=======
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
   const handleClosClearData = () => {
     setValues({});
     setErrors({});
@@ -151,6 +157,7 @@ const UpdateSpeExeRoutine = ({ handleClose, routineAlert, value }) => {
     },
   });
 
+<<<<<<< HEAD
   useEffect(() => {
     if (value) {
       setValues({...value,user:value.user.id});
@@ -166,6 +173,8 @@ const UpdateSpeExeRoutine = ({ handleClose, routineAlert, value }) => {
   }, [value]);
 
 
+=======
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
   const handleUpdateClose = () => {
     setValues({});
     setErrors({});
@@ -190,10 +199,26 @@ const UpdateSpeExeRoutine = ({ handleClose, routineAlert, value }) => {
     }
   };
 
+  useEffect(() => {
+    console.log(value);
+    if (value) {
+      setValues({ ...value, user: value.user.id });
+      setValues(value);
+      setTextValue(
+        RichTextEditor.createValueFromString(value.description, "html")
+      );
+      setImagePreview(value.thumbnail_image_url);
+      let image = value.thumbnail_image_url;
+      setOldImageName(
+        image.substring(image.lastIndexOf("/") + 1, image.lenght)
+      );
+    }
+  }, [value]);
   // for Description
   const onChange = (value) => {
     setTextValue(value);
     setValues({ ...values, description: value.toString("html") });
+    console.log(values);
   };
 
   const toolbarConfig = {
@@ -223,12 +248,18 @@ const UpdateSpeExeRoutine = ({ handleClose, routineAlert, value }) => {
   };
 
   if (!values) {
+<<<<<<< HEAD
     //console.log("no values, loading");
+=======
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
     return "no values";
   }
 
   if (!value) {
+<<<<<<< HEAD
    // console.log("no data,  loading");
+=======
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
     return "no data";
   }
 
@@ -317,13 +348,20 @@ const UpdateSpeExeRoutine = ({ handleClose, routineAlert, value }) => {
               <Select
                 labelId="day_1"
                 value={values.day_1}
+                defaultValue=""
                 label="day_1"
                 defaultValue=''
 
                 onChange={handleChange("day_1")}
                 error={errors.day_1 ? true : false}
               >
+<<<<<<< HEAD
               <MenuItem value='' disabled>Sub Type</MenuItem>
+=======
+                <MenuItem value="" disabled>
+                  Value
+                </MenuItem>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                 {Array.isArray(sub)
                   ? sub.map((sub) => {
                       if (sub.id === values.day_1) {
@@ -347,12 +385,19 @@ const UpdateSpeExeRoutine = ({ handleClose, routineAlert, value }) => {
               <Select
                 labelId="day_2"
                 label="day_2"
+                defaultValue=""
                 value={values.day_2}
                 defaultValue=''
                 onChange={handleChange("day_2")}
                 error={errors.day_2 ? true : false}
               >
+<<<<<<< HEAD
               <MenuItem value='' disabled>Sub Type</MenuItem>
+=======
+                <MenuItem value="" disabled>
+                  Value
+                </MenuItem>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -371,12 +416,19 @@ const UpdateSpeExeRoutine = ({ handleClose, routineAlert, value }) => {
               <Select
                 labelId="day_3"
                 label="day_3"
+                defaultValue=""
                 value={values.day_3}
                 defaultValue=''
                 onChange={handleChange("day_3")}
                 error={errors.day_3 ? true : false}
               >
+<<<<<<< HEAD
               <MenuItem value='' disabled>Sub Type</MenuItem>
+=======
+                <MenuItem value="" disabled>
+                  Value
+                </MenuItem>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -395,12 +447,19 @@ const UpdateSpeExeRoutine = ({ handleClose, routineAlert, value }) => {
               <Select
                 labelId="day_4"
                 label="day_4"
+                defaultValue=""
                 value={values.day_4}
                 defaultValue=''
                 onChange={handleChange("day_4")}
                 error={errors.day_4 ? true : false}
               >
+<<<<<<< HEAD
               <MenuItem value='' disabled>Sub Type</MenuItem>
+=======
+                <MenuItem value="" disabled>
+                  Value
+                </MenuItem>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -419,12 +478,19 @@ const UpdateSpeExeRoutine = ({ handleClose, routineAlert, value }) => {
               <Select
                 labelId="day_5"
                 label="day_5"
+                defaultValue=""
                 value={values.day_5}
                 defaultValue=''
                 onChange={handleChange("day_5")}
                 error={errors.day_5 ? true : false}
               >
+<<<<<<< HEAD
               <MenuItem value='' disabled>Sub Type</MenuItem>
+=======
+                <MenuItem value="" disabled>
+                  Value
+                </MenuItem>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -443,12 +509,19 @@ const UpdateSpeExeRoutine = ({ handleClose, routineAlert, value }) => {
               <Select
                 labelId="day_6"
                 label="day_6"
+                defaultValue=""
                 value={values.day_6}
                 defaultValue=''
                 onChange={handleChange("day_6")}
                 error={errors.day_6 ? true : false}
               >
+<<<<<<< HEAD
               <MenuItem value='' disabled>Sub Type</MenuItem>
+=======
+                <MenuItem value="" disabled>
+                  Value
+                </MenuItem>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -467,12 +540,19 @@ const UpdateSpeExeRoutine = ({ handleClose, routineAlert, value }) => {
               <Select
                 labelId="day_7"
                 label="day_7"
+                defaultValue=""
                 value={values.day_7}
                 defaultValue=''
                 onChange={handleChange("day_7")}
                 error={errors.day_7 ? true : false}
               >
+<<<<<<< HEAD
               <MenuItem value='' disabled>Sub Type</MenuItem>
+=======
+                <MenuItem value="" disabled>
+                  Value
+                </MenuItem>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -490,14 +570,25 @@ const UpdateSpeExeRoutine = ({ handleClose, routineAlert, value }) => {
               <InputLabel id="User ID">User Name</InputLabel>
               <Select
                 labelId="User Name"
+                value={values.uId}
                 label="User Name"
+<<<<<<< HEAD
                 default='choose'
                 value={values.user}
                 defaultValue=''
+=======
+                defaultValue=""
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                 onChange={handleChange("user_name")}
-                error={errors.user_name ? true : false}
+                error={errors.userId ? true : false}
               >
+<<<<<<< HEAD
                 <MenuItem value='' disabled>User Name</MenuItem>
+=======
+                <MenuItem value="" disabled>
+                  Value
+                </MenuItem>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                 {Array.isArray(user)
                   ? user.map((u) => (
                       <MenuItem key={u.id} value={u.id}>

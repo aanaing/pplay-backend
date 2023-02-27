@@ -22,7 +22,11 @@ import { GET_IMAGE_UPLOAD_URL, DELETE_IMAGE } from "../../gql/misc";
 import { useMutation, useQuery } from "@apollo/client";
 import { LoadingButton } from "@mui/lab";
 
+<<<<<<< HEAD
 const UpdateNuRoutine = ({value,handleClose,routineAlert}) => {
+=======
+const UpdateNuRoutine = ({ routineAlert, handleClose, value }) => {
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
   const fileTypes = [
     "image/apng",
     "image/bmp",
@@ -115,24 +119,8 @@ const UpdateNuRoutine = ({value,handleClose,routineAlert}) => {
       setLoading(false);
     },
     onCompleted: () => {
-      setValues({
-        description: "",
-        routine_category: "",
-        pdf_file_url: "",
-        vegetarian: "",
-        package_type: "",
-        thumbnail_image_url: "",
-        duration_of_routine_in_days: "",
-      });
-      setErrors({
-        description: "",
-        routine_category: "",
-        pdf_file_url: "",
-        vegetarian: "",
-        package_type: "",
-        thumbnail_image_url: "",
-        duration_of_routine_in_days: "",
-      });
+      setValues({});
+      setErrors({});
       setImageFile("");
       setPdfFile('');
       setImagePreview("");
@@ -145,6 +133,7 @@ const UpdateNuRoutine = ({value,handleClose,routineAlert}) => {
 
   //assign value to values from db
   useEffect(() => {
+<<<<<<< HEAD
     if (value) {      
      // console.log(props.value)
       setValues({...value,package_type:value.user_subscription_level});
@@ -152,14 +141,25 @@ const UpdateNuRoutine = ({value,handleClose,routineAlert}) => {
         RichTextEditor.createValueFromString(value.description, "html")
       );
       
+=======
+    if (value) {
+      setValues(value);
+      setTextValue(
+        RichTextEditor.createValueFromString(value.description, "html")
+      );
+
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
       setImagePreview(value.thumbnail_image_url);
       let image_url = value.thumbnail_image_url;
       //   setOldImageName(
       //   value.image_url.substring(image_url.lastIndexOf("/") + 1, image_url.lenght)
       //  );
+<<<<<<< HEAD
       // let pdf_url=value.pdf_file_url;
       // setOldPdfName(value.pdf_url.subString(pdf_url.lastIndexOf('/')+1 , pdf_url.length));
       
+=======
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
     }
   }, [value]);
 
@@ -234,11 +234,14 @@ const UpdateNuRoutine = ({value,handleClose,routineAlert}) => {
         await imageService.uploadImage(imageFileUrl, imageFile);        
         deleteImage({ variables: { image_name: oldImageName } });
       }
+<<<<<<< HEAD
       if (isPdfChange) {
         await imageService.uploadImage(pdfFileUrl, pdfFile);        
         deleteImage({ variables: { image_name: oldPdfName } });
       }
       
+=======
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
       updateRoutine({ variables: { ...values, id: value.id } });
     } catch (error) {
       console.log("error : ", error);
@@ -286,7 +289,11 @@ const UpdateNuRoutine = ({value,handleClose,routineAlert}) => {
     return 'values';
   }
   if (!value) {
+<<<<<<< HEAD
     return 'value';
+=======
+    return;
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
   }
 
   return (
@@ -343,7 +350,11 @@ const UpdateNuRoutine = ({value,handleClose,routineAlert}) => {
 
             {/* list items */}
             <div className="grid--2--cols grid-item ">
+<<<<<<< HEAD
             {/* thumbnail_image_url */}
+=======
+              {/* thumbnail_image_url */}
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
               <TextField
                 id="thumbnail_image_url"
                 label="image_url"
@@ -359,12 +370,20 @@ const UpdateNuRoutine = ({value,handleClose,routineAlert}) => {
               <TextField
                 id="nutrition_routine_name"
                 label="nutrition routine name"
-                value={values.nutrition_routine_name}
+                value={
+                  values.nutrition_routine_name
+                    ? values.nutrition_routine_name
+                    : "-"
+                }
                 onChange={handleChange("nutrition_routine_name")}
                 error={errors.nutrition_routine_name ? true : false}
                 helperText={errors.nutrition_routine_name}
               />
+<<<<<<< HEAD
                 {/* duration_of_routine_in_days */}
+=======
+              {/* duration_of_routine_in_days */}
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
               <TextField
                 id="duration_of_routine_in_days"
                 label="duration_of_routine_in_days"
@@ -374,17 +393,32 @@ const UpdateNuRoutine = ({value,handleClose,routineAlert}) => {
                 helperText={errors.duration_of_routine_in_days}
               />
               {/* vegetarian */}
+<<<<<<< HEAD
               <FormControl >
                 <InputLabel id="vegetarian">Vegetarian</InputLabel>
                 <Select
                   labelId="vegetarian"
                   defaultValue=""
                   value={values.vegetarian === "true" ? "Yes" : "No"}
+=======
+              <FormControl>
+                <InputLabel id="vegetarian">Vegetarian</InputLabel>
+                <Select
+                  labelId="vegetarian"
+                  value={values.vegetarian}
+                  defaultValue=""
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                   label="vegetarian"
                   onChange={handleChange("vegetarian")}
                   error={errors.vegetarian ? true : false}
                 >
+<<<<<<< HEAD
                   <MenuItem value='' disabled>Value</MenuItem>
+=======
+                  <MenuItem value="" disabled>
+                    Value
+                  </MenuItem>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                   <MenuItem value="0">False</MenuItem>
                   <MenuItem value="1">True</MenuItem>
                 </Select>
@@ -392,7 +426,10 @@ const UpdateNuRoutine = ({value,handleClose,routineAlert}) => {
                   <FormHelperText error>{errors.vegetarian}</FormHelperText>
                 )}
               </FormControl>
+<<<<<<< HEAD
 
+=======
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
               {/* routine_category */}
               <TextField
                 id="routine_category"
@@ -402,6 +439,7 @@ const UpdateNuRoutine = ({value,handleClose,routineAlert}) => {
                 error={errors.routine_category ? true : false}
                 helperText={errors.routine_category}
               />
+<<<<<<< HEAD
               {/* main_type */}
               <FormControl>
                 <InputLabel id="main_type">Package Type</InputLabel>
@@ -409,11 +447,26 @@ const UpdateNuRoutine = ({value,handleClose,routineAlert}) => {
                   labelId="main_type"
                   defaultValue=''
                   value={values.package_type}
+=======
+              {/* package_type */}
+              <FormControl>
+                <InputLabel id="package_type">Package Type</InputLabel>
+                <Select
+                  labelId="package_type"
+                  value={values.fk_user_subscription_level_id}
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                   label="Package Type"
+                  defaultValue=""
                   onChange={handleChange("package_type")}
                   error={errors.package_type ? true : false}
                 >
+<<<<<<< HEAD
                   <MenuItem value='' disabled>Package Type</MenuItem>
+=======
+                  <MenuItem value="" disabled>
+                    Value
+                  </MenuItem>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                   <MenuItem value="0">Free</MenuItem>
                   <MenuItem value="1">Basic</MenuItem>
                   <MenuItem value="2">Medium</MenuItem>
@@ -428,10 +481,16 @@ const UpdateNuRoutine = ({value,handleClose,routineAlert}) => {
                 id="pdf_file_url"
                 label="pdf_file_url"
                 type="file"
+<<<<<<< HEAD
                 accept="application/pdf"
                 InputLabelProps={{ shrink: true }}
                 //value={values.thumbnail_image_url}
                 onChange={pdfChange}
+=======
+                InputLabelProps={{ shrink: true }}
+                //value={values.pdf_file_url}
+                onChange={handleChange("pdf_file_url")}
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                 error={errors.pdf_file_url ? true : false}
                 helperText={errors.pdf_file_url}
               />

@@ -324,12 +324,22 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
               <Select
                 labelId="day_1"
                 label="day_1"
+<<<<<<< HEAD
                 defaultValue=''
                 
                 onChange={handleChange("day_1")}
                 error={errors.day_1 ? true : false}
               >
               <MenuItem value='' disabled>Sub Type</MenuItem>
+=======
+                defaultValue=""
+                onChange={handleChange("day_1")}
+                error={errors.day_1 ? true : false}
+              >
+                <MenuItem value="" disabled>
+                  Value
+                </MenuItem>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -343,16 +353,30 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
               )}
             </FormControl>
             {/* day_2 */}
+<<<<<<< HEAD
             <FormControl >
+=======
+            <FormControl>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
               <InputLabel id="sub_type">day_2</InputLabel>
               <Select
                 labelId="day_2"
                 label="day_2"
+<<<<<<< HEAD
                 defaultValue=''
                 onChange={handleChange("day_2")}
                 error={errors.day_2 ? true : false}
               >
               <MenuItem value='' disabled>Sub Type</MenuItem>
+=======
+                defaultValue=""
+                onChange={handleChange("day_2")}
+                error={errors.day_2 ? true : false}
+              >
+                <MenuItem value="" disabled>
+                  Value
+                </MenuItem>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -366,16 +390,27 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
               )}
             </FormControl>
             {/* day_3 */}
+<<<<<<< HEAD
             <FormControl >
+=======
+            <FormControl>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
               <InputLabel id="sub_type">day_3</InputLabel>
               <Select
                 labelId="day_3"
+                defaultValue=""
                 label="day_3"
                 defaultValue=''
                 onChange={handleChange("day_3")}
                 error={errors.day_3 ? true : false}
               >
+<<<<<<< HEAD
               <MenuItem value='' disabled>Sub Type</MenuItem>
+=======
+                <MenuItem value="" disabled>
+                  Value
+                </MenuItem>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -389,16 +424,30 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
               )}
             </FormControl>
             {/* day4 */}
+<<<<<<< HEAD
             <FormControl >
+=======
+            <FormControl>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
               <InputLabel id="sub_type">day_4</InputLabel>
               <Select
                 labelId="day_4"
                 label="day_4"
+<<<<<<< HEAD
                 defaultValue=''
                 onChange={handleChange("day_4")}
                 error={errors.day_4 ? true : false}
               >
               <MenuItem value='' disabled>Sub Type</MenuItem>
+=======
+                defaultValue=""
+                onChange={handleChange("day_4")}
+                error={errors.day_4 ? true : false}
+              >
+                <MenuItem value="" disabled>
+                  Value
+                </MenuItem>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -412,16 +461,30 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
               )}
             </FormControl>
             {/* day_5 */}
+<<<<<<< HEAD
             <FormControl >
+=======
+            <FormControl>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
               <InputLabel id="sub_type">day_5</InputLabel>
               <Select
                 labelId="day_5"
                 label="day_5"
+<<<<<<< HEAD
                 defaultValue=''
                 onChange={handleChange("day_5")}
                 error={errors.day_5 ? true : false}
               >
               <MenuItem value='' disabled>Sub Type</MenuItem>
+=======
+                defaultValue=""
+                onChange={handleChange("day_5")}
+                error={errors.day_5 ? true : false}
+              >
+                <MenuItem value="" disabled>
+                  Value
+                </MenuItem>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -435,16 +498,30 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
               )}
             </FormControl>
             {/* day_6 */}
+<<<<<<< HEAD
             <FormControl >
+=======
+            <FormControl>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
               <InputLabel id="sub_type">day_6</InputLabel>
               <Select
                 labelId="day_6"
                 label="day_6"
+<<<<<<< HEAD
                 defaultValue=''
                 onChange={handleChange("day_6")}
                 error={errors.day_6 ? true : false}
               >
               <MenuItem value='' disabled>Sub Type</MenuItem>
+=======
+                defaultValue=""
+                onChange={handleChange("day_6")}
+                error={errors.day_6 ? true : false}
+              >
+                <MenuItem value="" disabled>
+                  Value
+                </MenuItem>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -458,17 +535,31 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
               )}
             </FormControl>
             {/* day_7 */}
+<<<<<<< HEAD
             <FormControl >
+=======
+            <FormControl>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
               <InputLabel id="sub_type">day_7</InputLabel>
               <Select
                 labelId="day_7"
                 label="day_7"
+<<<<<<< HEAD
                 defaultValue=''
                 onChange={handleChange("day_7")}
                 error={errors.day_7 ? true : false}
               >
                 <MenuItem value='' disabled>Sub Type</MenuItem>
 
+=======
+                defaultValue=""
+                onChange={handleChange("day_7")}
+                error={errors.day_7 ? true : false}
+              >
+                <MenuItem value="" disabled>
+                  Value
+                </MenuItem>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -487,11 +578,21 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
               <Select
                 labelId="User Name"
                 label="User Name"
+<<<<<<< HEAD
                 defaultValue=''
                 onChange={handleChange("user_name")}
                 error={errors.user_name ? true : false}
               >
                 <MenuItem value='' disabled>User Name</MenuItem>
+=======
+                defaultValue=""
+                onChange={handleChange("user_name")}
+                error={errors.user_name ? true : false}
+              >
+                <MenuItem value="" disabled>
+                  Value
+                </MenuItem>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                 {Array.isArray(user)
                   ? user.map((u) => (
                       <MenuItem key={u.id} value={u.id}>

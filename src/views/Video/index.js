@@ -643,7 +643,7 @@ const Index = () => {
             open={createOpen}
             onClose={handleCreateClose}
             aria-labelledby="keep-mounted-modal-title"
-            aria-descripedby="keep-mounted-modal-description"
+            aria-describedby="keep-mounted-modal-description"
           >
             <Box style={style}>
               <CreateVideo
@@ -664,7 +664,7 @@ const Index = () => {
             open={updateOpen}
             onClose={handleUpdateClose}
             aria-labelledby="keep-mounted-modal-title"
-            aria-descripedby="keep-mounted-modal-description"
+            aria-describedby="keep-mounted-modal-description"
           >
             <Box sx={style}>
               <UpdateVideo

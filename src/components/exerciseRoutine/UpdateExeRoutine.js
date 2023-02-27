@@ -72,21 +72,6 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
     }
   }, [resultSub]);
 
-  //assign data from db
-  useEffect(() => {
-    if (value) {
-      setValues(value);
-      setTextValue(
-        RichTextEditor.createValueFromString(value.description, "html")
-      );
-      setImagePreview(value.thumbnail_image_url);
-      let image = value.thumbnail_image_url;
-      setOldImageName(
-        image.substring(image.lastIndexOf("/") + 1, image.lenght)
-      );
-    }
-  }, [value]);
-
   //for update routine
   const [updateRoutine] = useMutation(UPDATE_EXE_ROUTINE, {
     onError: (error) => {
@@ -221,6 +206,21 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
     ],
   };
 
+  //assign data from db
+  useEffect(() => {
+    if (value) {
+      setValues(value);
+      setTextValue(
+        RichTextEditor.createValueFromString(value.description, "html")
+      );
+      setImagePreview(value.thumbnail_image_url);
+      let image = value.thumbnail_image_url;
+      setOldImageName(
+        image.substring(image.lastIndexOf("/") + 1, image.lenght)
+      );
+    }
+  }, [value]);
+
   if (!values) {
     //console.log("no values, loading");
     return "no values";
@@ -312,7 +312,11 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
             />
 
             {/* day_1 */}
+<<<<<<< HEAD
             <FormControl >
+=======
+            <FormControl>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
               <InputLabel id="sub_type">day_1</InputLabel>
               <Select
                 labelId="day_1"
@@ -325,10 +329,10 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
                 <MenuItem value=''>Sub Type</MenuItem>
                 {Array.isArray(sub)
                   ? sub.map((sub) => {
-                      if (sub.id === values.day_1) {
-                        // console.log("default values");
-                      }
-                      //console.log(sub.id);
+                      // if (sub.id === values.day_1) {
+
+                      // }
+
                       return (
                         <MenuItem key={sub.id} value={sub.id}>
                           {sub.sub_type_name}
@@ -367,7 +371,11 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
               )}
             </FormControl>
             {/* day_3 */}
+<<<<<<< HEAD
             <FormControl >
+=======
+            <FormControl>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
               <InputLabel id="sub_type">day_3</InputLabel>
               <Select
                 labelId="day_3"

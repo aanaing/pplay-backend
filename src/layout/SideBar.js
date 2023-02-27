@@ -107,7 +107,7 @@ const SideBar = ({ open }) => {
         <Link to="/spe_exe_routine" className="nav-link">
           <ListItem button className="nav-btn">
             <ListItemIcon>
-              <FoodBankIcon
+              <ScheduleSendIcon
                 sx={{ fontSize: "27px" }}
                 className="nav-link-icon"
               />

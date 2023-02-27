@@ -28,8 +28,12 @@ import { GET_IMAGE_UPLOAD_URL, DELETE_IMAGE } from "../../gql/misc";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { LoadingButton } from "@mui/lab";
 
+<<<<<<< HEAD
 const UpdateNuRoutine = ({handleClose,routineAlert,value}) => {
   
+=======
+const UpdateSpeNuRoutine = ({ routineAlert, handleClose, value }) => {
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
   const fileTypes = [
     "image/apng",
     "image/bmp",
@@ -118,7 +122,23 @@ const UpdateNuRoutine = ({handleClose,routineAlert,value}) => {
     },
   });
 
+<<<<<<< HEAD
 
+=======
+  useEffect(() => {
+    if (value) {
+      setValues({ ...value, user: value.fk_user_id });
+      setTextValue(
+        RichTextEditor.createValueFromString(value.description, "html")
+      );
+      setImagePreview(value.thumbnail_image_url);
+      let image_url = value.thumbnail_image_url;
+      // setOldImageName(
+      //   image_url.substring(image_url.lastIndexOf("/") + 1, image_url.lenght)
+      // );
+    }
+  }, [value]);
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
 
   const imageChange = async (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -249,11 +269,15 @@ const UpdateNuRoutine = ({handleClose,routineAlert,value}) => {
   if (!resultUser) {
     return;
   }
+<<<<<<< HEAD
   if (!values) {
         return "no values";
   }
 
 console.log('Values are',values)
+=======
+  console.log(values);
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
   return (
     <>
       <Box
@@ -308,7 +332,11 @@ console.log('Values are',values)
 
             {/* list items */}
             <div className="grid-item grid--2--cols">
+<<<<<<< HEAD
             {/* thumbnail_image_url */}
+=======
+              {/* thumbnail_image_url */}
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
               <TextField
                 id="thumbnail_image_url"
                 label="image_url"
@@ -320,8 +348,12 @@ console.log('Values are',values)
                 error={errors.thumbnail_image_url ? true : false}
                 helperText={errors.thumbnail_image_url}
               />
+<<<<<<< HEAD
 
             {/* nutrition_routine_name */}
+=======
+              {/* nutrition_routine_name */}
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
               <TextField
                 id="nutrition_routine_name"
                 label="nutrition routine name"
@@ -334,7 +366,7 @@ console.log('Values are',values)
                 error={errors.nutrition_routine_name ? true : false}
                 helperText={errors.nutrition_routine_name}
               />
-
+              {/* duration_of_routine_in_days */}
               <TextField
                 id="duration_of_routine_in_days"
                 label="duration_of_routine_in_days"
@@ -347,18 +379,32 @@ console.log('Values are',values)
                 error={errors.duration_of_routine_in_days ? true : false}
                 helperText={errors.duration_of_routine_in_days}
               />
+<<<<<<< HEAD
                   {/* vegetarian */}
+=======
+              {/* vegetarian */}
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
               <FormControl>
                 <InputLabel id="vegetarian">Vegetarian</InputLabel>
                 <Select
                   labelId="vegetarian"
+<<<<<<< HEAD
                   value={values.vegetarian === 'true' ? "Yes" : "No"}
+=======
+                  value={values.vegetarian}
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                   label="vegetarian"
                   defaultValue=""
                   onChange={handleChange("vegetarian")}
                   error={errors.vegetarian ? true : false}
                 >
+<<<<<<< HEAD
                   <MenuItem value='' disabled>Value</MenuItem>
+=======
+                  <MenuItem value="" disabled>
+                    Value
+                  </MenuItem>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                   <MenuItem value="0">False</MenuItem>
                   <MenuItem value="1">True</MenuItem>
                 </Select>
@@ -366,7 +412,10 @@ console.log('Values are',values)
                   <FormHelperText error>{errors.vegetarian}</FormHelperText>
                 )}
               </FormControl>
+<<<<<<< HEAD
 
+=======
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
               {/* routine_category */}
               <TextField
                 id="routine_category"
@@ -380,16 +429,31 @@ console.log('Values are',values)
               <FormControl>
                 <InputLabel id="main_type">Package Type</InputLabel>
                 <Select
+<<<<<<< HEAD
                   labelId="main_type"
                   defaultValue=""
                   value={values.fk_user_subscription_level_id? values.fk_user_subscription_level_id:'-'}
+=======
+                  labelId="package_type"
+                  value={values.fk_user_subscription_level_id}
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                   label="Package Type"
+                  defaultValue=""
                   onChange={handleChange("package_type")}
                   error={errors.package_type ? true : false}
                 >
+<<<<<<< HEAD
                 
                   <MenuItem value='' disabled>Package Type</MenuItem>
                   <MenuItem value="0">Free</MenuItem>
+=======
+                  <MenuItem value="" disabled>
+                    Value
+                  </MenuItem>
+                  <MenuItem value="0" selected>
+                    Free
+                  </MenuItem>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                   <MenuItem value="1">Basic</MenuItem>
                   <MenuItem value="2">Medium</MenuItem>
                   <MenuItem value="3">Premium</MenuItem>
@@ -398,13 +462,19 @@ console.log('Values are',values)
                   <FormHelperText error>{errors.package_type}</FormHelperText>
                 )}
               </FormControl>
+<<<<<<< HEAD
 
               {/* User Name */}
+=======
+              {/* user_name */}
+
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
               <FormControl>
                 <InputLabel id="User ID">User Name</InputLabel>
                 <Select
                   labelId="User Name"
                   label="User Name"
+<<<<<<< HEAD
                   defaultValue="" 
                   value={values.fk_user_id}                 
                   onChange={handleChange("user_name")}
@@ -414,6 +484,19 @@ console.log('Values are',values)
                   {Array.isArray(user)
                     ? user.map((u) => (
                         <MenuItem key={u.id} value={u.id} >
+=======
+                  defaultValue=""
+                  value={values.fk_user_id ? values.fk_user_id : "-"}
+                  onChange={handleChange("user_name")}
+                  error={errors.user_name ? true : false}
+                >
+                  <MenuItem value="" disabled>
+                    Value
+                  </MenuItem>
+                  {Array.isArray(user)
+                    ? user.map((u) => (
+                        <MenuItem key={u.id} value={u.id} selected>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                           {u.username}
                         </MenuItem>
                       ))
@@ -423,7 +506,10 @@ console.log('Values are',values)
                   <FormHelperText error>{errors.user_name}</FormHelperText>
                 )}
               </FormControl>
+<<<<<<< HEAD
 
+=======
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
               {/* pdf_file_url */}
               <TextField
                 id="pdf_file_url"
@@ -488,4 +574,4 @@ console.log('Values are',values)
     </>
   );
 };
-export default UpdateNuRoutine;
+export default UpdateSpeNuRoutine;

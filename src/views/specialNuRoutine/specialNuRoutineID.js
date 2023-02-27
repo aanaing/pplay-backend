@@ -125,6 +125,7 @@ const SpecialNuRoutineId = () => {
     setRemoveOpen(true);
   };
   const handleRemoveClose = () => setRemoveOpen(false);
+<<<<<<< HEAD
 
   
   //------------------UPDATE----------------------
@@ -135,6 +136,10 @@ const SpecialNuRoutineId = () => {
     }
    if(values){
     setUpdateRoutine(values);
+=======
+  const handleUpdateOpen = () => {
+    //setUpdateRoutine(values);
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
     setUpdateOpen(true);
    }
     
@@ -297,7 +302,7 @@ const SpecialNuRoutineId = () => {
           <Button
             variant="contained"
             color="primary"
-            onClick={() => handleUpdateOpen(values)}
+            onClick={() => handleUpdateOpen()}
             sx={{ mr: "2rem" }}
           >
             Edit
@@ -375,7 +380,7 @@ const SpecialNuRoutineId = () => {
           <UpdateSpecialNuRoutine
             routineAlert={routineAlert}
             handleClose={handleUpdateClose}
-            value={updateRoutine}
+            value={{ ...values }}
           />
         </Box>
       </Modal>

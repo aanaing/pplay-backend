@@ -332,11 +332,21 @@ const CreateSpecialNuRoutine = ({ handleClose }) => {
                   labelId="vegetarian"
                   // value={values.package_type}
                   label="vegetarian"
+<<<<<<< HEAD
                   defaultValue=''
                   onChange={handleChange("vegetarian")}
                   error={errors.vegetarian ? true : false}
                 >
                   <MenuItem value='' disabled>value</MenuItem>
+=======
+                  defaultValue=""
+                  onChange={handleChange("vegetarian")}
+                  error={errors.vegetarian ? true : false}
+                >
+                  <MenuItem value="" disabled>
+                    Value
+                  </MenuItem>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                   <MenuItem value="0">False</MenuItem>
                   <MenuItem value="1">True</MenuItem>
                 </Select>
@@ -349,11 +359,21 @@ const CreateSpecialNuRoutine = ({ handleClose }) => {
                 <Select
                   labelId="User Name"
                   label="User Name"
+<<<<<<< HEAD
                   defaultValue=''
                   onChange={handleChange("user_name")}
                   error={errors.user_name ? true : false}
                 >
                   <MenuItem value='' disabled>User Name</MenuItem>
+=======
+                  defaultValue=""
+                  onChange={handleChange("user_name")}
+                  error={errors.user_name ? true : false}
+                >
+                  <MenuItem value="" disabled>
+                    Value
+                  </MenuItem>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                   {Array.isArray(user)
                     ? user.map((u) => (
                         <MenuItem key={u.id} value={u.id}>
@@ -381,10 +401,17 @@ const CreateSpecialNuRoutine = ({ handleClose }) => {
                   defaultValue=''
                   // value={values.package_type}
                   label="Package Type"
+                  defaultValue=""
                   onChange={handleChange("package_type")}
                   error={errors.package_type ? true : false}
                 >
+<<<<<<< HEAD
                   <MenuItem value='0' disabled>Package Type</MenuItem>
+=======
+                  <MenuItem value="" disabled>
+                    Value
+                  </MenuItem>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                   <MenuItem value="0">Free</MenuItem>
                   <MenuItem value="1">Basic</MenuItem>
                   <MenuItem value="2">Medium</MenuItem>

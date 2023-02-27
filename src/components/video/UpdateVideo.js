@@ -27,17 +27,18 @@ import {
 } from "@mui/material";
 
 const UpdateVideo = ({ handleClose, videoAlert, video }) => {
-  const fileTypes = ["video/webm", "video/mkv", "video/mp4"];
+  console.log(video);
+  const fileTypes = ["video/webm", "video/mp4"];
   const thumbnailfileTypes = [
-    "image/apng",
-    "image/bmp",
-    "image/gif",
+    // "image/apng",
+    // "image/bmp",
+    // "image/gif",
     "image/jpeg",
-    "image/pjpeg",
-    "image/png",
-    "image/svg+xml",
-    "image/tiff",
-    "image/webp",
+    // "image/pjpeg",
+    // "image/png",
+    // "image/svg+xml",
+    // "image/tiff",
+    // "image/webp",
   ];
 
   const [isImageChange, setIsImageChange] = useState(false);
@@ -108,23 +109,6 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
     }
     setValues({ ...values, [prop]: event.target.value });
   };
-
-  // -------------------- for image change----------
-  // const [getImageUrl] = useMutation(GET_IMAGE_UPLOAD_URL, {
-  //   onError: (error) => {
-  //     console.log("error : ", error);
-  //   },
-  //   onCompleted: (result) => {
-  //     setImageFileUrl(result.getImageUploadUrl.imageUploadUrl);
-  //     setIsImageChange(true);
-  //     setValues({
-  //       ...values,
-  //       video_url_a: `https://axra.sgp1.digitaloceanspaces.com/VJun/${result.getImageUploadUrl.imageName}`,
-  //       video_url_b: `https://axra.sgp1.digitaloceanspaces.com/VJun/${result.getImageUploadUrl.imageName}`,
-  //       thumbnail_image_url: `https://axra.sgp1.digitaloceanspaces.com/VJun/${result.getImageUploadUrl.imageName}`,
-  //     });
-  //   },
-  // });
 
   const [getVideoAUrl] = useMutation(GET_IMAGE_UPLOAD_URL, {
     onError: (error) => {
@@ -250,8 +234,12 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
         video_url_b: video.video_url_b,
         duration: video.duration,
         sub_name: video.video_sub_type ? video.video_sub_type.id : "-",
+        description: video.description,
       });
       setImagePreview(video.thumbnail_image_url);
+      setTextValue(
+        RichTextEditor.createValueFromString(video.description, "html")
+      );
     }
 
     setOldImageName();
@@ -293,8 +281,7 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
       if (!thumbnailfileTypes.includes(img.type)) {
         setErrors({
           ...errors,
-          thumbnail_image_url:
-            "Please select image. (PNG, JPG, JPEG, GIF, ...)",
+          thumbnail_image_url: "Please select image. (JPEG)",
         });
         return;
       }
@@ -318,7 +305,7 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
       if (!fileTypes.includes(videofile.type)) {
         setErrors({
           ...errors,
-          video_url_a: "Please select video. (mp4,mkv,...)",
+          video_url_a: "Please select video. (mp4,webm,..)",
         });
         return;
       }
@@ -334,6 +321,7 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
       getVideoAUrl();
     }
   };
+
   const videoChangeB = async (e) => {
     if (e.target.files && e.target.files[0]) {
       let videofile = e.target.files[0];
@@ -341,7 +329,7 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
       if (!fileTypes.includes(videofile.type)) {
         setErrors({
           ...errors,
-          video_url_b: "Please select video. (mp4,mkv,...)",
+          video_url_b: "Please select video. (mp4)",
         });
         return;
       }
@@ -354,7 +342,7 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
       }
       setVideoBFile(videofile);
       //setImagePreview(URL.createObjectURL(videofile));
-      getVideoBUrl();
+      getVideoAUrl();
     }
   };
 
@@ -392,6 +380,7 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
   // for Description
   const onChange = (value) => {
     setTextValue(value);
+    console.log(textValue);
     setValues({ ...values, description: value.toString("html") });
   };
 
@@ -452,7 +441,6 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
         sx={{
           borderTopLeftRadius: 0,
           borderTopRightRadius: 0,
-          color: "white",
         }}
       >
         <CardContent>
@@ -474,7 +462,6 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
                   mt: 4,
                   boxShadow: 5,
                   borderRadius: 2,
-                  border: 2,
                 }}
               />
             </Box>
@@ -489,7 +476,7 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
                 onChange={videoChangeA}
                 error={errors.video_url_a ? true : false}
                 helperText={errors.video_url_a}
-                accept="video/webm, video/mkv, video/mp4"
+                accept="video/webm,video/mp4"
               />
               {/* video_url_b */}
               <TextField
@@ -500,14 +487,18 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
                 onChange={videoChangeB}
                 error={errors.video_url_b ? true : false}
                 helperText={errors.video_url_b}
-                accept="video/webm, video/mkv, video/mp4"
+                accept="video/webm,video/mp4"
               />
               {/* thumbnail_image_url */}
               <TextField
                 id="thumbnail_image_url"
                 label="image_url"
                 type="file"
+<<<<<<< HEAD
                 accept="image/png, image/jpeg, image/jpg, image/gif, image/svg+xml"
+=======
+                accept="image/jpeg"
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                 InputLabelProps={{ shrink: true }}
                 //value={values.thumbnail_image_url}
                 onChange={imageChange}
@@ -531,10 +522,17 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
                   defaultValue=""
                   value={values.main_type}
                   label="Main Type"
+                  defaultValue=""
                   onChange={handleChange("main_type")}
                   error={errors.main_type ? true : false}
                 >
+<<<<<<< HEAD
                    <MenuItem value='' disabled>Value</MenuItem>
+=======
+                  <MenuItem value="" disabled>
+                    Value
+                  </MenuItem>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                   <MenuItem value="HOME">HOME</MenuItem>
                   <MenuItem value="GYM">GYM</MenuItem>
                   <MenuItem value="ZUMBA">ZUMBA</MenuItem>
@@ -550,11 +548,18 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
                 defaultValue=""
                   labelId="package_type"
                   value={values.package_type}
+                  defaultValue=""
                   label="Package Type"
                   onChange={handleChange("package_type")}
                   error={errors.package_type ? true : false}
                 >
+<<<<<<< HEAD
                    <MenuItem value='0' disabled>Value</MenuItem>
+=======
+                  <MenuItem value="" disabled>
+                    Value
+                  </MenuItem>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                   <MenuItem value="0">Free</MenuItem>
                   <MenuItem value="1">Basic</MenuItem>
                   <MenuItem value="2">Medium</MenuItem>
@@ -591,10 +596,15 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
                   defaultValue=""
                   value={values.promotion}
                   label="Promotion"
+                  defaultValue=""
                   onChange={handleChange("promotion")}
                   error={errors.promotion ? true : false}
                 >
+<<<<<<< HEAD
                    <MenuItem value='' disabled>Value</MenuItem>
+=======
+                  <MenuItem>Value</MenuItem>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                   <MenuItem value="true">Yes</MenuItem>
                   <MenuItem value="false">No</MenuItem>
                 </Select>
@@ -603,7 +613,11 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
                 )}
               </FormControl>
               {/* sub_type */}
+<<<<<<< HEAD
               <FormControl  disabled={showSubInput}>
+=======
+              <FormControl disabled={showSubInput}>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                 <InputLabel id="sub_type">Sub type</InputLabel>
                 <Select
                   labelId="sub_type"
@@ -613,7 +627,13 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
                   onChange={handleChange("sub_name")}
                   error={errors.sub_name ? true : false}
                 >
+<<<<<<< HEAD
                   <MenuItem value='' disabled>Value</MenuItem>
+=======
+                  <MenuItem value="" disabled>
+                    Value
+                  </MenuItem>
+>>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
                   {Array.isArray(sub)
                     ? sub.map((sub) => (
                         <MenuItem key={sub.id} value={sub.id}>
