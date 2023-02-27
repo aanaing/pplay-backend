@@ -41,6 +41,8 @@ const CreateNuRoutine = ({ handleClose }) => {
     "image/webp",
     "image/x-icon",
   ];
+  const pdfFileTypes=['application/pdf']
+  const pdfType='application/pdf'
 
   const [values, setValues] = useState({});
   const [errors, setErrors] = useState({});
@@ -52,6 +54,8 @@ const CreateNuRoutine = ({ handleClose }) => {
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
 
+  const [pdfFile,setPdfFile]=useState(null);
+  const [pdfFileUrl,setPdfFileUrl]=useState(null);
   const [textValue, setTextValue] = useState(RichTextEditor.createEmptyValue());
 
   /*---------------------------*/
@@ -59,6 +63,23 @@ const CreateNuRoutine = ({ handleClose }) => {
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
+
+  const [getPdfUrl] = useMutation(GET_IMAGE_UPLOAD_URL, {
+    onError: (error) => {
+      console.log("imge errors", error);
+      setShowAlert({ message: "Error on server", isError: true });
+      setTimeout(() => {
+        setShowAlert({ message: "", isError: false });
+      }, 1000);
+    },
+    onCompleted: (result) => {
+      setPdfFileUrl(result.getImageUploadUrl.imageUploadUrl);
+      setValues({
+        ...values,
+        pdf_file_url: `https://axra.sgp1.digitaloceanspaces.com/Powerplay/${result.getImageUploadUrl.imageName}`,
+      });
+    },
+  });
 
   const [getImageUrl] = useMutation(GET_IMAGE_UPLOAD_URL, {
     onError: (error) => {
@@ -72,10 +93,11 @@ const CreateNuRoutine = ({ handleClose }) => {
       setImageFileUrl(result.getImageUploadUrl.imageUploadUrl);
       setValues({
         ...values,
-        thumbnail_image_url: `https://axra.sgp1.digitaloceanspaces.com/VJun/${result.getImageUploadUrl.imageName}`,
+        thumbnail_image_url: `https://axra.sgp1.digitaloceanspaces.com/PowerPlay/${result.getImageUploadUrl.imageName}`,
       });
     },
   });
+
 
   //get data from db
   const [createNuRoutine] = useMutation(CREATE_NODAYS, {
@@ -94,6 +116,7 @@ const CreateNuRoutine = ({ handleClose }) => {
       setTextValue(RichTextEditor.createEmptyValue());
 
       setImageFile("");
+      setPdfFile('');
       setImagePreview("");
       setLoading(false);
       setShowAlert({
@@ -128,6 +151,29 @@ const CreateNuRoutine = ({ handleClose }) => {
       setImageFile(img);
       setImagePreview(URL.createObjectURL(img));
       getImageUrl();
+    }
+  };
+
+  const pdfChange = async (e) => {
+    if (e.target.files && e.target.files[0]) {
+      //console.log(e.target.files);
+      let img = e.target.files[0];
+      if (!pdfFileTypes.includes(img.type)) {
+        setErrors({
+          ...errors,
+          
+        });
+        return;
+      }
+      if (img.size > 10485760) {
+        setErrors({
+          ...errors,
+         pdf_file_url: "Pdf file size must be smaller than 10MB.",
+        });
+        return;
+      }
+      setPdfFile(img);      
+      getPdfUrl({variables:{contentType:pdfType}});
     }
   };
 
@@ -177,6 +223,7 @@ const CreateNuRoutine = ({ handleClose }) => {
 
     try {
       await imageService.uploadImage(imageFileUrl, imageFile);
+      await imageService.uploadImage(pdfFileUrl, pdfFile);
       createNuRoutine({ variables: { ...values } });
     } catch (error) {
       console.log("error : ", error);
@@ -353,9 +400,10 @@ const CreateNuRoutine = ({ handleClose }) => {
                 id="pdf_file_url"
                 label="pdf_file_url"
                 type="file"
-                InputLabelProps={{ shrink:true }}
-                //value={values.pdf_file_url}
-                onChange={handleChange("pdf_file_url")}
+                accept="application/pdf"
+                InputLabelProps={{ shrink: true }}
+                //value={values.thumbnail_image_url}
+                onChange={pdfChange}
                 error={errors.pdf_file_url ? true : false}
                 helperText={errors.pdf_file_url}
               />
