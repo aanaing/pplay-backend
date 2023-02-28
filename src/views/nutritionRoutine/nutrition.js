@@ -168,9 +168,6 @@ const NuRoutineId = () => {
       setShowAlert({ message: "", isError: false });
     }, 3000);
   };
-  //let values = result.data.nutrition_routine_by_pk;
-
-  //console.log(updateDay);
 
   return (
     <>
@@ -243,7 +240,11 @@ const NuRoutineId = () => {
               <ListItem>
                 <ListItemText
                   primary="pdf_file_url"
-                  secondary={values.pdf_file_url}
+                  secondary={
+                    values.pdf_file_url
+                      ? values.pdf_file_url.substring(0, 30)
+                      : "-"
+                  }
                 />
               </ListItem>
 

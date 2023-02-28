@@ -243,7 +243,11 @@ const SpecialNuRoutineId = () => {
               <ListItem>
                 <ListItemText
                   primary="pdf_file_url"
-                  secondary={values.pdf_file_url}
+                  secondary={
+                    values.pdf_file_url
+                      ? values.pdf_file_url.substring(0, 30)
+                      : "-"
+                  }
                 />
               </ListItem>
 
