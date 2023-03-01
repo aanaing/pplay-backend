@@ -23,6 +23,7 @@ import {
   InputLabel,
   Select,
   FormHelperText,
+  CircularProgress,
   Alert,
 } from "@mui/material";
 
@@ -63,6 +64,9 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
   const [showAlert, setShowAlert] = useState({ message: "", isError: false });
 
   const [textValue, setTextValue] = useState(RichTextEditor.createEmptyValue());
+
+  const [progress, setProgress] = useState(0);
+
   const [values, setValues] = useState({
     main_type: "",
     package_type: "",
@@ -91,6 +95,19 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
   const [sub, setSub] = useState("");
   const [loadSub, resutSub] = useLazyQuery(SUB_TYPE_NAME);
   const [showSubInput, setShowSubInput] = useState(false);
+
+  //progress
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setProgress((prevProgress) =>
+        prevProgress >= 100 ? 0 : prevProgress + 10
+      );
+    }, 8000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
 
   useEffect(() => {
     loadSub();
@@ -617,7 +634,9 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
                   onChange={handleChange("promotion")}
                   error={errors.promotion ? true : false}
                 >
-                  <MenuItem>Value</MenuItem>
+                  <MenuItem value="" disabled>
+                    Value
+                  </MenuItem>
                   <MenuItem value="true">Yes</MenuItem>
                   <MenuItem value="false">No</MenuItem>
                 </Select>
@@ -671,16 +690,21 @@ const UpdateVideo = ({ handleClose, videoAlert, video }) => {
           </div>
         </CardContent>
         <Box className="btn_end">
-          <LoadingButton
+          <Button
             variant="contained"
-            //color="warning"
+            className="progress"
             size="large"
             sx={{ height: 50, width: 100 }}
-            loading={loading}
+            //loading={loading}
+            disabled={loading}
             onClick={handleUpdate}
           >
-            Update
-          </LoadingButton>
+            {loading ? (
+              <CircularProgress color="warning" value={progress} />
+            ) : (
+              "Update"
+            )}
+          </Button>
         </Box>
       </Card>
       {showAlert.message && !showAlert.isError && (

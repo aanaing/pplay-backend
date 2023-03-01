@@ -1,7 +1,7 @@
 import RichTextEditor from "react-rte";
 import { useState } from "react";
 import imageService from "../../services/image";
-
+import { useNavigate } from "react-router-dom";
 import {
   Button,
   Typography,
@@ -18,6 +18,7 @@ import {
   Alert,
   TextareaAutosize,
   CardContent,
+  CircularProgress,
 } from "@mui/material";
 import {
   CREATE_EACH_DAY,
@@ -60,6 +61,8 @@ const CreateNuRoutine = ({ handleClose }) => {
   const [pdfFileUrl, setPdfFileUrl] = useState(null);
 
   const [textValue, setTextValue] = useState(RichTextEditor.createEmptyValue());
+
+  const navigate = useNavigate();
 
   /*---------------------------*/
 
@@ -145,6 +148,7 @@ const CreateNuRoutine = ({ handleClose }) => {
       setTextValue(RichTextEditor.createEmptyValue());
 
       setImageFile("");
+      setPdfFile("");
       setImagePreview("");
       setLoading(false);
       setShowAlert({
@@ -228,7 +232,9 @@ const CreateNuRoutine = ({ handleClose }) => {
 
     try {
       await imageService.uploadImage(imageFileUrl, imageFile);
+      await imageService.uploadImage(pdfFileUrl, pdfFile);
       createNuRoutine({ variables: { ...values } });
+      navigate("/nuroutine");
     } catch (error) {
       console.log("error : ", error);
     }
@@ -360,11 +366,12 @@ const CreateNuRoutine = ({ handleClose }) => {
                   labelId="vegetarian"
                   // value={values.package_type}
                   label="vegetarian"
+                  defaultValue=""
                   onChange={handleChange("vegetarian")}
                   error={errors.vegetarian ? true : false}
                 >
                   <MenuItem value="" disabled>
-                    value
+                    Value
                   </MenuItem>
                   <MenuItem value="0">False</MenuItem>
                   <MenuItem value="1">True</MenuItem>
@@ -387,9 +394,13 @@ const CreateNuRoutine = ({ handleClose }) => {
                   labelId="main_type"
                   // value={values.package_type}
                   label="Package Type"
+                  defaultValue=""
                   onChange={handleChange("package_type")}
                   error={errors.package_type ? true : false}
                 >
+                  <MenuItem value="" disabled>
+                    Value
+                  </MenuItem>
                   <MenuItem value="0">Free</MenuItem>
                   <MenuItem value="1">Basic</MenuItem>
                   <MenuItem value="2">Medium</MenuItem>
@@ -430,16 +441,16 @@ const CreateNuRoutine = ({ handleClose }) => {
         </CardContent>
 
         <Box className="btn_end">
-          <LoadingButton
+          <Button
             variant="contained"
             //color="warning"
             size="large"
             sx={{ height: 50, width: 100 }}
-            loading={loading}
+            disabled={loading}
             onClick={handleCreate}
           >
-            Create
-          </LoadingButton>
+            {loading ? <CircularProgress color="warning" /> : "Create"}
+          </Button>
         </Box>
       </Card>
 

@@ -15,6 +15,7 @@ import {
   FormHelperText,
   CardMedia,
   Alert,
+  CircularProgress,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { validateSDL } from "graphql/validation/validate";
@@ -52,6 +53,21 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
   const [imageFileUrl, setImageFileUrl] = useState(null);
 
   const [textValue, setTextValue] = useState(RichTextEditor.createEmptyValue());
+
+  const [progress, setProgress] = useState(0);
+
+  //progress
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setProgress((prevProgress) =>
+        prevProgress >= 100 ? 0 : prevProgress + 10
+      );
+    }, 1000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
 
   useEffect(() => {
     loadSub();
@@ -372,9 +388,13 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
               <Select
                 labelId="day_3"
                 label="day_3"
+                defaultValue=""
                 onChange={handleChange("day_3")}
                 error={errors.day_3 ? true : false}
               >
+                <MenuItem value="" disabled>
+                  value
+                </MenuItem>
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -393,9 +413,13 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
               <Select
                 labelId="day_4"
                 label="day_4"
+                defaultValue=""
                 onChange={handleChange("day_4")}
                 error={errors.day_4 ? true : false}
               >
+                <MenuItem value="" disabled>
+                  Value
+                </MenuItem>
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -414,9 +438,13 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
               <Select
                 labelId="day_5"
                 label="day_5"
+                defaultValue=""
                 onChange={handleChange("day_5")}
                 error={errors.day_5 ? true : false}
               >
+                <MenuItem value="" disabled>
+                  Value
+                </MenuItem>
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -435,9 +463,13 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
               <Select
                 labelId="day_6"
                 label="day_6"
+                defaultValue=""
                 onChange={handleChange("day_6")}
                 error={errors.day_6 ? true : false}
               >
+                <MenuItem value="" disabled>
+                  Value
+                </MenuItem>
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -456,9 +488,13 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
               <Select
                 labelId="day_7"
                 label="day_7"
+                defaultValue=""
                 onChange={handleChange("day_7")}
                 error={errors.day_7 ? true : false}
               >
+                <MenuItem value="" disabled>
+                  Value
+                </MenuItem>
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -490,16 +526,24 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
           </div>
         </CardContent>
         <Box className="btn_end">
-          <LoadingButton
+          <Button
             variant="contained"
             //color="warning"
             size="large"
             sx={{ height: 50, width: 100 }}
-            loading={loading}
+            disabled={loading}
             onClick={handleCreate}
           >
-            Create
-          </LoadingButton>
+            {loading ? (
+              <CircularProgress
+                color="warning"
+                value={progress}
+                //text={`${progress}%`}
+              />
+            ) : (
+              "Create"
+            )}
+          </Button>
         </Box>
       </Card>
       {showAlert.message && !showAlert.isError && (

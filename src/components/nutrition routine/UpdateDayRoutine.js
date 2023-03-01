@@ -6,6 +6,7 @@ import {
   FormHelperText,
   InputLabel,
   Alert,
+  CircularProgress,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { useState, useEffect } from "react";
@@ -133,15 +134,15 @@ const UpdateDayRoutine = (props) => {
           </Box>
         </div>
         <Box className="btn_end">
-          <LoadingButton
+          <Button
             variant="contained"
             //color="warning"
             size="large"
-            loading={loading}
+            disabled={loading}
             onClick={handleUpdate}
           >
-            Update
-          </LoadingButton>
+            {loading ? <CircularProgress color="warning" /> : "Update"}
+          </Button>
         </Box>
       </Card>
       {showAlert.message && !showAlert.isError && (

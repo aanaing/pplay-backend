@@ -16,6 +16,7 @@ import {
   Select,
   Alert,
   CardContent,
+  CircularProgress,
 } from "@mui/material";
 import { CREATE_NODAYS, UPDATE_NODAYS } from "../../gql/nuRoutine";
 import { GET_IMAGE_UPLOAD_URL, DELETE_IMAGE } from "../../gql/misc";
@@ -462,10 +463,10 @@ const UpdateNuRoutine = ({ routineAlert, handleClose, value }) => {
             //color="warning"
             size="large"
             sx={{ height: 50, width: 100 }}
-            loading={loading}
+            disabled={loading}
             onClick={handleUpdate}
           >
-            Update
+            {loading ? <CircularProgress color="warning" /> : "Update"}
           </LoadingButton>
         </Box>
       </Card>

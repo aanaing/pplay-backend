@@ -4,6 +4,9 @@ import imageService from "../../services/image";
 import { GET_IMAGE_UPLOAD_URL } from "../../gql/misc";
 import { Box } from "@mui/system";
 import RichTextEditor from "react-rte";
+
+//import CircularProgressWithLabel from "@material-ui/core/CircularProgress/CircularProgressWithLabel";
+
 import {
   CREATE_VIDEOS,
   CREATE_VIDEOS_ZUMBA,
@@ -22,6 +25,7 @@ import {
   InputLabel,
   Select,
   FormHelperText,
+  CircularProgress,
   Alert,
 } from "@mui/material";
 
@@ -60,6 +64,42 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
   const [showSubInput, setShowSubInput] = useState(false);
 
   const [textValue, setTextValue] = useState(RichTextEditor.createEmptyValue());
+
+  const [progress, setProgress] = useState(0);
+
+  //progress bar circularProgressWithLabel
+  // const simulateProgress = () => {
+  //   let count = 0;
+  //   const intervalId = setInterval(() => {
+  //     count++;
+  //     setProgress(count);
+  //     if (count >= 100) {
+  //       clearInterval(intervalId);
+  //     }
+  //   }, 1000);
+  // };
+
+  //progress
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setProgress((prevProgress) =>
+        prevProgress >= 100 ? 0 : prevProgress + 10
+      );
+    }, 1000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
+
+  // const handleClick = () => {
+  //   setLoading(true);
+  //   // Make an API call or perform some other async operation
+  // };
+
+  // const handleIncreaseProgress = () => {
+  //   setProgress(progress + 10);
+  // };
 
   useEffect(() => {
     loadSub();
@@ -223,6 +263,7 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
   };
 
   const handleCreate = async () => {
+    console.log("hi");
     setLoading(true);
     setErrors({});
     let isErrorExit = false;
@@ -562,18 +603,46 @@ const CreateVideo = ({ handleClose, videoAlert }) => {
         </CardContent>
 
         <Box className="btn_end">
-          <LoadingButton
+          <Button
             variant="contained"
-            //color="warning"
+            className="progress"
             size="large"
             sx={{ height: 50, width: 100 }}
-            loading={loading}
+            //loading={loading}
+            disabled={loading}
             onClick={handleCreate}
+            //style={{ position: "absolute", top: "10px", left: "2px" }}
           >
-            Create
-          </LoadingButton>
+            {loading ? (
+              <CircularProgress
+                color="warning"
+                value={progress}
+                text={`${progress}%`}
+              />
+            ) : (
+              "Create"
+            )}
+          </Button>
+          {/* <Button
+            variant="contained"
+            color="primary"
+            onClick={handleClick}
+            disabled={loading}
+          >
+            {loading ? <CircularProgress size={24} /> : "Click me"}
+          </Button> */}
+          {/* <Box display="flex" justifyContent="center" alignItems="center">
+            <CircularProgress />
+            <Typography position="absolute">
+              {`${Math.round(progress)}%`}
+            </Typography>
+          </Box> */}
         </Box>
       </Card>
+
+      {/* <h1>Progress Dashboard</h1>
+      <CircularProgress value={progress} text={`${progress}%`} />
+      <button onClick={handleIncreaseProgress}>Increase Progress</button> */}
       {showAlert.message && !showAlert.isError && (
         <Alert
           sx={{ position: "fixed", bottom: "1em", right: "1em" }}

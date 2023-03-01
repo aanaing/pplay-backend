@@ -65,18 +65,15 @@ thead .MuiTableCell-root:last-child {
 .dashboard,
 .nav-link,
 .user {
-  color: #7f7f80;
-  text-decoration: none;
-}
-.dash:link {
-  color: red;
-  text-decoration: none;
+  color: #7f7f80 !important;
+  text-decoration: none !important;
 }
 
 .dashboard:hover,
 .user:hover {
-  color: orangered;
+  color: orangered !important;
   /* color: #000; */
+  cursor: pointer !important;
 }
 
 .dob {
@@ -219,4 +216,8 @@ thead .MuiTableCell-root:last-child {
   width: 45vw;
   height: 400px;
   overflow: scroll;
+}
+.progress:focus {
+  background: none !important;
+  /* color: orangered !important; */
 }

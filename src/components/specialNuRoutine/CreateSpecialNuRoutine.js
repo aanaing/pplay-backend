@@ -18,6 +18,7 @@ import {
   Alert,
   TextareaAutosize,
   CardContent,
+  CircularProgress,
 } from "@mui/material";
 import {
   CREATE_EACH_DAY,
@@ -478,16 +479,16 @@ const CreateSpecialNuRoutine = ({ handleClose }) => {
         </CardContent>
 
         <Box className="btn_end">
-          <LoadingButton
+          <Button
             variant="contained"
             //color="warning"
             size="large"
             sx={{ height: 50, width: 100 }}
-            loading={loading}
+            disabled={loading}
             onClick={handleCreate}
           >
-            Create
-          </LoadingButton>
+            {loading ? <CircularProgress color="primary" /> : "Create"}
+          </Button>
         </Box>
       </Card>
 

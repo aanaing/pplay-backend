@@ -18,6 +18,7 @@ import {
   Alert,
   TextareaAutosize,
   CardContent,
+  CircularProgress,
 } from "@mui/material";
 import {
   CREATE_NODAYS,
@@ -508,16 +509,16 @@ const UpdateSpeNuRoutine = ({ routineAlert, handleClose, value }) => {
         </CardContent>
 
         <Box className="btn_end">
-          <LoadingButton
+          <Button
             variant="contained"
             //color="warning"
             size="large"
             sx={{ height: 50, width: 100 }}
-            loading={loading}
+            disabled={loading}
             onClick={handleUpdate}
           >
-            Update
-          </LoadingButton>
+            {loading ? <CircularProgress color="warning" /> : "Update"}
+          </Button>
         </Box>
       </Card>
 

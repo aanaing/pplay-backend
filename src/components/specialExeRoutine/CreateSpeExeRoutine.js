@@ -13,6 +13,7 @@ import {
   MenuItem,
   FormHelperText,
   CardMedia,
+  CircularProgress,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useState, useEffect } from "react";
@@ -539,16 +540,16 @@ const CreateExeRoutine = ({ handleClose, routineAlert }) => {
           </div>
         </CardContent>
         <Box className="btn_end">
-          <LoadingButton
+          <Button
             variant="contained"
             //color="warning"
             size="large"
             sx={{ height: 50, width: 100 }}
-            loading={loading}
+            disabled={loading}
             onClick={handleCreate}
           >
-            Create
-          </LoadingButton>
+            {loading ? <CircularProgress color="warning" /> : "Create"}
+          </Button>
         </Box>
       </Card>
     </div>

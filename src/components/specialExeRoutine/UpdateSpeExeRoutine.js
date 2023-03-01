@@ -13,6 +13,7 @@ import {
   MenuItem,
   FormHelperText,
   CardMedia,
+  CircularProgress,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { validateSDL } from "graphql/validation/validate";
@@ -548,10 +549,10 @@ const UpdateSpeExeRoutine = ({ handleClose, routineAlert, value }) => {
             //color="warning"
             size="large"
             sx={{ height: 50, width: 100 }}
-            loading={loading}
+            disabled={loading}
             onClick={handleUpdate}
           >
-            Update
+            {loading ? <CircularProgress color="warning" /> : "Update"}
           </LoadingButton>
         </Box>
       </Card>

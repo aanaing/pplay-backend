@@ -15,6 +15,7 @@ import {
   FormHelperText,
   CardMedia,
   Alert,
+  CircularProgress,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { validateSDL } from "graphql/validation/validate";
@@ -160,7 +161,7 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
   });
 
   //for create routine
-  const handleCreate = () => {
+  const handleUpdate = () => {
     setLoading(true);
     setErrors({});
 
@@ -317,10 +318,14 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
               <Select
                 labelId="day_1"
                 value={values.day_1}
+                defaultValue=""
                 label="day_1"
                 onChange={handleChange("day_1")}
                 error={errors.day_1 ? true : false}
               >
+                <MenuItem value="" disabled>
+                  Value
+                </MenuItem>
                 {Array.isArray(sub)
                   ? sub.map((sub) => {
                       // if (sub.id === values.day_1) {
@@ -347,9 +352,13 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
                 labelId="day_2"
                 label="day_2"
                 value={values.day_2}
+                defaultValue=""
                 onChange={handleChange("day_2")}
                 error={errors.day_2 ? true : false}
               >
+                <MenuItem value="" disabled>
+                  Value
+                </MenuItem>
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -368,10 +377,14 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
               <Select
                 labelId="day_3"
                 label="day_3"
+                defaultValue=""
                 onChange={handleChange("day_3")}
                 value={values.day_3}
                 error={errors.day_3 ? true : false}
               >
+                <MenuItem value="" disabled>
+                  Value
+                </MenuItem>
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -391,10 +404,14 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
               <Select
                 labelId="day_4"
                 label="day_4"
+                defaultValue=""
                 onChange={handleChange("day_4")}
                 value={values.day_4}
                 error={errors.day_4 ? true : false}
               >
+                <MenuItem value="" disabled>
+                  Value
+                </MenuItem>
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -412,11 +429,15 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
               <InputLabel id="sub_type">day_5</InputLabel>
               <Select
                 labelId="day_5"
+                defaultValue=""
                 label="day_5"
                 onChange={handleChange("day_5")}
                 value={values.day_5}
                 error={errors.day_5 ? true : false}
               >
+                <MenuItem value="" disabled>
+                  Value
+                </MenuItem>
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -435,10 +456,14 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
               <Select
                 labelId="day_6"
                 label="day_6"
+                defaultValue=""
                 onChange={handleChange("day_6")}
                 value={values.day_6}
                 error={errors.day_6 ? true : false}
               >
+                <MenuItem value="" disabled>
+                  Value
+                </MenuItem>
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -457,10 +482,14 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
               <Select
                 labelId="day_7"
                 label="day_7"
+                defaultValue=""
                 onChange={handleChange("day_7")}
                 value={values.day_7}
                 error={errors.day_7 ? true : false}
               >
+                <MenuItem value="" disabled>
+                  Value
+                </MenuItem>
                 {Array.isArray(sub)
                   ? sub.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -492,16 +521,16 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
           </div>
         </CardContent>
         <Box className="btn_end">
-          <LoadingButton
+          <Button
             variant="contained"
             //color="warning"
             size="large"
             sx={{ height: 50, width: 100 }}
-            loading={loading}
-            onClick={handleCreate}
+            disabled={loading}
+            onClick={handleUpdate}
           >
-            Update
-          </LoadingButton>
+            {loading ? <CircularProgress color="warning" /> : "Update"}
+          </Button>
         </Box>
       </Card>
       {showAlert.message && !showAlert.isError && (

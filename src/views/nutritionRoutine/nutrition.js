@@ -180,7 +180,7 @@ const NuRoutineId = () => {
           <Link to="/" className="dashboard">
             Dashboard
           </Link>
-          <Link to="nuroutine" className="user">
+          <Link to="/nuroutine" className="user">
             Nutrition Routine
           </Link>
           <span>{id}</span>
