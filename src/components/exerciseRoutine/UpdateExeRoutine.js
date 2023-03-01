@@ -312,11 +312,7 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
             />
 
             {/* day_1 */}
-<<<<<<< HEAD
             <FormControl >
-=======
-            <FormControl>
->>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
               <InputLabel id="sub_type">day_1</InputLabel>
               <Select
                 labelId="day_1"
@@ -371,11 +367,7 @@ const UpdateExeRoutine = ({ handleClose, routineAlert, value }) => {
               )}
             </FormControl>
             {/* day_3 */}
-<<<<<<< HEAD
             <FormControl >
-=======
-            <FormControl>
->>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
               <InputLabel id="sub_type">day_3</InputLabel>
               <Select
                 labelId="day_3"

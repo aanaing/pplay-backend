@@ -1,19 +1,8 @@
 import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
-<<<<<<< HEAD
 import { USER, UPDATE_USER, UPDATE_SUBSCRIPTION } from "../../gql/users";
 import { LoadingButton } from "@mui/lab";
-=======
-import { LoadingButton } from "@mui/lab";
-import {
-  USER,
-  UPDATE_USER,
-  UPDATE_SUBSCRIPTION,
-  UPDATE_POINTS,
-} from "../../gql/users";
-
->>>>>>> ad4e10d9714b9e52b7041fc4073f1b34abc6fdcc
 import {
   Breadcrumbs,
   Typography,
